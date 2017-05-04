@@ -1,0 +1,3 @@
+name = Statistiken anzeigen
+description = Analysiert die bisher hochgeladenen Objekte
+core = 7.x

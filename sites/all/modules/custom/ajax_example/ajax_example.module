@@ -1,0 +1,149 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: hofer
+ * Date: 09.10.2015
+ * Time: 10:43
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+
+function ajax_example_menu() {
+
+    //Ajax Callback. Returen telephone number for current region
+    $items['ajax/username'] = array(
+        'title' => 'Get current user name',
+        'page callback' => 'ajax_example_get_username',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    return $items;
+}
+
+function ajax_example_get_username() {
+    //TODO delete later now its only fpr testing
+    global $user;
+    $user_name = $user->name;
+
+
+    //Get Node IDs for phase_1
+    $result = get_nid_for_phase_1();
+    //dsm($result);
+    $list = array();
+    foreach ($result as $record) {
+        dsm($record);
+        $entity_id = $record->entity_id;
+        //Get Methodenname of node ID
+        $method_results = get_methode_name_of_node_id($entity_id);
+        foreach($method_results as $method_record) {
+            $method_name = $method_record->title;
+            $node_id = $method_record->entity_id;
+
+            $list[] = "<li>" . "<a href='./node/" . $entity_id . "'>" .  $method_name . "</a></li>";
+            dsm($method_name);
+        }
+    }
+    dsm($list[0]);
+
+    //Build an unordered list
+    $list_start_item = "<ul>";
+    foreach($list as $list_item) {
+        $list_start_item .= $list_item;
+    }
+    $list_start_item .= "</ul>";
+    dsm($list_start_item);
+
+
+
+    //Output it via JSON for AJAX
+    drupal_json_output($list_start_item);
+}
+
+
+
+
+
+
+//Function which queries the database for phase 1
+function get_nid_for_phase_1(){
+    //SELECT * FROM field_data_field_raum AS raum
+    // INNER JOIN field_data_field_phase AS phase ON raum.entity_id = phase.entity_id
+    //WHERE field_raum_target_id = 29 AND
+    //field_phase_target_id = 27;
+    $type ='methode';
+    $raum_id = 29;
+    $phase_id = 27;
+
+    $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+        ':raum_id' => $raum_id,
+        ':phase_id' => $phase_id,
+    ));
+    return $result;
+
+}
+
+function get_methode_name_of_node_id($node_id) {
+    $result = db_query("SELECT title FROM {node} WHERE nid = :nid", array(
+        ':nid' => $node_id,
+    ));
+    return $result;
+}
+
+
+
+
+
+
+/**
+ * Implements hook_block_info()
+ */
+function ajax_example_block_info() {
+    $blocks['methods'] = array(
+        'info' => t('Design Thinking Methods'),
+    );
+
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function ajax_example_block_view($delta) {
+    $block = array();
+
+    //dsm($delta);
+    switch ($delta) {
+        case 0:
+            $block['subject'] = t('Methoden');
+            $block['content'] = ajax_example_block_content('Fahren Sie über die Grafik, um die Methoden anzuzeigen.');
+            break;
+
+    }
+    return $block;
+}
+
+
+
+
+
+
+function ajax_example_block_content($phase_1) {
+    /*Here to generate content*/
+    //$output = arg(1); //gets parameters out of the url arg(0) is the first value after the base_url
+    $output = $phase_1;
+    return $output;
+}
+
+
+/**
+ * Implementation of hook_init()
+ *
+ */
+function ajax_example_init() {
+    //dsm('hello world');
+    drupal_add_js(drupal_get_path('module', 'ajax_example') . '/ajax_example.js', array('scope' => 'footer'));
+}

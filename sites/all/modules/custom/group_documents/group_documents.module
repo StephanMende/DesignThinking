@@ -1,0 +1,128 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: kortum
+ * Date: 03.11.2015
+ * Time: 19:20
+ */
+
+/**
+ * Implements block_info
+ */
+function group_documents_block_info() {
+    $blocks['group_documents'] = array(
+        // The name that will appear in the block list.
+        'info' => t('group documents'),
+        // Default setting.
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    return $blocks;
+}
+
+/**
+ * Custom content function.
+ *
+ * Gets all Documents from the group of the current user.
+ *
+ * @return
+ *   A result set of documents
+ */
+function group_documents_getDocuments(){
+
+
+    //Current User
+    global $user;
+
+    //Use Database API to retrieve group documents.
+
+    $result = db_query("SELECT * FROM {node} AS node INNER JOIN {field_data_field_phasenreferenz} AS phasenreferenz ON node.nid = phasenreferenz.entity_id INNER JOIN {field_data_field_raumreferenz} AS raumreferenz ON node.nid = raumreferenz.entity_id INNER JOIN {users} AS users ON node.uid = users.uid WHERE node.type = 'dokument' AND users.uid IN(SELECT users.uid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE role.rid = (SELECT role.rid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE users.uid = :user_id ))ORDER BY node.nid ASC", array(
+        ':user_id' => $user->uid,
+    ));
+
+
+    return $result;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * Prepares the contents of the block.
+ */
+function group_documents_block_view($delta = '') {
+    switch ($delta) {
+        case 'group_documents':
+
+
+            //group_documents_send_mail();
+
+            //$block['subject'] = t('Dokumente der Gruppe');
+
+            // get group documents
+            $result = group_documents_getDocuments();
+
+            $items = array();
+            //counter for documents
+            $i = 1;
+
+            $tempString = "<table><th> Anzahl </th><th> Datum </th> <th> Phase </th> <th> Raum </th> <th> Methode </th> <th> Begriff </th> <th> Link </th>";
+
+            foreach ($result as $method) {
+
+                $methodResult = db_query("SELECT node.title, node.created, node.nid FROM {node} AS node WHERE node.nid IN (SELECT referenz.field_methodenreferenz_target_id FROM {node} AS node INNER JOIN {field_data_field_methodenreferenz} AS referenz ON node.nid = referenz.entity_id WHERE node.nid = :node_id)", array(
+                    ':node_id' => $method->nid,
+                ));
+
+                $methodResult2 = db_query("SELECT node.title FROM {node} AS node WHERE node.nid = :node_id", array(
+                    ':node_id' => $method->field_phasenreferenz_target_id,
+                ));
+
+                $methodResult3 = db_query("SELECT node.title FROM {node} AS node WHERE node.nid = :node_id", array(
+                    ':node_id' => $method->field_raumreferenz_target_id,
+                ));
+
+                foreach ($methodResult as $method2) {
+                    foreach($methodResult2 as $bla) {
+                        foreach($methodResult3 as $bla2) {
+                            $test = format_date($method->changed, 'custom', 'j M Y');
+                            $tempString = $tempString . '<tr><td>'.$i.'.</td><td>'.$test.'</td><td>'.$bla2->title.'</td><td>' . $bla->title . '</td><td>' . $method2->title . '</td><td>'.$method->title.'</td><td>' . l('Link', 'node/' . $method->nid) . '</td></tr>';
+                            $i++;
+                        }
+                    }
+            }}
+
+
+            $tempString = $tempString . '</table>';
+
+            //for each document get the right method name from database
+            foreach ($result as $node) {
+
+
+
+
+
+
+                //save each method name in an array to read it out in the next step
+                foreach ($methodResult as $method) {
+                    $tempVariable = $method;
+                }
+
+            }
+
+                $items[] = array(
+                    'data' => $tempString,
+                );
+
+            if(user_is_logged_in()) {
+                // No content was found.
+                if (empty($items)) {
+                    $block['content'] = t('Bisher wurden keine Methoden bearbeitet!');
+                } else {
+                    // Pass data through theme function.
+                    $block['content'] = t($tempString);
+                }
+            } else {
+                    $block['content'] = t('Bitte melden Sie sich an, um ihre bereits bearbeiteten Methoden anzuzeigen!');
+            }
+
+            return $block;
+    }}

@@ -1,0 +1,72 @@
+<svg width="1030.5992" height="420">
+<g>
+    <rect x="40" y="1" width="902" height="30" style="fill: rgb(89, 89, 89);"></rect>
+    <text x="425" y="23" font-family="sans-serif" font-size="22px" fill="white">Vorbereitung</text>
+</g>
+
+<g>
+    <rect x="40" y="32" width="300" height="30" style="fill: rgb(173, 145, 190);"></rect>
+    <text x="125" y="53" font-family="sans-serif" font-size="22px" fill="white">Problemraum</text>
+</g>
+
+<g>
+    <rect x="341" y="32" width="300" height="30" style="fill: rgb(122, 155, 185);"></rect>
+    <text x="425" y="53" font-family="sans-serif" font-size="22px" fill="white">Lösungsraum</text>
+</g>
+
+<g>
+    <rect x="642" y="32" width="300" height="30" style="fill: rgb(112, 196, 111);"></rect>
+    <text x="675" y="53" font-family="sans-serif" font-size="22px" fill="white">Implementierungsraum</text>
+</g>
+
+<g>
+    <rect x="40" y="63" width="149.5" height="30" style="fill: rgb(173, 145, 190);"></rect>
+    <text dy="0em" x="64" y="83" font-family="sans-serif" font-size="15px" fill="white">Recherchieren</text>
+</g>
+<g>
+    <rect x="190.5" y="63" width="149.5" height="30" style="fill: rgb(173, 145, 190);"></rect>
+    <text dy="0em" x="236" y="76" font-family="sans-serif" font-size="13px" fill="white">Problem</text>
+    <text dy="0em" x="233" y="88" font-family="sans-serif" font-size="13px" fill="white">definieren</text>
+</g>
+<g>
+    <rect x="341" y="63" width="149.5" height="30" style="fill: rgb(122, 155, 185);"></rect>
+    <text dy="0em" x="395" y="76" font-family="sans-serif" font-size="13px" fill="white">Ideen</text>
+    <text dy="0em" x="382" y="88" font-family="sans-serif" font-size="13px" fill="white">generieren</text>
+</g>
+<g>
+    <rect x="491.5" y="63" width="149.5" height="30" style="fill: rgb(122, 155, 185);"></rect>
+    <text dy="0em" x="548" y="76" font-family="sans-serif" font-size="13px" fill="white">Ideen</text>
+    <text dy="0em" x="533" y="88" font-family="sans-serif" font-size="13px" fill="white">ausarbeiten</text>
+</g>
+<g>
+    <rect x="642" y="63" width="149.5" height="30" style="fill: rgb(112, 196, 111);"></rect>
+    <text dy="0em" x="685" y="76" font-family="sans-serif" font-size="13px" fill="white">Prototypen</text>
+    <text dy="0em" x="682" y="88" font-family="sans-serif" font-size="13px" fill="white">ausarbeiten</text>
+</g>
+<g>
+    <rect x="792" y="63" width="150" height="30" style="fill: rgb(112, 196, 111);"></rect>
+    <text dy="0em" x="840" y="76" font-family="sans-serif" font-size="13px" fill="white">Lösung</text>
+    <text dy="0em" x="835" y="88" font-family="sans-serif" font-size="13px" fill="white">bewerten</text>
+</g>
+<g>
+    <rect x="40" y="395" width="902" height="30" style="fill: rgb(89, 89, 89);"></rect>
+    <text x="395" y="414" font-family="sans-serif" font-size="22px" fill="white">Projektmanagement</text>
+</g>
+    <rect x="40" y="94" width="150" height="300" style="fill: rgb(173, 145, 190);"></rect>
+    <rect x="190" y="94" width="150" height="300" style="fill: rgb(173, 145, 190);"></rect>
+    <rect x="341" y="94" width="150" height="300" style="fill: rgb(122, 155, 185);"></rect>
+    <rect x="491" y="94" width="150" height="300" style="fill: rgb(122, 155, 185);"></rect>
+    <rect x="642" y="94" width="150" height="300" style="fill: rgb(112, 196, 111);"></rect>
+    <rect x="792" y="94" width="150" height="300" style="fill: rgb(112, 196, 111);"></rect>
+
+    <path d="M 190 94 L40 244 L190 394 z" style="fill: rgb(143, 86, 178);"></path>
+    <path d="M 190 94 L340 244 L190 394 z" style="fill: rgb(120, 61, 153);"></path>
+
+    <path d="M 491 94 L341 244 L491 394 z" style="fill: rgb(68, 111, 149);"></path>
+    <path d="M 491 94 L641 244 L491 394 z" style="fill: rgb(51, 94, 135);"></path>
+
+    <path d="M 792 94 L641 244 L792 394 z" style="fill: rgb(58, 160, 57);"></path>
+    <path d="M 792 94 L941 244 L792 394 z" style="fill: rgb(50, 129, 49);"></path>
+    <circle class="node" r="6" cx="203" cy="105" style="fill: red; stroke: #000; stroke-width: 1.5px;"></circle><circle class="node" r="6" cx="233" cy="105" style="fill: red; stroke: #000; stroke-width: 1.5px;"></circle><circle class="node" r="6" cx="263" cy="105" style="fill: red; stroke: #000; stroke-width: 1.5px;"></circle><circle class="node" r="6" cx="293" cy="105" style="fill: red; stroke: #000; stroke-width: 1.5px;"></circle><line class="link" style="stroke: #000 stroke-width: 1.5px;" x1="203" y1="105" x2="233" y2="105"></line><line class="link" style="stroke: #000 stroke-width: 1.5px;" x1="233" y1="105" x2="263" y2="105"></line><line class="link" style="stroke: #000 stroke-width: 1.5px;" x1="263" y1="105" x2="293" y2="105"></line>
+
+    </svg>

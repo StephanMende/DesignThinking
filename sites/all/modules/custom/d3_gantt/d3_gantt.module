@@ -1,0 +1,87 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: hofer
+ * Date: 06.12.2016
+ * Time: 13:10
+ */
+
+
+/**
+ * Implements hook_menu()
+ */
+
+function d3_gantt_menu(){
+    $items['d3/gantt'] = array(
+        'title' => 'Gantt Chart',
+        'description' => 'Gantt visualization',
+        'access callback' => TRUE,
+        'page callback' => 'd3_gantt',
+        'type' => MENU_LOCAL_TASK,
+
+    );
+
+    $items['dashboard'] = array(
+        'title' => 'Gantt Chart',
+        'description' => 'Gantt visualization',
+        'access callback' => TRUE,
+        'page callback' => 'd3_gantt',
+        'type' => MENU_LOCAL_TASK,
+
+    );
+
+    $items['admin/config/d3/d3_gantt']  = array(
+        'title' => 'D3 gantt configuration',
+        'description' => 'Configuration for d3 gantt module',
+        'access arguments' => array('access administration pages'),
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('d3_gantt_sql_query_form'),
+        'type' => MENU_NORMAL_ITEM,
+    );
+
+
+    return $items;
+}
+
+
+function d3_gantt_sql_query_form($form, &$form_state){
+    $form['d3_gantt_sql'] = array(
+        '#type' => 'textarea',
+        '#title' => 'SQL Query',
+        '#row' => 10
+    );
+
+    return system_settings_form($form);
+}
+
+
+/**
+ * Implements call to draw d3-gantt chart
+ */
+
+function d3_gantt() {
+
+    drupal_set_message("HEHE");
+    //Get data
+    //dsm("Hello");
+    $result = db_query("SELECT * FROM {node}");
+    //dsm($result);
+    //dsm(drupal_json_encode($result));
+    $record = $result->fetchAll();
+
+    //array_walk($record, function(&$value, $key){$value .= "huhuhuhu";});
+    //dsm($record);
+    //dsm($record);
+    //$record = drupal_json_encode($record);
+    //foreach ($result as $r){
+    //    dsm($r->field_anfangsdatum_value);
+    //}
+    $chart = array(
+        'id' => 'visualization',
+        'type' => 'gantt',
+        'data' => $record,
+    );
+
+    $d3_chart = d3_draw($chart);
+    return $d3_chart;
+}

@@ -1,0 +1,54 @@
+
+#action-links {
+  display:none;
+}
+
+
+#inner_header_wrapper {
+    background: 0;
+    background-color: #dedede;
+}
+
+
+#main-menu li,
+#main-menu li .expanded {
+  border: 0;
+}
+
+.menu_wrapper,
+#main-menu li ul,
+#main-menu ul.menu li li > a {
+  background-color: #359ECF;
+  color: #fff;
+  border: 0;
+}
+
+
+#main-menu li:hover > a,
+#main-menu li a.active,
+#main-menu ul.menu li li:hover > a {
+  background-color: #254563;
+  border: 0;
+}
+
+#main-menu li a {
+  color: #fff;
+}
+
+
+th {
+  background-color: #444;
+}
+
+#methodengrafik_test {
+  width: 100%;
+  height: 400px;
+}
+
+/* Calendar-Links entfernen */
+ .calendar.monthview a,
+ .calendar.monthview a:hover {
+  pointer-events: none;
+  color: #777;
+  text-decoration: none;
+ }

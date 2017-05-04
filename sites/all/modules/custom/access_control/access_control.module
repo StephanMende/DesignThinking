@@ -1,0 +1,47 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: kortum
+ * Date: 03.11.2015
+ * Time: 19:20
+ */
+
+/**
+ * Implements block_info
+ */
+function access_control_menu() {
+    //When this site is clicked, the method will be activated
+    $items['meine_Methoden'] = array(
+        "title" => "meine_Methoden",
+        "page callback" => "access_control_send_mail",
+        'access arguments' => array('access content'),
+
+    );
+
+    return $items;
+}
+
+/**
+ * This method calls the standard drupal method to send an email.
+ * @return string
+ */
+function access_control_send_mail() {
+    drupal_mail('meetup_email_sending', 'testmail', 'kortumj@uni-hildesheim.de', language_default());
+    dsm('mail was sent');
+    return "Email wurde versendet";
+}
+
+function access_control_mail($key, &$message, $params) {
+    switch($key) {
+        case 'testmail':
+            $message['subject'] = t('This is a message from the new module :-)');
+            $message['body'][] = t('This is a simple body');
+            break;
+    }
+}
+
+
+
+
+
+

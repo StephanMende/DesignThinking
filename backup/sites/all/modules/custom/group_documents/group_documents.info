@@ -1,0 +1,3 @@
+name = Gruppendokumente anzeigen
+description = Holt alle Dokumente der Gruppe des angemeldeten Nutzers und zeigt diese in einem Block an.
+core = 7.x

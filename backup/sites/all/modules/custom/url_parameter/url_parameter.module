@@ -1,0 +1,92 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: kortum
+ * Date: 03.11.2015
+ * Time: 19:20
+ */
+
+/**
+ * Implementation of hook_init().
+ */
+function url_parameter_init()
+
+{
+
+    $url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" . '';
+
+
+
+    //dsm($_SERVER['HTTP_REFERER']);
+
+    if (strpos($url, "Methodenauswahl") == 25) {
+
+
+        //drupal_flush_all_caches();
+
+        $teilstring = explode('/', $_SERVER['REQUEST_URI']);
+
+        //dsm($teilstring[3]);
+        //dsm($teilstring[5]);
+        //dsm($teilstring[6]);
+
+
+        $methodResult = db_query("SELECT * FROM {field_data_field_upload} AS upload WHERE upload.entity_id = :methoden_id", array(
+            ':methoden_id' => $teilstring[3],
+        ));
+
+        $v1='';
+
+        if(empty($teilstring[5]) or empty($teilstring[6])) {
+
+            foreach ($methodResult as $result) {
+                $v1 = $result->field_upload_url;
+                $name = 'node/add/dokument/?field_methodenreferenz=' . $teilstring[3];
+
+                db_query('UPDATE {field_revision_field_upload} SET field_upload_url = :name WHERE entity_id= :id',
+                    array(':name' => $name, ':id' => $teilstring[3]));
+
+                db_query('UPDATE {field_data_field_upload} SET field_upload_url = :name WHERE entity_id= :id',
+                    array(':name' => $name, ':id' => $teilstring[3]));
+
+                if (strcmp($v1, $name) != 0) {
+                    drupal_flush_all_caches();
+                    drupal_add_js('jQuery(document).ready(function () { window.location.reload(); });', 'inline');
+                }
+            }
+        } else {
+            foreach ($methodResult as $result) {
+                //dsm($result->field_upload_url);
+                $v1=$result->field_upload_url;
+                //dsm($teilstring[3]);
+                //dsm($teilstring[5]);
+                //dsm($teilstring[6]);
+
+                $name = 'node/add/dokument/?field_methodenreferenz=' . $teilstring[3] . '&field_raumreferenz=' . $teilstring[5] . '&field_phasenreferenz=' . $teilstring[6];
+
+                db_query('UPDATE {field_revision_field_upload} SET field_upload_url = :name WHERE entity_id= :id',
+                    array(':name' => $name, ':id' => $teilstring[3]));
+
+                db_query('UPDATE {field_data_field_upload} SET field_upload_url = :name WHERE entity_id= :id',
+                    array(':name' => $name, ':id' => $teilstring[3]));
+
+            }
+
+            //Vergleich ob Link erfolgreich übernommen wurde. Falls nicht: Page reload und Cache leeren
+            if(strcmp($v1,$name) != 0) {
+                drupal_flush_all_caches();
+                drupal_add_js('jQuery(document).ready(function () { window.location.reload(); });', 'inline');
+            }
+        }
+
+
+    }
+
+}
+
+
+
+
+
+
+

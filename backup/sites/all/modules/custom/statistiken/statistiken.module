@@ -1,0 +1,542 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: kortum
+ * Date: 03.11.2015
+ * Time: 19:20
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function statistiken_menu() {
+    $items['statistiken'] = array(
+        'title' => 'Statistiken',
+        'page callback' => 'statistiken_get_diagrams',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    return $items;
+}
+
+/**
+ * Callback function for menu item.
+ */
+function statistiken_get_diagrams() {
+
+    $build['methodsRoom'] = method_overview_room();
+    $build['methodsPhase'] = method_overview_phase();
+    $build['pieGroup1'] =  group_statistics(4);
+    $build['pieGroup2'] =  group_statistics(5);
+    $build['pieGroup3'] =  group_statistics(6);
+    $build['pieAdmin'] =  group_statistics(3);
+    $build['lineComparison'] =  group_statistics_comparison();
+    $build['AnzahlMethoden'] = method_ranking();
+
+    return $build;
+
+}
+
+function user_activity() {
+/*
+    $registered = array();
+
+    $regUserResults = db_query("SELECT * FROM {counter_data} WHERE counter_name = 'registered_user';");
+
+    foreach($regUserResults as $reg) {
+        for($i=0;$i<$reg->counter_value;$i++) {
+            array_push($registered, $reg);
+        }
+    }
+
+    $userResults = db_query("SELECT * FROM {counter} WHERE uid >0");
+
+    $hour = 13;
+    $today = strtotime($hour . ':00:00');
+    $yesterday = strtotime('-1 day', $today);
+    $yesterday2 = strtotime('-8 day', $today);
+    $yesterday3 = strtotime('-30 day', $today);
+
+    $day = array();
+    $month = array();
+    $year = array();
+
+    foreach($userResults as $user) {
+        $timestamp = $user->created;
+
+        if ($timestamp >= $yesterday AND $timestamp <= $today) {
+            array_push($day, $user->uid);
+        }
+
+        if ($timestamp >= $yesterday2 AND $timestamp <= $today) {
+            array_push($month, $user->uid);
+        }
+
+        if ($timestamp >= $yesterday3 AND $timestamp <= $today) {
+            array_push($year, $user->uid);
+        }
+    }
+
+    $day = array_unique($day,SORT_STRING);
+    $month = array_unique($month,SORT_STRING);
+    $year = array_unique($year,SORT_STRING);
+
+    $data3 = array(
+        array('phase' => 'Insgesamt registriert', 'Anzahl' => sizeof($registered)),
+        array('phase' => 'davon heute', 'Anzahl' => sizeof($day)),
+        array('phase' => 'davon letzte Woche', 'Anzahl' => sizeof($month)),
+        array('phase' => 'davon letzten Monat', 'Anzahl' => sizeof($year)),
+    );
+
+    $options_column2 = array(
+        'title' => 'User-Statistiken',
+        'fields' => array(
+            'Anzahl' => array(
+                'label' => t('Anzahl registrierter Benutzer'),
+                'enabled' => TRUE,
+            ),
+        ),
+        'xAxis' => array(
+            'labelField' => 'phase',
+        ),
+        'data' => $data3,
+        'type' => 'column',
+    );
+
+    $build['column2'] =  array(
+        '#theme' => 'visualization',
+        '#options' => $options_column2,
+    );
+*/
+
+}
+
+function method_overview_room() {
+
+    $vorbereitung = array();
+    $problemraum = array();
+    $loesungsraum = array();
+    $implementierungsraum = array();
+    $projektmanagement = array();
+
+    $allDocuments = db_query("SELECT node.title, phase.field_phasenreferenz_target_id, raum.field_raumreferenz_target_id from {node} INNER JOIN {field_data_field_phasenreferenz} as phase On node.nid = phase.entity_id INNER JOIN {field_data_field_raumreferenz} as raum On node.nid = raum.entity_id WHERE node.type = 'dokument'");
+
+    foreach ($allDocuments as $method) {
+        switch($method->field_raumreferenz_target_id) {
+            case '51':
+                array_push($vorbereitung, $method);
+                break;
+            case '29':
+                array_push($problemraum, $method);
+                break;
+            case 30:
+                array_push($loesungsraum, $method);
+                break;
+            case 31:
+                array_push($implementierungsraum, $method);
+                break;
+            case 52:
+                array_push($projektmanagement, $method);
+                break;
+        }
+    }
+
+    $data2 = array(
+        array('phase' => 'Vorbereitung', 'Anzahl' => sizeof($vorbereitung)),
+        array('phase' => 'Problemraum', 'Anzahl' => sizeof($problemraum)),
+        array('phase' => 'Lösungsraum', 'Anzahl' => sizeof($loesungsraum)),
+        array('phase' => 'Implementierungsraum', 'Anzahl' => sizeof($implementierungsraum)),
+        array('phase' => 'Projektmanagement', 'Anzahl' => sizeof($projektmanagement)),
+
+    );
+
+    $options_column = array(
+        'title' => 'bearbeitete Methoden pro Raum',
+        'fields' => array(
+            'Anzahl' => array(
+                'label' => t('Anzahl'),
+                'enabled' => TRUE,
+            ),
+        ),
+        'xAxis' => array(
+            'labelField' => 'phase',
+        ),
+        'data' => $data2,
+        'type' => 'pie',
+    );
+
+    $build['column'] =  array(
+        '#theme' => 'visualization',
+        '#options' => $options_column,
+    );
+
+    return $build;
+
+}
+
+function method_overview_phase() {
+
+    $methodResult = db_query("SELECT * FROM {node} as node INNER JOIN {field_data_field_phase} AS phase ON node.nid = phase.entity_id;");
+
+    $a = array();
+    $b = array();
+    $c = array();
+    $d = array();
+
+    foreach($methodResult as $result) {
+        if($result->field_phase_target_id == 27) {
+            array_push($a, $result);
+        }
+        if($result->field_phase_target_id == 28) {
+            array_push($b, $result);
+        }
+        if($result->field_phase_target_id == 142) {
+            array_push($c, $result);
+        }
+        if($result->field_phase_target_id == 143) {
+            array_push($d, $result);
+        }
+    }
+
+    $data = array(
+        array('phase' => 'divergent', 'Anzahl' => sizeof($a)),
+        array('phase' => 'konvergent', 'Anzahl' => sizeof($b)),
+        array('phase' => 'Vorbereitung', 'Anzahl' => sizeof($c)),
+        array('phase' => 'Projektmanagement', 'Anzahl' => sizeof($d)),
+
+    );
+
+    $options_pie = array(
+        'title' => 'Gesamte Anzahl Methoden',
+        'fields' => array(
+            'Anzahl' => array(
+                'label' => t('Anzahl'),
+                'enabled' => TRUE,
+            ),
+        ),
+        'xAxis' => array(
+            'labelField' => 'phase',
+        ),
+        'data' => $data,
+        'type' => 'pie',
+    );
+
+    $build['pie'] =  array(
+        '#theme' => 'visualization',
+        '#options' => $options_pie,
+    );
+
+    return $build;
+
+}
+
+function group_statistics($group_number) {
+
+    $userResult = db_query("SELECT * FROM {node} AS node INNER JOIN {field_data_field_phasenreferenz} AS phasenreferenz ON node.nid = phasenreferenz.entity_id INNER JOIN {field_data_field_raumreferenz} AS raumreferenz ON node.nid = raumreferenz.entity_id INNER JOIN {users} AS users ON node.uid = users.uid WHERE node.type = 'dokument' AND users.uid IN(SELECT users.uid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE role.rid = :role_id)", array(
+        ':role_id' => $group_number,
+    ));
+
+    $group1a = array();
+    $group1b = array();
+    $group1c = array();
+    $group1d = array();
+
+    foreach($userResult as $result) {
+        if($result->field_phasenreferenz_target_id == 27) {
+            array_push($group1a, $result);
+        }
+        if($result->field_phasenreferenz_target_id == 28) {
+            array_push($group1b, $result);
+        }
+        if($result->field_phasenreferenz_target_id == 142) {
+            array_push($group1c, $result);
+        }
+        if($result->field_phasenreferenz_target_id == 143) {
+            array_push($group1d, $result);
+        }
+    }
+
+    $data = array(
+        array('phase' => 'divergent', 'Anzahl' => sizeof($group1a)),
+        array('phase' => 'konvergent', 'Anzahl' => sizeof($group1b)),
+        array('phase' => 'Vorbereitung', 'Anzahl' => sizeof($group1c)),
+        array('phase' => 'Projektmanagement', 'Anzahl' => sizeof($group1d)),
+
+    );
+
+    $title;
+
+    switch($group_number) {
+        case 3:
+            $title = "Gesamtübersicht Administrator";
+            break;
+        case 4:
+            $title = "Gesamtübersicht Projektgruppe 1";
+            break;
+        case 5:
+            $title = "Gesamtübersicht Projektgruppe 2";
+            break;
+        case 6:
+            $title = "Gesamtübersicht Projektgruppe 3";
+            break;
+    }
+
+    $options_pie = array(
+        'title' => $title,
+        'fields' => array(
+            'Anzahl' => array(
+                'label' => t('Anzahl'),
+                'enabled' => TRUE,
+            ),
+        ),
+        'xAxis' => array(
+            'labelField' => 'phase',
+        ),
+        'data' => $data,
+        'type' => 'pie',
+    );
+
+    $build['pie'] =  array(
+        '#theme' => 'visualization',
+        '#options' => $options_pie,
+    );
+
+    return $build;
+
+}
+
+function group_statistics_comparison() {
+
+    $group1a = array();
+    $group1b = array();
+    $group1c = array();
+    $group1d = array();
+    $group2a = array();
+    $group2b = array();
+    $group2c = array();
+    $group2d = array();
+    $group3a = array();
+    $group3b = array();
+    $group3c = array();
+    $group3d = array();
+    $groupAdmina = array();
+    $groupAdminb = array();
+    $groupAdminc = array();
+    $groupAdmind = array();
+
+    for($i=3;$i<=6;$i++) {
+        $userResult = db_query("SELECT * FROM {node} AS node INNER JOIN {field_data_field_phasenreferenz} AS phasenreferenz ON node.nid = phasenreferenz.entity_id INNER JOIN {field_data_field_raumreferenz} AS raumreferenz ON node.nid = raumreferenz.entity_id INNER JOIN {users} AS users ON node.uid = users.uid WHERE node.type = 'dokument' AND users.uid IN(SELECT users.uid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE role.rid = :role_id)", array(
+            ':role_id' => $i,
+        ));
+
+    foreach($userResult as $result) {
+        if($result->field_phasenreferenz_target_id == 27) {
+            if($i==3) {
+                array_push($groupAdmina, $result);
+
+            } else if($i==4) {
+                array_push($group1a, $result);
+
+            } else if($i==5) {
+                array_push($group2a, $result);
+
+            } else if($i==6) {
+                array_push($group3a, $result);
+            }
+        }
+        if($result->field_phasenreferenz_target_id == 28) {
+            if($i==3) {
+                array_push($groupAdminb, $result);
+
+            } else if($i==4) {
+                array_push($group1b, $result);
+
+            } else if($i==5) {
+                array_push($group2b, $result);
+
+            } else if($i==6) {
+                array_push($group3b, $result);
+            }
+        }
+        if($result->field_phasenreferenz_target_id == 142) {
+            if($i==3) {
+                array_push($groupAdminc, $result);
+
+            } else if($i==4) {
+                array_push($group1c, $result);
+
+            } else if($i==5) {
+                array_push($group2c, $result);
+
+            } else if($i==6) {
+                array_push($group3c, $result);
+            }        }
+        if($result->field_phasenreferenz_target_id == 143) {
+            if($i==3) {
+                array_push($groupAdmind, $result);
+
+            } else if($i==4) {
+                array_push($group1d, $result);
+
+            } else if($i==5) {
+                array_push($group2d, $result);
+
+            } else if($i==6) {
+                array_push($group3d, $result);
+            }        }
+        }
+    }
+
+    $data = array(
+        array('phase' => 'divergent', 'Projektgruppe_1' => sizeof($group1a), 'Projektgruppe_2' => sizeof($group2a), 'Projektgruppe_3' => sizeof($group3a), 'Projektgruppe_Admin' => sizeof($groupAdmina)),
+        array('phase' => 'konvergent', 'Projektgruppe_1' => sizeof($group1b), 'Projektgruppe_2' => sizeof($group2b), 'Projektgruppe_3' => sizeof($group3b), 'Projektgruppe_Admin' => sizeof($groupAdminb)),
+        array('phase' => 'Vorbereitung', 'Projektgruppe_1' => sizeof($group1c), 'Projektgruppe_2' => sizeof($group2c), 'Projektgruppe_3' => sizeof($group3c), 'Projektgruppe_Admin' => sizeof($groupAdminc)),
+        array('phase' => 'Projektmanagement', 'Projektgruppe_1' => sizeof($group1d), 'Projektgruppe_2' => sizeof($group2d), 'Projektgruppe_3' => sizeof($group3d), 'Projektgruppe_Admin' => sizeof($groupAdmind)),
+
+    );
+
+    $options_line = array(
+        'title' => 'Vergleich bearbeiteter Methoden',
+        'fields' => array(
+            'Projektgruppe_1' => array(
+                'label' => t('Projektgruppe 1'),
+                'enabled' => TRUE,
+            ),
+            'Projektgruppe_2' => array(
+                'label' => t('Projektgruppe 2'),
+                'enabled' => TRUE,
+            ),
+            'Projektgruppe_3' => array(
+                'label' => t('Projektgruppe 3'),
+                'enabled' => TRUE,
+            ),
+            'Projektgruppe_Admin' => array(
+                'label' => t('Administrator'),
+                'enabled' => TRUE,
+            ),
+        ),
+        'xAxis' => array(
+            'labelField' => 'phase',
+        ),
+        'data' => $data,
+        'type' => 'line',
+    );
+
+    $build['lineComparison'] =  array(
+        '#theme' => 'visualization',
+        '#options' => $options_line,
+    );
+    return $build;
+}
+
+function method_ranking() {
+
+    $a = array();
+    $b = array();
+    $i=1;
+
+    $methodResult = db_query("SELECT * FROM {node} AS node WHERE node.type = 'dokument'");
+
+    foreach($methodResult as $result) {
+        $nameResult = db_query("SELECT node.title, node.created, node.nid FROM {node} AS node WHERE node.nid IN (SELECT referenz.field_methodenreferenz_target_id FROM {node} AS node INNER JOIN {field_data_field_methodenreferenz} AS referenz ON node.nid = referenz.entity_id WHERE node.nid = :node_id)", array(
+            ':node_id' => $result->nid,
+        ));
+
+        foreach($nameResult as $name) {
+            array_push($a,$name->title);
+            if($i<=8) {
+                array_push($b,$name->title);
+                $i++;
+            }
+        }
+    }
+
+    $temp = array_count_values($a);
+    foreach ($temp as $key => $value) {
+        $ergebnis[] = array($value, $key);
+    }
+
+    rsort($ergebnis);
+
+    $sonstige1 = sizeof($a);
+    $sonstige2 = $sonstige1-$ergebnis[0][0];
+    $sonstige = sizeof($ergebnis);
+
+    switch(sizeof($ergebnis)) {
+        case 0:
+            $data = array();
+            break;
+        case 1:
+            $data = array(
+                array('phase' => $ergebnis[0][1], 'Anzahl' => $ergebnis[0][0]),
+            );
+            break;
+        case 2:
+            $data = array(
+                array('phase' => $ergebnis[0][1], 'Anzahl' => $ergebnis[0][0]),
+                array('phase' => $ergebnis[1][1], 'Anzahl' => $ergebnis[1][0]),
+            );
+            break;
+        case 3:
+            $data = array(
+                array('phase' => $ergebnis[0][1], 'Anzahl' => $ergebnis[0][0]),
+                array('phase' => $ergebnis[1][1], 'Anzahl' => $ergebnis[1][0]),
+                array('phase' => $ergebnis[2][1], 'Anzahl' => $ergebnis[2][0]),
+            );
+            break;
+        case 4:
+            $data = array(
+                array('phase' => $ergebnis[0][1], 'Anzahl' => $ergebnis[0][0]),
+                array('phase' => $ergebnis[1][1], 'Anzahl' => $ergebnis[1][0]),
+                array('phase' => $ergebnis[2][1], 'Anzahl' => $ergebnis[2][0]),
+                array('phase' => $ergebnis[3][1], 'Anzahl' => $ergebnis[3][0]),
+
+            );
+            break;
+        case 5:
+            $data = array(
+                array('phase' => $ergebnis[0][1], 'Anzahl' => $ergebnis[0][0]),
+                array('phase' => $ergebnis[1][1], 'Anzahl' => $ergebnis[1][0]),
+                array('phase' => $ergebnis[2][1], 'Anzahl' => $ergebnis[2][0]),
+                array('phase' => $ergebnis[3][1], 'Anzahl' => $ergebnis[3][0]),
+                array('phase' => $ergebnis[4][1], 'Anzahl' => $ergebnis[4][0]),
+                array('phase' => $ergebnis[4][1], 'Anzahl' => $ergebnis[5][0]),
+            );
+            break;
+        default:
+            $sonstige2 = $sonstige1-$ergebnis[0][0]-$ergebnis[1][0]-$ergebnis[2][0]-$ergebnis[3][0]-$ergebnis[4][0];
+            $data = array(
+                array('phase' => $ergebnis[0][1], 'Anzahl' => $ergebnis[0][0]),
+                array('phase' => $ergebnis[1][1], 'Anzahl' => $ergebnis[1][0]),
+                array('phase' => $ergebnis[2][1], 'Anzahl' => $ergebnis[2][0]),
+                array('phase' => $ergebnis[3][1], 'Anzahl' => $ergebnis[3][0]),
+                array('phase' => $ergebnis[4][1], 'Anzahl' => $ergebnis[4][0]),
+                array('phase' => 'Sonstige', 'Anzahl' => $sonstige2),
+
+            );
+            break;
+    }
+
+    $options_pie = array(
+        'title' => 'Top 5 Benutzungen Methoden',
+        'fields' => array(
+            'Anzahl' => array(
+                'label' => t('Anzahl'),
+                'enabled' => TRUE,
+            ),
+        ),
+        'xAxis' => array(
+            'labelField' => 'phase',
+        ),
+        'data' => $data,
+        'type' => 'pie',
+    );
+
+    $build['AnzahlMethoden'] =  array(
+        '#theme' => 'visualization',
+        '#options' => $options_pie,
+    );
+
+    return $build;
+}

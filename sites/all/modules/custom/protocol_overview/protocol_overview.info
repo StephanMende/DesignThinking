@@ -1,0 +1,6 @@
+name = Protokoll Übersicht
+description = Zeigt die erstellten Protokolle der Gruppen an
+core = 7.x
+dependencies[] = test_module
+
+configure = admin/config/content/protocol_overview

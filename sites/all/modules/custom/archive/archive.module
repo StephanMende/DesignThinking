@@ -1,0 +1,777 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jonaskortum
+ * Date: 02.03.17
+ * Time: 19:54
+ */
+
+function archive_menu()
+{
+    $items['archiv'] = array(
+        'title' => 'Methodendurchführung ändern',
+        'page arguments' => array('archive_form'),
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'type' => MENU_CALLBACK,
+    );
+
+    $items['archiv_methoden_uebersicht/%'] = array(
+        'title' => 'Methodenübersicht',
+        'page callback' => 'archive_method_overview',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    $items['archiv_protokoll_uebersicht/%'] = array(
+        'title' => 'Protokollübersicht',
+        'page callback' => 'archive_protocol_overview',
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    return $items;
+}
+
+function archive_form() {
+
+    $array = array();
+    $sql = "SELECT * FROM {role}";
+    $result = db_query($sql);
+    foreach ($result as $item) {
+        $array[$item->rid] = $item->name;
+
+    }
+
+    $form['room_type'] = array(
+        '#type' => 'select',
+        '#options' => $array,
+        '#title' => t('Auswahl einer Protokollübersicht'),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Zur Protokollübersicht',
+        '#submit' => array('archive_redirect_to_protocol_overview')
+    );
+
+    $form['room_type2'] = array(
+        '#type' => 'select',
+        '#options' => $array,
+        '#title' => t('Auswahl einer Methodenübersicht'),
+    );
+
+    $form['submit22222'] = array(
+        '#type' => 'submit',
+        '#value' => 'Zur Methodenübersicht',
+        '#submit' => array('archive_redirect_to_method_overview')
+    );
+
+    return $form;
+}
+
+function archive_redirect_to_method_overview($form, &$form_state) {
+    $type = $form_state['values']['room_type2'];
+    drupal_goto("archiv_methoden_uebersicht/".$type);
+}
+
+function archive_redirect_to_protocol_overview($form, &$form_state) {
+    $type = $form_state['values']['room_type'];
+    drupal_goto("archiv_protokoll_uebersicht/".$type);
+}
+
+function archive_protocol_overview() {
+    global $base_url;
+
+    $id = arg(1);
+    $users = array();
+    $sql = "SELECT * FROM {users_roles} WHERE rid = ".$id;
+
+    $proresult = db_query($sql);
+
+    foreach($proresult as $pro) {
+        array_push($users, $pro->uid);
+    }
+
+    $list = implode(',', $users);
+    $sql = "SELECT * FROM {protocol} WHERE uid IN ($list) AND finished = 1 ORDER BY date";
+    $result = db_query($sql);
+
+
+    $test = array();
+
+    foreach ($result as $r) {
+        array_push($test, $r);
+
+    }
+
+
+    if (archive_get_height($test, 40) > 820) {
+        if(archive_get_height($test, 38) > 820) {
+            if(archive_get_height($test, 36) > 820) {
+                $chart = archive_protocol_overview_d3_gantt($test, 34);
+            } else {
+                $chart = archive_protocol_overview_d3_gantt($test, 36);
+            }
+        } else {
+            $chart = archive_protocol_overview_d3_gantt($test, 38);
+        }
+    } else {
+        $chart = archive_protocol_overview_d3_gantt($test, 40);
+    }
+
+
+
+    $tempString = $chart;
+    $tempString .= "<table><th>Nr.</th><th>Datum</th><th>Methoden</th><th>Fazit</th><th>Raum</th><th>Phase</th> <th>Aktionen</th>";
+
+    $number = 1;
+
+    $tempString .= "<br><br><a href='" . $base_url . "/show_total_protocol/".arg(1)."'>Das gesamte Dokument als PDF anzeigen (kann etwas dauern)</a>";
+
+    foreach ($test as $r) {
+        $date = new DateTime($r->start_date);
+        $date2 = new DateTime($r->end_date);
+        $deadline2 = $date->format('d.m.Y H:i');
+        $deadline3 = $date2->format('d.m.Y H:i');
+        $tempString2 = "";
+        $methods = get_protocol_methods($r->protocol_id);
+        if (sizeof($methods) > 0) {
+            $tempString2 .= '<ul>';
+
+            foreach ($methods as $m) {
+                $tempString2 .= " <li><a href='" . $base_url . "/methodenanzeige/$m->method_execution_id/t8HVhPRlPZ'>$m->name</a></li>";
+            }
+            $tempString2 .= '</ul>';
+        } else {
+            $tempString2 = "Keine Methoden durchgeführt";
+        }
+
+        $fazit = $r->conclusion;
+
+        if (!strcmp($fazit, "")) {
+            $fazit = "Keine Bewertung als Freitext vorhanden";
+        }
+
+        $tempString = $tempString . "<tr><td>$number</td><td>$deadline2 -<br>$deadline3</td><td>$tempString2</td><td>$fazit</td><td>$r->raum_end</td><td>$r->phase_end</td><td><ul> <li><a href='" . $base_url . "/protokollanzeige/$r->protocol_id'>anzeigen</a></li> <li><a href='" . $base_url . "/protokoll_pdf_erstellen/$r->protocol_id'>pdf</a></li></ul></td></tr></tr>";
+        $number = $number + 1;
+    }
+
+
+    $tempString .= "</table>";
+
+
+    return $tempString;
+}
+
+
+function archive_method_overview() {
+    $id = arg(1);
+    $counter = 1;
+    global $base_url;
+
+    $methods = archive_get_relevant_methods($id);
+    $tempString = method_overview_d3_gantt($methods, 40);
+
+    $tempString .= "<table><th>Nr.</th><th>Datum</th><th>Methodenname</th><th> Bewertung</th><th> Bewertung</th><th> Aktionen</th></th>";
+
+
+    $methods = archive_get_relevant_methods($id);
+
+    foreach ($methods as $r) {
+        $image = $base_url."/";
+        if($r->rating == 20) {
+            $image .= "one.png";
+        } else if($r->rating == 40) {
+            $image .= "two.png";
+        } else if($r->rating == 60) {
+            $image .= "three.png";
+        } else if($r->rating == 80) {
+            $image .= "four.png";
+        } else if($r->rating == 100) {
+            $image .= "five.png";
+        }
+
+        $deadline2 = "";
+        $date = new DateTime($r->creation_date);
+        $deadline2 .= $date->format('d.m.Y');
+
+        $bewertung = $r->evaluation;
+
+        if(!strcmp($bewertung, "")) {
+            $bewertung = "Keine Bewertung als Freitext vorhanden";
+        }
+
+        $method_id = $r->method_execution_id;
+        $protocol_id = $r->protocol_id;
+        $tempString = $tempString . "<tr><td>".$counter.".</td><td>".$deadline2."</td><td>
+        <a href='".$base_url."/methodenanzeige/$method_id/zqjvEz44Qx'>$r->name</a></td>
+        <td><img src=".$image." height=\"100\" width=\"100\"></td>
+            <td>$bewertung</td>
+            <td><ul><li><a href='".$base_url."/protokoll_methode_aendern/".$method_id."/zqjvEz44Qx' >bearbeiten</a></li><li><a href='".$base_url."/protokollanzeige/".$protocol_id."' >Link zum Protokoll</a></li></ul></td></tr></tr>";
+        $counter = $counter + 1;
+
+    }
+
+    $tempString .= "</table>";
+
+    return $tempString;
+}
+
+function archive_get_relevant_methods($id) {
+    $users = array();
+    $sql = "SELECT * FROM {users_roles} WHERE rid = ".$id;
+    $proresult = db_query($sql);
+
+    foreach($proresult as $pro) {
+        array_push($users, $pro->uid);
+    }
+
+    $list = implode(',', $users);
+
+    $participants = $list;
+    $sql = "SELECT * FROM {method_execution} WHERE uid in (" . $participants . ") ORDER BY creation_date";
+    $result = db_query($sql);
+
+    return $result;
+}
+
+function archive_d3_gantt($result, $y_wert)
+{
+
+    $link_reference_1 = -1;
+    $link_reference_2 = 0;
+    $check = true;
+
+    $y_abstand = $y_wert;
+
+    $test = array();
+    $validation = array();
+    $protocols = $result;
+    foreach ($protocols as $protocol) {
+        $validation["name"] = $protocol->raum_end . " " . $protocol->phase_end;
+
+        if(!strcmp($protocol->room, "Vorbereitung") || !strcmp($protocol->room, "Projektmanagement")) {
+            $validation["valid"] = 0;
+        } else {
+            $validation["valid"] = 1;
+        }
+        array_push($test, $validation);
+    }
+    $stuff = array();
+    $stuff['nodes'] = array();
+    $stuff['links'] = array();
+
+    $counter = 0;
+    $referenz_array = array();
+    $y = 240;
+    $x = 25;
+
+
+    for ($i = 0; $i < sizeof($test); $i++) {
+
+        $name = $test[$i]["name"];
+
+        if($test[$i]["valid"]) {
+            switch ($name) {
+                case 'Problemraum divergent':
+                    if ($counter == 0) {
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                        array_push($referenz_array, "1");
+                        $counter++;
+                    } else {
+                        if($referenz_array[$counter-1] <= 1) {
+                            $x = $x+40;
+                            if($x > 185) {
+                                $x = 25;
+                                $y = $y+$y_abstand;
+                            }
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                            array_push($referenz_array, "1");
+                            $counter++;
+                        } else {
+                            $y = $y+$y_abstand;
+                            $x = 25;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                            array_push($referenz_array, "1");
+                            $counter++;
+                        }
+                    }
+                    break;
+
+                case 'Problemraum konvergent':
+                    if ($counter == 0) {
+                        $x = 245;
+                        $y = 240;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                        array_push($referenz_array, "2");
+                        $counter++;
+                    } else {
+                        if($referenz_array[$counter-1] <2) {
+                            $x = 245;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                            array_push($referenz_array, "2");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] == 2) {
+                            $x = $x+40;
+                            if($x > 405) {
+                                $x = 245;
+                                $y = $y+$y_abstand;
+                            }
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                            array_push($referenz_array, "2");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] >2) {
+                            $x = 245;
+                            $y = $y+$y_abstand;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                            array_push($referenz_array, "2");
+                            $counter++;
+                        }
+                    }
+                    break;
+
+                case 'Lösungsraum divergent':
+                    if ($counter == 0) {
+                        $x = 461;
+                        $y = 240;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                        array_push($referenz_array, "3");
+                        $counter++;
+                    } else {
+                        if($referenz_array[$counter-1] < 3) {
+                            $x = 461;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                            array_push($referenz_array, "3");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] == 3) {
+                            $x = $x+40;
+                            if($x > 622) {
+                                $x = 461;
+                                $y = $y+$y_abstand;
+                            }
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                            array_push($referenz_array, "3");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] >3) {
+                            $x = 461;
+                            $y = $y+$y_abstand;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                            array_push($referenz_array, "3");
+                            $counter++;
+                        }
+                    }
+                    break;
+
+                case "Lösungsraum konvergent":
+                    if ($counter == 0) {
+                        $x = 677;
+                        $y = 240;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                        array_push($referenz_array, "4");
+                        $counter++;
+                    } else {
+                        if($referenz_array[$counter-1] < 4) {
+                            $x = 677;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                            array_push($referenz_array, "4");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] == 4) {
+                            $x = $x+40;
+                            if($x > 854) {
+                                $x = 677;
+                                $y = $y+$y_abstand;
+                            }
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                            array_push($referenz_array, "4");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] >4) {
+                            $x = 677;
+                            $y = $y+$y_abstand;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                            array_push($referenz_array, "4");
+                            $counter++;
+                        }
+                    }
+                    break;
+
+                case "Implementierungsraum divergent":
+                    if ($counter == 0) {
+                        $x = 891;
+                        $y = 240;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                        array_push($referenz_array, "5");
+                        $counter++;
+                    } else {
+                        if($referenz_array[$counter-1] < 5) {
+                            $x = 891;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                            array_push($referenz_array, "5");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] == 5) {
+                            $x = $x+40;
+                            if($x > 1051) {
+                                $x = 891;
+                                $y = $y+$y_abstand;
+                            }
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                            array_push($referenz_array, "5");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] >5) {
+                            $x = 891;
+                            $y = $y+$y_abstand;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                            array_push($referenz_array, "5");
+                            $counter++;
+                        }
+                    }
+                    break;
+
+                case "Implementierungsraum konvergent":
+                    if ($counter == 0) {
+                        $x = 1111;
+                        $y = 240;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                        array_push($referenz_array, "6");
+                        $counter++;
+
+                    } else {
+                        if($referenz_array[$counter-1] < 6) {
+                            $x = 1111;
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                            array_push($referenz_array, "6");
+                            $counter++;
+                        } else if ($referenz_array[$counter-1] == 6) {
+                            $x = $x+40;
+                            if($x > 1271) {
+                                $x = 1111;
+                                $y = $y+$y_abstand;
+                            }
+                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                            array_push($referenz_array, "6");
+                            $counter++;
+                        }
+                    }
+                    break;
+            }
+
+
+
+        } else {
+            $check = false;
+
+        }
+
+        if($i>0) {
+
+            if($check) {
+                $link_reference_1++;
+                $link_reference_2++;
+
+                array_push($stuff['links'], array('source' => $link_reference_1, 'target' => $link_reference_2));
+            } else {
+                if($link_reference_1 >=0) {
+                    array_push($stuff['links'], array('source' => $link_reference_1, 'target' => $link_reference_2));
+                    $check = true;
+                }
+                $check = true;
+
+            }
+        }
+    }
+
+    $chart = array(
+        'id' => 'visualization',
+        'type' => 'gantt',
+        'data' => ($stuff),
+    );
+
+    $d3_chart = d3_draw($chart);
+
+    return $d3_chart;
+}
+
+function archive_protocol_overview_d3_gantt($result, $y_wert)
+{
+
+    $y_abstand = $y_wert;
+
+    $test = array();
+    $protocols = $result;
+    foreach ($protocols as $protocol) {
+        array_push($test, $protocol->raum_end . " " . $protocol->phase_end);
+    }
+    $stuff = array();
+    $stuff['nodes'] = array();
+    $stuff['links'] = array();
+
+
+    $counter = 0;
+    $referenz_array = array();
+    $y = 240;
+    $x = 25;
+
+
+    for ($i = 0; $i < sizeof($test); $i++) {
+
+
+        $name = $test[$i];
+        switch ($name) {
+
+            case 'Problemraum divergent':
+                if ($counter == 0) {
+                    array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                    array_push($referenz_array, "1");
+                    $counter++;
+                } else {
+                    if($referenz_array[$counter-1] <= 1) {
+                        $x = $x+40;
+                        if($x > 185) {
+                            $x = 25;
+                            $y = $y+$y_abstand;
+                        }
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                        array_push($referenz_array, "1");
+                        $counter++;
+                    } else {
+                        $y = $y+$y_abstand;
+                        $x = 25;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                        array_push($referenz_array, "1");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case 'Problemraum konvergent':
+                if ($counter == 0) {
+                    $x = 245;
+                    $y = 240;
+                    array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                    array_push($referenz_array, "2");
+                    $counter++;
+                } else {
+                    if($referenz_array[$counter-1] <2) {
+                        $x = 245;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                        array_push($referenz_array, "2");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] == 2) {
+                        $x = $x+40;
+                        if($x > 405) {
+                            $x = 245;
+                            $y = $y+$y_abstand;
+                        }
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                        array_push($referenz_array, "2");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] >2) {
+                        $x = 245;
+                        $y = $y+$y_abstand;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                        array_push($referenz_array, "2");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case 'Lösungsraum divergent':
+                if ($counter == 0) {
+                    $x = 461;
+                    $y = 240;
+                    array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                    array_push($referenz_array, "3");
+                    $counter++;
+                } else {
+                    if($referenz_array[$counter-1] < 3) {
+                        $x = 461;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                        array_push($referenz_array, "3");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] == 3) {
+                        $x = $x+40;
+                        if($x > 622) {
+                            $x = 461;
+                            $y = $y+$y_abstand;
+                        }
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                        array_push($referenz_array, "3");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] >3) {
+                        $x = 461;
+                        $y = $y+$y_abstand;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                        array_push($referenz_array, "3");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case "Lösungsraum konvergent":
+                if ($counter == 0) {
+                    $x = 677;
+                    $y = 240;
+                    array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                    array_push($referenz_array, "4");
+                    $counter++;
+                } else {
+                    if($referenz_array[$counter-1] < 4) {
+                        $x = 677;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                        array_push($referenz_array, "4");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] == 4) {
+                        $x = $x+40;
+                        if($x > 854) {
+                            $x = 677;
+                            $y = $y+$y_abstand;
+                        }
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                        array_push($referenz_array, "4");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] >4) {
+                        $x = 677;
+                        $y = $y+$y_abstand;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                        array_push($referenz_array, "4");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case "Implementierungsraum divergent":
+                if ($counter == 0) {
+                    $x = 891;
+                    $y = 240;
+                    array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                    array_push($referenz_array, "5");
+                    $counter++;
+                } else {
+                    if($referenz_array[$counter-1] < 5) {
+                        $x = 891;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                        array_push($referenz_array, "5");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] == 5) {
+                        $x = $x+40;
+                        if($x > 1051) {
+                            $x = 891;
+                            $y = $y+$y_abstand;
+                        }
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                        array_push($referenz_array, "5");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] >5) {
+                        $x = 891;
+                        $y = $y+$y_abstand;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                        array_push($referenz_array, "5");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case "Implementierungsraum konvergent":
+                if ($counter == 0) {
+                    $x = 1111;
+                    $y = 240;
+                    array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                    array_push($referenz_array, "6");
+                    $counter++;
+
+                } else {
+                    if($referenz_array[$counter-1] < 6) {
+                        $x = 1111;
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                        array_push($referenz_array, "6");
+                        $counter++;
+                    } else if ($referenz_array[$counter-1] == 6) {
+                        $x = $x+40;
+                        if($x > 1271) {
+                            $x = 1111;
+                            $y = $y+$y_abstand;
+                        }
+                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                        array_push($referenz_array, "6");
+                        $counter++;
+                    }
+                }
+                break;
+        }
+
+        if($i>0) {
+            array_push($stuff['links'], array('source' => $i-1, 'target' => $i));
+        }
+    }
+
+
+    $chart = array(
+        'id' => 'visualization',
+        'type' => 'gantt',
+        'data' => ($stuff),
+    );
+
+    $d3_chart = d3_draw($chart);
+
+    return $d3_chart;
+}
+
+function archive_get_height($test2, $referenz) {
+
+
+
+    $test = array();
+    $protocols = $test2;
+    foreach ($protocols as $protocol) {
+        array_push($test, $protocol->raum_end . " " . $protocol->phase_end);
+
+
+    }
+
+    $zahlenArray = array();
+
+
+    foreach ($test as $item) {
+        switch($item) {
+            case "Problemraum divergent":
+                array_push($zahlenArray, 1);
+                break;
+            case "Problemraum konvergent":
+                array_push($zahlenArray, 2);
+                break;
+            case "Lösungsraum divergent":
+                array_push($zahlenArray, 3);
+                break;
+            case "Lösungsraum konvergent":
+                array_push($zahlenArray, 4);
+                break;
+            case "Implementierungsraum divergent":
+                array_push($zahlenArray, 5);
+                break;
+            case "Implementierungsraum konvergent";
+                array_push($zahlenArray, 6);
+                break;
+        }
+    }
+
+    $y_wert = 240;
+    $counter = 1;
+    for ($i=0;$i<sizeof($zahlenArray)-1;$i++) {
+
+        if ($zahlenArray[$i+1] > $zahlenArray[$i]) {
+            $counter = 1;
+        } else if ($zahlenArray[$i+1] == $zahlenArray[$i])  {
+            $counter ++;
+            if($counter == 6) {
+                $y_wert = $y_wert + $referenz;
+                $counter = 1;
+            }
+        } else {
+            $counter = 1;
+            $y_wert = $y_wert + $referenz;
+        }
+    }
+
+    return $y_wert;
+
+}

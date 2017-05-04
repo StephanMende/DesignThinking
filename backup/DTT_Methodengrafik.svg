@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with DrawBerry (http://raphaelbost.free.fr/) -->
+<svg 
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:cc="http://web.resource.org/cc/"
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:svg="http://www.w3.org/2000/svg"
+ xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+
+ xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+ xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+ >
+    <script>
+    function mouseOver(id,idGrafik) {
+    document.getElementById(id).setAttribute('opacity', '0.5');
+    document.getElementById(idGrafik).setAttribute('opacity', '0.5');
+}
+        
+    function mouseDown(id,idGrafik) {
+    document.getElementById(id).setAttribute('opacity', '1');
+    document.getElementById(idGrafik).setAttribute('opacity', '1');
+    }    
+</script>
+    
+    
+<g inkscape:label="Background" inkscape:groupmode="layer" id="Background">
+    
+<!-- DREIECK PROBLEMRAUM KONVERGENT -->
+<a id="problemraumKonvergent" class="a" xlink:href="http://localhost/designthinking" target="_top" onmouseover="mouseOver('problemraumKonvergent','taschenlampe')" onmouseout="mouseDown('problemraumKonvergent','taschenlampe')">
+    <path  style="fill:#458dfa;fill-opacity:1.000000;stroke:#000000;stroke-width:3.757766px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 333.031250,241.167969 L 189.523438,384.804688 L 331.503906,531.117188 L 333.031250,241.167969  z"  />
+    <image id="taschenlampe" x="222.031250" y="210.031250" width="100.000" height="333.031250"
+    xlink:href="Taschenlampe2.png" xlink= "http://www.google.de" >
+    </image>
+</a>
+    
+<!-- DREIECK PROBLEMRAUM DIVERGENT -->
+<a  id= "problemRaumDivergent" class="a" xlink:href="http://localhost/designthinking" target="_top" onmouseover="mouseOver('problemRaumDivergent','fragezeichen')" onmouseout="mouseDown('problemRaumDivergent','fragezeichen')">
+    <path  style="fill:#448bf5;fill-opacity:1.000000;stroke:#000000;stroke-width:4.000000px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 334.460938,241.683594 L 478.011719,385.195312 L 333.460938,530.257812 L 334.460938,241.683594  z"  />
+    <image id="fragezeichen" x="342.031250" y="210.031250" width="85.000" height="333.031250"
+        xlink:href="Fragezeichen1.png">
+    </image>
+</a>
+    
+<!-- DREIECK LOESUNGSRAUM KONVERGENT -->
+<a id="loesungsraumKonvergent" class="a" xlink:href="http://localhost/drupal/?q=L%C3%B6sungsraum%20konvergent" target="_top" onmouseover="mouseOver('loesungsraumKonvergent','glühbirne')" onmouseout="mouseDown('loesungsraumKonvergent','glühbirne')">   
+    <path  style="fill:#4389f3;fill-opacity:1.000000;stroke:#000000;stroke-width:3.757766px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 623.031250,242.167969 L 479.523438,385.804688 L 621.503906,532.117188 L 623.031250,242.167969  z"  />
+    <image id="glühbirne" x="530.031250" y="210.031250" width="85.000" height="333.031250"
+        xlink:href="Glühbirne.png">
+    </image>
+</a>
+    
+<!-- DREIECK LOESUNGSRAUM DIVERGENT -->
+<a id="loesungsraumDivergent" class="a" xlink:href="http://localhost/drupal/?q=L%C3%B6sungsraum%20divergent" target="_top" onmouseover="mouseOver('loesungsraumDivergent','ausrufezeichen')" onmouseout="mouseDown('loesungsraumDivergent','ausrufezeichen')">
+    <path  style="fill:#458cf9;fill-opacity:1.000000;stroke:#000000;stroke-width:4.000000px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 625.460938,242.683594 L 769.011719,386.195312 L 624.460938,531.257812 L 625.460938,242.683594  z"  />
+    <image id="ausrufezeichen" x="625.031250" y="210.031250" width="100.000" height="333.031250"
+        xlink:href="Ausrufezeichen2.png" >
+    </image>
+</a>
+
+<!-- DREIECK IMPLEMENTIERUNGSRAUM KONVERGENT -->
+<a id="implementierungsraumKonvergent" class="a" xlink:href="http://localhost/drupal/?q=Implementierungsraum%20konvergent" target="_top" onmouseover="mouseOver('implementierungsraumKonvergent','baustein')" onmouseout="mouseDown('implementierungsraumKonvergent','baustein')">
+    <path  style="fill:#458dfa;fill-opacity:1.000000;stroke:#000000;stroke-width:3.757766px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 913.031250,241.167969 L 769.523438,384.804688 L 911.503906,531.117188 L 913.031250,241.167969  z"  />
+    <image id="baustein" x="800.031250" y="210.031250" width="100.000" height="333.031250"
+    xlink:href="Baustein.png" onmouseover="mouseOver('implementierungsraumKonvergent','baustein')"                                                                     onmouseout="mouseDown('implementierungsraumKonvergent','baustein')">
+    </image>
+</a>
+    
+<!-- DREIECK IMPLEMENTIERUNGSRAUM DIVERGENT -->
+<a id="implementierungsraumDivergent" class="a" xlink:href="http://localhost/drupal/?q=Implementierungsraum%20divergent" target="_top" onmouseover="mouseOver('implementierungsraumDivergent','haken')" onmouseout="mouseDown('implementierungsraumDivergent','haken')">
+    <path  style="fill:#458dfa;fill-opacity:1.000000;stroke:#000000;stroke-width:4.000000px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 915.460938,241.683594 L 1059.011719,385.195312 L 914.460938,530.257812 L 915.460938,241.683594  z"  />
+    <image id="haken" x="920.031250" y="210.031250" width="85.000" height="333.031250"
+    xlink:href="Haken.png" onmouseover="mouseOver('implementierungsraumDivergent','haken')" onmouseout="mouseDown('implementierungsraumDivergent','haken')">
+  </image>
+</a>
+
+<!-- VORBEREITUNG -->
+<a id="vorbereitung" class="a" xlink:href="http://localhost/drupal/?q=Vorbereitung" target="_top" onmouseover="mouseOver('vorbereitung')" onmouseout="mouseDown('vorbereitung')"> 
+    <path  style="fill:#458dfa;fill-opacity:1.000000;stroke:#000000;stroke-width:4.000000px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 188.656250,214.566406 L 1059.835938,214.566406 L 1059.835938,152.046875 L 188.656250,152.046875 L 188.656250,214.566406  z"  />
+    <text class="TextShape"><tspan class="TextParagraph" font-family="Comic Sans MS" font-size="45" font-weight="400"><tspan class="TextPosition" x="10751"           y="17500"/><tspan class="TextPosition" x="480.000" y="197.000"><tspan fill="white" stroke="none">Vorbereitung</tspan></tspan></tspan></text>
+</a>
+
+<!-- PROJEKTMANAGEMENT -->
+<a id = "projektmanagement" class="a" xlink:href="http://localhost/drupal/?q=Projektmanagement" target="_top" onmouseover="mouseOver('projektmanagement')" onmouseout="mouseDown('projektmanagement')"> 
+    <path  style="fill:#448dff;fill-opacity:1.000000;stroke:#000000;stroke-width:4.000000px;stroke-opacity:1.000000;stroke-linecap:butt;stroke-linejoin:miter;" 
+    d="M 187.656250,616.566406 L 1058.835938,616.566406 L 1058.835938,554.046875 L 187.656250,554.046875 L 187.656250,616.566406  z"  />
+    <text class="TextShape"><tspan class="TextParagraph" font-family="Comic Sans MS" font-size="45" font-weight="400"><tspan class="TextPosition" x="10751"           y="17500"/><tspan class="TextPosition" x="410.000" y="600.000"><tspan fill="white" stroke="none">Projektmanagement</tspan></tspan></tspan></text>
+</a>
+<path  style="fill:none;stroke:none;" 
+ d="M 506.027344,561.808594 L 765.980469,561.808594 L 765.980469,617.535156 L 506.027344,617.535156 L 506.027344,561.808594  z"  />
+</g>
+</svg>

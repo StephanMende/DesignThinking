@@ -1,0 +1,96 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jonaskortum
+ * Date: 09.12.16
+ * Time: 09:56
+ */
+
+function reflection_menu() {
+    $items['persoenliche_reflexion'] = array(
+        'title' => 'Persönliche Reflexion',
+        'access callback' => true,
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('reflection_get_form'),
+    );
+
+    $items['gruppenreflexion'] = array(
+        'title' => 'Gruppenreflexion',
+        'access callback' => true,
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('reflection_group_get_form'),
+        'file' => 'group_reflection.inc',
+    );
+
+    return $items;
+}
+
+function reflection_get_form($form, &$form_submit) {
+
+    $reflection = reflection_get_reflection();
+
+    $form['test'] = array(
+        '#title' => "persönliche Reflexion",
+        '#type' => 'fieldset',
+        '#description' => "Am Ende der Projektphase soll jedes Gruppenmitglied ein persönliches Fazit ziehen. Dort können sowohl positive als auch negative Aspekte der Projektphase genannt werden."
+    );
+    $form['test']['task'] = array(
+        '#title' => t('Fazit'),
+        '#resizable' => FALSE,
+        "#default_value" => $reflection->reflection,
+        '#type' => 'textarea',
+    );
+
+    $form['save_reflection'] = array(
+        '#type' => 'submit',
+        '#value' => 'Fazit speichern',
+        '#submit' => array('reflection_save_reflection')
+
+    );
+
+    return $form;
+}
+
+
+function reflection_save_reflection($form, &$form_state) {
+
+    global $user;
+    $task = $form_state['values']['task'];
+
+    if (check_current_reflection()) {
+        $sql = "UPDATE {user_reflection} SET reflection = '$task' WHERE uid = ".$user->uid;
+    } else {
+        $sql = "INSERT INTO {user_reflection} (uid,reflection) VALUES(".$user->uid.",'".$task."');";
+    }
+
+    db_query($sql);
+    drupal_set_message("Reflexion wurde erfolgreich gespeichert!");
+    drupal_goto("");
+}
+
+function check_current_reflection() {
+    global $user;
+    $reflection = false;
+    $sql = "SELECT * FROM {user_reflection} WHERE uid = ".$user->uid;
+    $result = db_query($sql);
+    foreach ($result as $r) {
+        $reflection = true;
+    }
+
+    return $reflection;
+
+}
+
+function reflection_get_reflection() {
+    global $user;
+    $reflection = "";
+    $sql = "SELECT * FROM {user_reflection} WHERE uid = ".$user->uid;
+    $result = db_query($sql);
+    foreach ($result as $r) {
+        $reflection = $r;
+    }
+
+    return $reflection;
+}

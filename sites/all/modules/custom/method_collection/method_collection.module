@@ -1,0 +1,212 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: kortum
+ * Date: 03.11.2015
+ * Time: 19:20
+ */
+
+/**
+ * Implements block_info
+ */
+function method_collection_block_info() {
+    $blocks['method_collection'] = array(
+        // The name that will appear in the block list.
+        'info' => t('method collection'),
+        // Default setting.
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    return $blocks;
+}
+
+/**
+ * Custom content function.
+ *
+ * Gets all Documents from the group of the current user.
+ *
+ * @return
+ *   A result set of documents
+ */
+function method_collection_getMethods(){
+
+    $result;
+    $path = current_path();
+    $path_alias = drupal_lookup_path('alias',$path);
+
+    switch($path_alias) {
+        case 'Auflistung_Problemraum':
+            $result = method_collection_getDBEntrys("Problemraum");
+            break;
+        case 'Auflistung_Lösungsraum':
+            $result = method_collection_getDBEntrys("Lösungsraum");
+            break;
+        case 'Auflistung_Implementierungsraum':
+            $result = method_collection_getDBEntrys("Implementierungsraum");
+            break;
+        case 'Auflistung_konvergent':
+            $result = method_collection_getDBEntrys("Konvergent");
+            break;
+        case 'Auflistung_divergent':
+            $result = method_collection_getDBEntrys("Divergent");
+            break;
+        case 'Auflistung_Problemraum_Lösungsraum':
+            $result = method_collection_getDBEntrys("Problemraum_Lösungsraum");
+            break;
+        case 'Auflistung_Problemraum_Lösungsraum_Implementierungsraum':
+            $result = method_collection_getDBEntrys("Problemraum_Lösungsraum_Implementierungsraum");
+            break;
+        case 'Auflistung_Problemraum_Implementierungsraum':
+            $result = method_collection_getDBEntrys("Problemraum_Implementierungsraum");
+            break;
+        case 'Auflistung_Vorbereitung':
+            $result = method_collection_getDBEntrys("Vorbereitung");
+            break;
+        case 'Auflistung_Projektmanagement':
+            $result = method_collection_getDBEntrys("Projektmanagement");
+            break;
+
+
+    }
+
+    return $result;
+
+
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * Prepares the contents of the block.
+ */
+function method_collection_block_view($delta = '') {
+
+    switch ($delta) {
+        case 'method_collection':
+
+            $result = method_collection_getMethods();
+
+            $items = array();
+            //counter for documents
+            $i = 1;
+            $tempVariable = '';
+            $a=array();
+            $c=array();
+
+
+            //for each document get the right method name from database
+            foreach ($result as $node) {
+
+                $methodResult = db_query("SELECT * FROM {node} AS node WHERE node.nid = :node_id", array(
+                    ':node_id' => $node->entity_id,
+                ));
+
+                foreach ($methodResult as $method) {
+                    array_push($a, $method->title);
+                    $tempVariable = $method->title;
+                }
+
+            }
+
+            $x= my_array_unique($a);
+
+            foreach($x as $z) {
+
+                $methodResult = db_query("SELECT * FROM {node} AS node WHERE node.title = :node_id", array(
+                    ':node_id' => $z,
+                ));
+
+                foreach($methodResult as $bla) {
+
+                $items[] = array(
+                    'data' => l($z, 'node/' . $bla->nid . "/Methodenauswahl"),
+                );
+                $i++;
+                }
+            }
+
+
+
+
+
+            // No content was found.
+            if (empty($items)) {
+                $block['content'] = t('Bisher wurden keine Methoden bearbeitet!');
+            } else {
+                // Pass data through theme function.
+                $block['content'] = theme('item_list', array(
+                    'items' => $items));
+            }
+
+
+            return $block;
+    }}
+
+
+function method_collection_getDBEntrys($phase_wildcard){
+    //SELECT * FROM field_data_field_raum AS raum
+    // INNER JOIN field_data_field_phase AS phase ON raum.entity_id = phase.entity_id
+    //WHERE field_raum_target_id = 29 AND
+    //field_phase_target_id = 28;
+    $type ='methode';
+
+
+
+    switch ($phase_wildcard) {
+        case "Problemraum":
+            $raum_id = 29;
+            $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id", array(
+                ':raum_id' => $raum_id,
+            ));
+            break;
+        case "Lösungsraum":
+            $raum_id = 30;
+            $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id", array(
+                ':raum_id' => $raum_id,
+            ));
+            break;
+        case "Implementierungsraum":
+            $raum_id = 31;
+            $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id", array(
+                ':raum_id' => $raum_id,
+            ));
+            break;
+        case "Konvergent":
+            $phase_id = 28;
+            $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_phase_target_id = :phase_id", array(
+                ':phase_id' => $phase_id,
+            ));
+            break;
+        case "Divergent":
+            $phase_id = 27;
+            $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_phase_target_id = :phase_id", array(
+                ':phase_id' => $phase_id,
+            ));
+            break;
+        case "Vorbereitung":
+            $raum_id = 51;
+            $result = db_query("SELECT * FROM {field_data_field_raum} WHERE field_raum_target_id = :raum_id", array(
+                ':raum_id' => $raum_id,
+            ));
+            break;
+        case "Projektmanagement":
+            $raum_id = 52;
+            $result = db_query("SELECT * FROM {field_data_field_raum} WHERE field_raum_target_id = :raum_id", array(
+                ':raum_id' => $raum_id,
+            ));
+            break;
+
+    }
+
+    return $result;
+
+}
+
+function my_array_unique($old){
+    $new = array();
+    for($i=0;$i<count($old);++$i){
+        if(in_array($old[$i], $new) != "true"){
+            $new[] = $old[$i];
+        }
+    }
+    return $new;
+}

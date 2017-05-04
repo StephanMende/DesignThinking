@@ -1,0 +1,76 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jonaskortum
+ * Date: 06.12.16
+ * Time: 20:15
+ */
+
+function basics_menu() {
+
+    $items['basics'] = array(
+        'title' => 'Upload-Test',
+        'access callback' => true,
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('basics_get_form'),
+    );
+
+    return $items;
+}
+
+function basics_get_form() {
+
+
+    $form['file'] = array(
+        '#type' => 'file',
+        '#name' => 'files[]',
+        '#title' => t('Upload some photos'),
+        '#attributes' => array('multiple' => 'multiple'),
+    );
+
+
+
+
+    $form['save_reflection'] = array(
+        '#type' => 'submit',
+        '#value' => 'Fazit speichern',
+        '#submit' => array('basics_submit')
+
+    );
+
+    return $form;
+}
+
+
+function basics_submit($form, $form_state) {
+    $num_files = count($_FILES['files']['name']);
+    $main_path = "";
+
+    for ($i = 0; $i < $num_files; $i++) {
+        $file = file_save_upload($i, array(
+            'file_validate_is_audio' => array(),
+            'file_validate_extensions' => array('png pdf jpg jpeg mp3 mp4'),
+            'file_validate_size' => array(5 * 1024 * 1024),
+        ));
+        if ($file) {
+            $file->status = FILE_STATUS_PERMANENT;
+            //$mydir = 'public://methods/';
+            //file_prepare_directory($mydir, FILE_CREATE_DIRECTORY);
+            if ($file = file_move($file, 'public://methods')) {
+
+                $form_state['values']['file'][$i] = $file;
+                $path = substr($file->uri, 9);
+                $main_path .= $path;
+                if ($num_files - $i != 1) {
+                    $main_path .= ",";
+                }
+            } else {
+                drupal_set_message("NOO");
+
+            }
+        }
+
+    }
+
+}
+

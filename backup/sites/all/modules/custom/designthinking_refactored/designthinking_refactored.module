@@ -1,0 +1,212 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: hofer
+ * Date: 14.10.2015
+ * Time: 22:47
+ */
+
+
+/**
+ * Implements hook_menu()
+ */
+
+function designthinking_refactored_menu() {
+    //Ajax Callback. Return methods of Phase %
+    $items['ajax/%'] = array(
+        'title' => 'Get methods for Phase',
+        'page callback' => 'designthinking_get_methods_for_phase',
+        'page arguments' => array(1),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    return $items;
+
+}
+
+/**
+ * Implements a unorderd list of methods of phase 5
+ * and return it via JSON
+ */
+function designthinking_get_methods_for_phase($phase_wildcard) {
+
+    //Get Node IDs for phase
+    //dsm($phase_wildcard);
+    $result = get_nid_for_phase($phase_wildcard);
+    //dsm($result);
+    //$list = array();
+
+
+
+
+    foreach ($result as $record) {
+        //dsm($record);
+        $entity_id = $record->entity_id;
+        //Get Methodenname of node ID
+        $method_results = get_methode_name_of_node_id($entity_id);
+        foreach($method_results as $method_record) {
+            $method_name = $method_record->title;
+            $node_id = $method_record->entity_id;
+
+            //if($record->raum_id)
+
+            $list[] = "<li>" . "<a href='./node/" . $entity_id . "/Methodenauswahl/$record->field_raum_target_id/$record->field_phase_target_id'>" .  $method_name . "</a></li>";
+            //dsm($method_name);
+        }
+    }
+
+
+    //dsm($list[0]);
+
+    //Build an unordered list
+    $list_start_item = "<ul>";
+    foreach($list as $list_item) {
+        $list_start_item .= $list_item;
+    }
+    $list_start_item .= "</ul>";
+    //dsm($list_start_item);
+
+
+
+    //Output it via JSON for AJAX
+    drupal_json_output($list_start_item);
+
+}
+
+//Function which queries the database for phase
+function get_nid_for_phase($phase_wildcard){
+    //SELECT * FROM field_data_field_raum AS raum
+    // INNER JOIN field_data_field_phase AS phase ON raum.entity_id = phase.entity_id
+    //WHERE field_raum_target_id = 29 AND
+    //field_phase_target_id = 28;
+    $type ='methode';
+
+
+
+    switch ($phase_wildcard) {
+            case "phase_1":
+                $raum_id = 29;
+                $phase_id = 27;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                global $user;
+
+                variable_set('Phasenwahl'.$user->id, 'Phase 1 ' . $user->uid);
+                break;
+            case "phase_2":
+                $raum_id = 29;
+                $phase_id = 28;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                break;
+            case "phase_3":
+                $raum_id = 30;
+                $phase_id = 27;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                break;
+            case "phase_4":
+                //dsm($type);
+                $raum_id = 30;
+                $phase_id = 28;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                break;
+            case "phase_5":
+                $raum_id = 31;
+                $phase_id = 27;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                break;
+            case "phase_6":
+                $raum_id = 31;
+                $phase_id = 28;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                break;
+            case "vorbereitung":
+                $raum_id = 51;
+                $phase_id = 142;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                break;
+            case "projektmanagement":
+                $raum_id = 52;
+                $phase_id = 143;
+                $result = db_query("SELECT * FROM {field_data_field_raum} AS raum INNER JOIN {field_data_field_phase} AS phase ON raum.entity_id = phase.entity_id WHERE field_raum_target_id = :raum_id AND field_phase_target_id = :phase_id", array(
+                    ':raum_id' => $raum_id,
+                    ':phase_id' => $phase_id,
+                ));
+                break;
+
+        }
+
+
+
+
+    return $result;
+
+}
+
+
+
+//Function which queries the database to get a node id
+function get_methode_name_of_node_id($node_id) {
+    $result = db_query("SELECT title FROM {node} WHERE nid = :nid ORDER BY title ASC ", array(
+        ':nid' => $node_id,
+    ));
+    //dsm($result);
+    return $result;
+}
+/**
+ * Implements hook_block_info()
+ */
+function designthinking_refactored_block_info() {
+    $blocks['methods'] = array(
+        'info' => t('Design Thinking Methods'),
+    );
+
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function designthinking_refactored_block_view($delta) {
+    $block = array();
+
+    //dsm($delta);
+    switch ($delta) {
+        case 0:
+            $block['subject'] = t('Methoden');
+            $block['content'] = t('Klicken Sie auf eine der Phasen im Modelle, um die dazugehörigen verlinkten Methoden anzuzeigen.');
+            break;
+
+    }
+    return $block;
+}
+
+/**
+ * Implementation of hook_init()
+ *
+ */
+function designthinking_refactored_init() {
+    //dsm('hello world');
+    drupal_add_js(drupal_get_path('module', 'designthinking_refactored') . '/designthinking.js', array('scope' => 'footer'));
+}
+

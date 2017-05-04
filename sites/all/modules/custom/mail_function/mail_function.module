@@ -1,0 +1,203 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jonaskortum
+ * Date: 02.11.16
+ * Time: 15:03
+ */
+
+function mail_function_menu()
+{
+    $items['mail'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('mail_function_form'),
+    );
+
+    return $items;
+}
+
+
+
+function mail_function_form($form, &$form_submit) {
+
+    global $user;
+    $user=user_load($user->uid);
+    $mail=$user->mail;
+
+    $form['test'] = array(
+        '#title' => "Mail versenden",
+        '#type' => 'fieldset',
+        '#description' => "Es kann eine Mail an einen beliebigen Empfänger versendet werden. Die Adresse des Absenders ist standardmäßig die registrierte Mail-Adresse des Benutzers."
+    );
+
+    $form['test']['from'] = array(
+        '#type' => 'markup',
+        '#title' => t('My Form Item'),
+        '#prefix' => "<b>Absender</b><br>$mail<br> <br>",
+    );
+
+    $form['test']['to'] = array(
+        '#type' => 'textfield',
+        '#require' => TRUE,
+        '#title' => t('Empfänger:'),
+        '#default_value' => ''
+    );
+
+    $form['test']['cc'] = array(
+        '#type' => 'textfield',
+        '#require' => TRUE,
+        '#title' => t('cc:'),
+        '#default_value' => ''
+    );
+
+    $form['test']['subject'] = array(
+        '#type' => 'textfield',
+        '#require' => TRUE,
+        '#title' => t('Betreff'),
+        '#default_value' => ''
+    );
+
+    $form['test']['body'] = array(
+        '#title' => t('Inhalt'),
+        '#resizable' => FALSE,
+        '#type' => 'textarea',
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Mail versenden',
+        '#submit' => array('submit_func')
+    );
+
+    return $form;
+}
+
+function mail_function_cron() {
+
+    $result = get_all_open_tasks();
+
+    foreach($result as $r) {
+
+        $user=user_load($r->uid);
+        $username=$user->name;
+
+        $actual_date = date('Y-m-d H:i:s');
+        $deadline_date = $r->deadline;
+
+        $today = new DateTime();
+        $date = new DateTime($r->deadline);
+        $interval = $today->diff($date);
+
+        $days = $interval->format("%r%a");
+        $hours = $interval->format("%r%h");
+
+        $main_time = ($days*24) + ($hours);
+
+        $from = "noreply@dtt.de";
+        $to = "kortumj@uni-hildesheim.de";
+        $cc = "";
+        $subject = "offene Aufgabe";
+        $body = "Hallo " . $username ."!  \r\n Ihre Aufgabe mit der Kurzbeschreibung \r\n\r\n " .$r->short_description. "\r\n\r\n läuft in ".$interval->format("%d Tag(en) und %h Stunde(n)") . " ab! \r\n Diese Mail wurde automatisch generiert. \r\n Mit freundlichen Grüßen
+        \r\nIhr Design-Thinking-Bot" ;
+
+
+        if ($main_time < 72) {
+            if ($r->reminder3 != 1) {
+                $sql = "UPDATE {task} SET reminder3 = 1 WHERE task_id = $r->task_id";
+                db_query($sql);
+                send_personal_mail($from, $to, $cc, $subject, $body);
+            } else if ($main_time < 24) {
+                if ($r->reminder1 != 1) {
+                    $sql = "UPDATE {task} SET reminder1 = 1 WHERE task_id = $r->task_id";
+                    db_query($sql);
+                    send_personal_mail($from, $to, $cc, $subject, $body);
+                }
+            }
+        }
+    }
+
+
+
+
+
+}
+
+function submit_func($form, &$form_state) {
+    global $user;
+
+    $user=user_load($user->uid);
+    $mail=$user->mail;
+
+    $from = $mail;
+    $to = $form_state['values']['to'];
+    $cc = $form_state['values']['cc'];
+    $subject = $form_state['values']['subject'];
+    $body = $form_state['values']['body'];
+
+    /*
+    $myfile = fopen("uploads/method_execution/newfile.txt", "w") or die("Unable to open file!");
+    $txt = "John Doe\n";
+    fwrite($myfile, $txt);
+    $txt = "Jane Doe\n";
+    fwrite($myfile, $txt);
+    fclose($myfile);
+    */
+
+    send_personal_mail($from, $to, $cc, $subject, $body);
+
+}
+
+function send_personal_mail($from, $to, $cc, $subject, $body) {
+
+    $fake_module = 'foo'; // or whatever you want
+    $fake_key = 'bar'; // or whatever you want
+
+    $message = array(
+        'id' => $fake_module . '_' . $fake_key,
+        'from' => $from,
+        'to' => $to,
+        'subject' => $subject,
+        'body' => $body,
+        'headers' => array(
+            'Return-Path' => $from,
+            'MIME-Version' => '1.0',
+            'Content-Transfer-Encoding' => '8Bit',
+            'Content-Type' => 'text/plain; charset=UTF-8;',
+        ),
+    );
+
+    $system = drupal_mail_system($fake_module, $fake_key);
+    if ($system->mail($message)) {
+        drupal_set_message("Email wurde gesendet!");
+    } else {
+        drupal_set_message("Email wurde nicht gesendet!", "error");
+    }
+}
+
+function mail_function_mail($key, &$message, $params) {
+    switch($key) {
+        case 'newsletter':
+            $headers = array(
+                'MIME-Version' => '1.0',
+                'Content-Type' => 'text/html; charset=UTF-8;',
+                'Content-Transfer-Encoding' => '8Bit',
+                'X-Mailer' => 'Drupal'
+            );
+
+            foreach ($headers as $key => $value) {
+                $message['headers'][$key] = $value;
+            }
+            $message['subject'] = $params['subject'];
+            $message['body'] = array(0=>t($params['body']));
+            break;
+    }
+}
+
+function get_all_open_tasks() {
+    $sql = "SELECT * FROM {task} WHERE done = 0";
+    $return = db_query($sql);
+    return $return;
+}

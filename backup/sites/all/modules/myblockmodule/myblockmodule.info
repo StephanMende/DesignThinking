@@ -1,0 +1,4 @@
+name = MyBlockModule
+description = This module provides a custom block with dynamic content.
+package = MyModules
+core = 7.x

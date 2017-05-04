@@ -1,0 +1,201 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: kortum
+ * Date: 03.11.2015
+ * Time: 19:20
+ */
+
+/**
+ * Implements block_info
+ */
+function graphic_points_block_info() {
+    $blocks['graphic_points'] = array(
+        // The name that will appear in the block list.
+        'info' => t('graphic_points'),
+        // Default setting.
+        'cache' => DRUPAL_CACHE_PER_ROLE,
+    );
+    return $blocks;
+}
+/**
+ * Implements hook_block_view().
+ *
+ * Prepares the contents of the block.
+ */
+function graphic_points_block_view($delta = '') {
+    switch ($delta) {
+        case 'graphic_points':
+
+            global $user;
+            $testVariable = "";
+            $x1 = 80;
+            $y1 = 140;
+            $x2 = 130;
+            $y2 = 140;
+            $x3 = 280;
+            $y3 = 140;
+            $x4 = 330;
+            $y4 = 140;
+            $x5 = 475;
+            $y5 = 140;
+            $x6 = 525;
+            $y6 = 140;
+
+            $counter = 1;
+
+
+            $result = db_query("SELECT * FROM {node} AS node INNER JOIN {field_data_field_phasenreferenz} AS phase ON node.nid = phase.entity_id INNER JOIN {field_data_field_raumreferenz} AS raum ON node.nid = raum.entity_id WHERE node.nid IN (SELECT node.nid FROM {node} AS node INNER JOIN {users} AS users ON node.uid = users.uid WHERE node.type = 'dokument' AND users.uid IN(SELECT users.uid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE role.rid = (SELECT role.rid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE users.uid = :user_id)));", array(
+                ':user_id' => $user->uid,
+            ));
+
+
+                foreach ($result as $node2) {
+
+                    $phase = "";
+
+                    switch($node2->field_raumreferenz_target_id) {
+                        case 29:
+                            if($node2->field_phasenreferenz_target_id == 27) {
+                                $phase = "Phase 1";
+                            } else {
+                                $phase = "Phase 2";
+                            }
+                        break;
+                        case 30:
+                            if($node2->field_phasenreferenz_target_id == 27) {
+                                $phase = "Phase 3";
+                            } else {
+                                $phase = "Phase 4";
+                            }
+                        break;
+                        case 31:
+                            if($node2->field_phasenreferenz_target_id == 27) {
+                                $phase = "Phase 5";
+                            } else {
+                                $phase = "Phase 6";
+                            }
+                        break;
+                    }
+                    $array = array("#f0f8ff", "#ff7f50", "#6495ed", "#1e90ff", '#ffd700', '#7cfc00', '#d3d3d3', '#00ff7f', '#fa8072');
+
+
+                    switch($phase) {
+                        case "Phase 1":
+
+                            $testVariable = $testVariable . '<circle id='.$counter.' cx='.$x1.' cy='.$y1.' r="8" stroke="black" stroke-width="3" fill="'.$array[rand(0,8)].'" />';
+                            if($counter > 9) {
+                                $tx1 = $x1 -5;
+                            } else {
+                                $tx1 = $x1 -2;
+
+                            }
+                            $ty1 = $y1 +2.5;
+                            $testVariable = $testVariable . '<text id=t'.$counter.' x='.$tx1.' y='.$ty1.' font-size="11" fill="black" > '.$counter.' </text>';
+                            $y1 = $y1 + 17;
+                            $counter++;
+                            break;
+                        case "Phase 2":
+                            $testVariable = $testVariable . '<circle cx='.$x2.' cy='.$y2.' r="8" stroke="black" stroke-width="3" fill="'.$array[rand(0,8)].'" />';
+                            if($counter > 9) {
+                                $tx2 = $x2 -5;
+                            } else {
+                                $tx2 = $x2 -2;
+
+                            }
+                            $ty2 = $y2 +2.5;
+                            $testVariable = $testVariable . '<text x='.$tx2.' y='.$ty2.' font-size="11" fill="black" > '.$counter.' </text>';
+                            $y2 = $y2 + 17;
+                            $counter++;
+
+                            break;
+                        case "Phase 3":
+                            $testVariable = $testVariable . '<circle cx='.$x3.' cy='.$y3.' r="8" stroke="black" stroke-width="3" fill="'.$array[rand(0,8)].'" />';
+                            if($counter > 9) {
+                                $tx3 = $x3 -5;
+                            } else {
+                                $tx3 = $x3 -2;
+
+                            }
+                            $ty3 = $y3 +2.5;
+                            $testVariable = $testVariable . '<text x='.$tx3.' y='.$ty3.' font-size="11" fill="black" > '.$counter.' </text>';
+                            $y3 = $y3 + 17;
+                            $counter++;
+
+                            break;
+                        case "Phase 4":
+                            $testVariable = $testVariable . '<circle cx='.$x4.' cy='.$y4.' r="8" stroke="black" stroke-width="3" fill="'.$array[rand(0,8)].'" />';
+                            if($counter > 9) {
+                                $tx4 = $x4 -5;
+                            } else {
+                                $tx4 = $x4 -2;
+
+                            }
+                            $ty4 = $y4 +2.5;
+                            $testVariable = $testVariable . '<text x='.$tx4.' y='.$ty4.' font-size="11" fill="black" > '.$counter.' </text>';
+                            $y4 = $y4 + 17;
+                            $counter++;
+                            break;
+                        case "Phase 5":
+                            $testVariable = $testVariable . '<circle cx='.$x5.' cy='.$y5.' r="8" stroke="black" stroke-width="3" fill="'.$array[rand(0,8)].'" />';
+                            if($counter > 9) {
+                                $tx5 = $x5 -5;
+                            } else {
+                                $tx5 = $x5 -2;
+
+                            }
+                            $ty5 = $y5 +2.5;
+                            $testVariable = $testVariable . '<text x='.$tx5.' y='.$ty5.' font-size="11" fill="black" > '.$counter.' </text>';
+                            $y5 = $y5 + 17;
+                            $counter++;
+                            break;
+                        case "Phase 6":
+                            $testVariable = $testVariable . '<circle cx='.$x6.' cy='.$y6.' r="8" stroke="black" stroke-width="3" fill="'.$array[rand(0,8)].'" />';
+                            if($counter > 9) {
+                                $tx6 = $x6 -5;
+                            } else {
+                                $tx6 = $x6 -2;
+
+                            }
+                            $ty6 = $y6 +2.5;
+                            $testVariable = $testVariable . '<text x='.$tx6.' y='.$ty6.' font-size="11" fill="black" > '.$counter.' </text>';
+                            $y6 = $y6 + 17;
+                            $counter++;
+                            break;
+                    }
+                }
+
+            $tempString = ' <svg height="1000" width="1000">
+    <path id="test" transform="rotate(-89.77584838867188 53.125942230224624,195.84477233886722) " id="svg_2"
+d="m-59.508537,247.846939l114.634468,-92.004333l114.634491,90.004333l-2.268959,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+<path id="svg_3" transform="rotate(89.69190216064453 154.77575683593753,194.82394409179688) " d="m40.141285,240.826096l114.634472,-90.004318l114.634491,90.004318l-229.268963,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+  <path id="svg_4" transform="rotate(-90.0 256.7757568359375,194.82394409179688) " d="m143.141281,239.826096l114.634476,-90.004318l114.634491,90.004318l-229.268967,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+
+<path id="svg_5" transform="rotate(90.0 355.77575683593756,192.82394409179685) " d="m243.141281,241.826096l114.634476,-90.004318l114.634491,90.004318l-229.268967,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+
+<path id="svg_6" transform="rotate(-90.0 457.77575683593744,194.82394409179685) " d="m343.141296,235.826096l114.63446,-90.004318l114.634521,90.004318l-229.268982,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+  <path id="svg_7" transform="rotate(90.0 555.7757568359375,193.8239440917969) " d="m443.141296,245.826111l114.63446,-90.004333l114.634521,90.004333l-229.268982,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+  <path id="svg_9" d="m5.975,25.382509l178.077933,-14.93751l251.843796,0l178.078247,14.93751l0,21.125025l-178.078247,14.93745l-251.843796,0l-178.077933,-14.93745l0,-21.125025z" stroke-linecap="null" stroke-linejoin="null" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+
+<path id="svg_10" d="m7.000015,345.437531l178.077927,-14.937531l251.843781,0l178.078278,14.937531l0,21.125l-178.078278,14.937469l-251.843781,0l-178.077927,-14.937469l0,-21.125z" stroke-linecap="null" stroke-linejoin="null" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+
+ <text id="vorbereitung" class="TextShape"><tspan class="TextParagraph" font-family="Comic Sans MS" font-size="35" font-weight="400"><tspan class="TextPosition" x="10751"           y="17500"/><tspan class="TextPosition" x="200.000" y="47.000"><tspan fill="white" stroke="none">Vorbereitung</tspan></tspan></tspan></text>
+<text id="projektmanagement" class="TextShape"><tspan class="TextParagraph" font-family="Comic Sans MS" font-size="35" font-weight="400"><tspan class="TextPosition" x="10751"           y="17500"/><tspan class="TextPosition" x="150.000" y="370.000"><tspan fill="white" stroke="none">Projektmanagement</tspan></tspan></tspan></text>
+
+'.$testVariable.'
+</svg> ';
+
+            $items[] = array(
+                'data' => $tempString);
+
+            // No content was found.
+            if (empty($items)) {
+                $block['content'] = t('Bisher wurden keine Aufgaben verteilt!');
+            } else {
+                // Pass data through theme function.
+                $block['content'] = t($tempString);
+            }
+            return $block;
+    }
+}
+

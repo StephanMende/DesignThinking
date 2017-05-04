@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with DrawBerry (http://raphaelbost.free.fr/) -->
+<svg 
+ 	xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:cc="http://web.resource.org/cc/"
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:svg="http://www.w3.org/2000/svg"
+ xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+
+ xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+ xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+ >
+<g inkscape:label="Background" inkscape:groupmode="layer" id="Background">
+    
+    
+    <path transform="rotate(-89.77584838867188 53.125942230224624,195.84477233886722) " id="svg_2" 
+d="m-59.508537,247.846939l114.634468,-92.004333l114.634491,90.004333l-2.268959,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+ 
+<path id="svg_3" transform="rotate(89.69190216064453 154.77575683593753,194.82394409179688) " d="m40.141285,240.826096l114.634472,-90.004318l114.634491,90.004318l-229.268963,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+  
+<path id="svg_4" transform="rotate(-90.0 256.7757568359375,194.82394409179688) " d="m143.141281,239.826096l114.634476,-90.004318l114.634491,90.004318l-229.268967,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+  
+<path id="svg_5" transform="rotate(90.0 355.77575683593756,192.82394409179685) " d="m243.141281,241.826096l114.634476,-90.004318l114.634491,90.004318l-229.268967,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+  
+<path id="svg_6" transform="rotate(-90.0 457.77575683593744,194.82394409179685) " d="m343.141296,235.826096l114.63446,-90.004318l114.634521,90.004318l-229.268982,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+  <path id="svg_7" transform="rotate(90.0 555.7757568359375,193.8239440917969) " d="m443.141296,245.826111l114.63446,-90.004333l114.634521,90.004333l-229.268982,0z" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+    
+<path id="svg_9" d="m5.975,25.382509l178.077933,-14.93751l251.843796,0l178.078247,14.93751l0,21.125025l-178.078247,14.93745l-251.843796,0l-178.077933,-14.93745l0,-21.125025z" stroke-linecap="null" stroke-linejoin="null" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+    
+<path id="svg_10" d="m7.000015,345.437531l178.077927,-14.937531l251.843781,0l178.078278,14.937531l0,21.125l-178.078278,14.937469l-251.843781,0l-178.077927,-14.937469l0,-21.125z" stroke-linecap="null" stroke-linejoin="null" stroke-width="5" stroke="#000000" fill="#58ACFA"/>
+
+
+    <image id="taschenlampe" x="25.031250" y="55.031250" width="65.000" height="280.031250"
+    xlink:href="Taschenlampe2.png" xlink= "http://www.google.de" >
+    </image>
+    
+    <image id="fragezeichen" x="110.031250" y="70.031250" width="66.000" height="250.031250"
+        xlink:href="Fragezeichen1.png">
+    </image>
+    
+    <image id="glühbirne" x="232.031250" y="30.031250" width="65.000" height="333.031250"
+        xlink:href="Gluehbirne.png">
+    </image>
+    
+    <image id="ausrufezeichen" x="295.031250" y="30.031250" width="90.000" height="333.031250"
+        xlink:href="Ausrufezeichen2.png" >
+    </image>
+    
+    <image id="baustein" x="422.031250" y="22.031250" width="75.000" height="333.031250"
+    xlink:href="Baustein.png">
+    </image>
+    
+    <image id="haken" x="510.031250" y="30.031250" width="60.000" height="333.031250"
+    xlink:href="Haken.png">
+  </image>
+    
+    <text id="vorbereitung" class="TextShape"><tspan class="TextParagraph" font-family="Comic Sans MS" font-size="35" font-weight="400"><tspan class="TextPosition" x="10751"           y="17500"/><tspan class="TextPosition" x="200.000" y="47.000"><tspan fill="white" stroke="none">Vorbereitung</tspan></tspan></tspan></text> 
+    
+    <text id="projektmanagement" class="TextShape"><tspan class="TextParagraph" font-family="Comic Sans MS" font-size="35" font-weight="400"><tspan class="TextPosition" x="10751"           y="17500"/><tspan class="TextPosition" x="150.000" y="370.000"><tspan fill="white" stroke="none">Projektmanagement</tspan></tspan></tspan></text> 
+    
+    </g>
+    
+
+    
+</svg>

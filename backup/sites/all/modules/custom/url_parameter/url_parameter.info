@@ -1,0 +1,3 @@
+name = URL Parameter
+description = Check if the user is logged in
+core = 7.x
