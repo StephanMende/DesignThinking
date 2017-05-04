@@ -61,6 +61,8 @@ function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
             $date_value = $d->format($dateformat);
         }
 
+        drupal_set_message($date_value);
+
         $form['description']['deadline'] = array(
             '#type' => 'date_popup',
             '#date_timezone' => 'Europe/Berlin',
