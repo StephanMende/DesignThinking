@@ -130,7 +130,6 @@ function task_reminder_get_content()
 
     //Alle erledigten Aufgaben der Gruppe werden geladen
     $sql = "SELECT * FROM {task} WHERE done = 1 AND uid IN (" . $group_tasks . ") ORDER BY deadline";
-    drupal_set_message($sql);
     $completed_tasks_result = db_query($sql);
 
     //Es wird über alle erledigten Aufgaben iteriert
