@@ -6,10 +6,13 @@
  * Time: 19:20
  */
 
+require_once("statistiken_diagram.inc");
+
 /**
  * Implements hook_menu().
  */
-function statistiken_menu() {
+function statistiken_menu()
+{
     $items['statistiken'] = array(
         'title' => 'Statistiken',
         'access callback' => 'user_is_logged_in',
@@ -21,435 +24,196 @@ function statistiken_menu() {
     return $items;
 }
 
-/**
- * Callback function for menu item.
+/*
+ * Diese Funktion baut alle nötigen Statistik-Diagramme und gibt den entsprechenden HTML-Code zurück
  */
-function statistiken_get_diagrams() {
+function statistiken_get_diagrams()
+{
 
-    $html = "";
+    $diagram_string = "";
 
-    $html .= statistiken_create_pie_chart("Anzahl durchgeführter Methoden Ihrer Gruppe",method_overview_room());
-    $html .= statistiken_create_pie_chart("Anzahl Methoden nach Phase",method_overview_phase());
+    $diagram_string .= statistiken_create_pie_chart("Anzahl durchgeführter Methoden Ihrer Gruppe", statistiken_method_overview_room());
+    $diagram_string .= statistiken_create_pie_chart("Anzahl Methoden nach Phase", statistiken_method_overview_phase());
+    $diagram_string .= statistiken_create_pie_chart("Top 5 genutzter Methoden", statistiken_method_ranking());
+    $diagram_string .= statistiken_create_pie_chart("Top 5 Ihrer genutzten Methoden", statistiken_group_method_ranking());
 
-    $html .= statistiken_create_pie_chart("Top 5 genutzter Methoden",method_ranking());
-    $html .= statistiken_create_pie_chart("Top 5 Ihrer genutzten Methoden",statistiken_group_method_ranking());
-
-
-    return $html;
+    return $diagram_string;
 
 }
 
-function method_overview_room() {
+/*
+ * Diese Funktion erfasst alle Methoden, die die Gruppe durchgeführt haben und ordnet sie anhand des Raumes
+ */
+function statistiken_method_overview_room()
+{
 
     $method_list = array();
 
-    $vorbereitung = array();
-    $problemraum = array();
-    $loesungsraum = array();
-    $implementierungsraum = array();
-    $projektmanagement = array();
+    $preparation = array();
+    $problem_room = array();
+    $solution_room = array();
+    $implementation_room = array();
+    $project_management = array();
 
-    $participants = get_participants_for_methods2();
-    $sql = "SELECT * FROM {method_execution} WHERE uid in (" . $participants . ")";
-    $result = db_query($sql);
 
-    foreach ($result as $method) {
+    //Gruppenmitglieder werden ermittelt
+    $user_list = statistiken_get_group_participants_from_current_user();
+
+
+    //Die Methodendurchführungen der Gruppe werden ermittelt
+    $sql = "SELECT * FROM {method_execution} WHERE uid in (" . $user_list . ")";
+    $method_execution_result = db_query($sql);
+
+    //Die Methodendurchführungen werden nach dem entsprechenden Raum aufgeteilt und in einzelne Arrays gespeichert
+    foreach ($method_execution_result as $method) {
         array_push($method_list, $method->name);
-        switch($method->room) {
+        switch ($method->room) {
             case 'Vorbereitung':
-                array_push($vorbereitung, $method);
+                array_push($preparation, $method);
                 break;
             case 'Problemraum':
-                array_push($problemraum, $method);
+                array_push($problem_room, $method);
                 break;
             case 'Lösungsraum':
-                array_push($loesungsraum, $method);
+                array_push($solution_room, $method);
                 break;
             case 'Implementierungsraum':
-                array_push($implementierungsraum, $method);
+                array_push($implementation_room, $method);
                 break;
             case 'Projektmanagement':
-                array_push($projektmanagement, $method);
+                array_push($project_management, $method);
                 break;
         }
     }
 
+    $data_array = array(
+        "Vorbereitung" => sizeof($preparation),
+        "Problemraum" => sizeof($problem_room),
+        "Lösungsraum" => sizeof($solution_room),
+        "Implementierungsraum" => sizeof($implementation_room),
+        "Projektmanagement" => sizeof($project_management));
 
-    $array = array(
-        "Vorbereitung" => sizeof($vorbereitung),
-        "Problemraum" => sizeof($problemraum),
-        "Lösungsraum" => sizeof($loesungsraum),
-        "Implementierungsraum" => sizeof($implementierungsraum),
-        "Projektmanagement" => sizeof($projektmanagement));
-
-
-
-
-
-
-    $data2 = array(
-        array('phase' => 'Vorbereitung', 'Anzahl' => sizeof($vorbereitung)),
-        array('phase' => 'Problemraum', 'Anzahl' => sizeof($problemraum)),
-        array('phase' => 'Lösungsraum', 'Anzahl' => sizeof($loesungsraum)),
-        array('phase' => 'Implementierungsraum', 'Anzahl' => sizeof($implementierungsraum)),
-        array('phase' => 'Projektmanagement', 'Anzahl' => sizeof($projektmanagement)),
-
-    );
-
-    $options_column = array(
-        'title' => 'Wie viele Methoden habt ihr pro Raum durchgeführt?',
-        'fields' => array(
-            'Anzahl' => array(
-                'label' => t('Anzahl'),
-                'enabled' => TRUE,
-            ),
-        ),
-        'xAxis' => array(
-            'labelField' => 'phase',
-        ),
-        'data' => $data2,
-        'type' => 'pie',
-    );
-
-    $build['column'] =  array(
-        '#theme' => 'visualization',
-        '#options' => $options_column,
-    );
-
-    return $array;
+    return $data_array;
 
 }
 
-function method_overview_phase() {
+/*
+ * Diese Funktion erfasst alle verfügbaren Methoden innerhalb des Design-Thinking-Informationssytems und ordnet sie
+ * anhand der Phase.
+ */
+function statistiken_method_overview_phase()
+{
 
-    $methodResult = db_query("SELECT * FROM {node} as node INNER JOIN {field_data_field_phase} AS phase ON node.nid = phase.entity_id;");
+    //Die Methoden werden aus der Datenbank geladen
+    $sql = "SELECT * FROM {node} as node INNER JOIN {field_data_field_phase} AS phase ON node.nid = phase.entity_id;";
+    $method_result = db_query($sql);
 
-    $a = array();
-    $b = array();
-    $c = array();
-    $d = array();
+    $divergent = array();
+    $convergent = array();
+    $preparation = array();
+    $project_management = array();
 
-    foreach($methodResult as $result) {
-        if($result->field_phase_target_id == 27) {
-            array_push($a, $result);
+    //Je nachdem, welche Phase der Methode zugeordnet wurde, wird diese in das entsprechende Array abgespeichert
+    foreach ($method_result as $result) {
+        if ($result->field_phase_target_id == 27) {
+            array_push($divergent, $result);
         }
-        if($result->field_phase_target_id == 28) {
-            array_push($b, $result);
+        if ($result->field_phase_target_id == 28) {
+            array_push($convergent, $result);
         }
-        if($result->field_phase_target_id == 142) {
-            array_push($c, $result);
+        if ($result->field_phase_target_id == 142) {
+            array_push($preparation, $result);
         }
-        if($result->field_phase_target_id == 143) {
-            array_push($d, $result);
+        if ($result->field_phase_target_id == 143) {
+            array_push($project_management, $result);
         }
     }
 
-    $data = array(
-        array('phase' => 'divergent', 'Anzahl' => sizeof($a)),
-        array('phase' => 'konvergent', 'Anzahl' => sizeof($b)),
-        array('phase' => 'Vorbereitung', 'Anzahl' => sizeof($c)),
-        array('phase' => 'Projektmanagement', 'Anzahl' => sizeof($d)),
+    $data_array = array(
+        "divergent" => sizeof($divergent),
+        "konvergent" => sizeof($convergent),
+        "Vorbereitung" => sizeof($preparation),
+        "Projektmanagement" => sizeof($project_management));
 
-    );
-
-    $array = array(
-        "divergent" => sizeof($a),
-        "konvergent" => sizeof($b),
-        "Vorbereitung" => sizeof($c),
-        "Projektmanagement" => sizeof($d));
-
-    $options_pie = array(
-        'title' => 'Gesamte Anzahl Methoden',
-        'fields' => array(
-            'Anzahl' => array(
-                'label' => t('Anzahl'),
-                'enabled' => TRUE,
-            ),
-        ),
-        'xAxis' => array(
-            'labelField' => 'phase',
-        ),
-        'data' => $data,
-        'type' => 'pie',
-    );
-
-    $build['pie'] =  array(
-        '#theme' => 'visualization',
-        '#options' => $options_pie,
-    );
-
-    return $array;
-
+    return $data_array;
 }
 
-function group_statistics($group_number) {
+/*
+ * Diese Methode ermittelt, welche Methode von der Gruppe wie häufig genutzt wurde und gibt die fünf häufigsten zurück
+ */
+function statistiken_group_method_ranking()
+{
 
-    $userResult = db_query("SELECT * FROM {node} AS node INNER JOIN {field_data_field_phasenreferenz} AS phasenreferenz ON node.nid = phasenreferenz.entity_id INNER JOIN {field_data_field_raumreferenz} AS raumreferenz ON node.nid = raumreferenz.entity_id INNER JOIN {users} AS users ON node.uid = users.uid WHERE node.type = 'dokument' AND users.uid IN(SELECT users.uid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE role.rid = :role_id)", array(
-        ':role_id' => $group_number,
-    ));
 
-    $group1a = array();
-    $group1b = array();
-    $group1c = array();
-    $group1d = array();
+    $method_name_array = array();
+    $method_name_ranking = array();
 
-    foreach($userResult as $result) {
-        if($result->field_phasenreferenz_target_id == 27) {
-            array_push($group1a, $result);
-        }
-        if($result->field_phasenreferenz_target_id == 28) {
-            array_push($group1b, $result);
-        }
-        if($result->field_phasenreferenz_target_id == 142) {
-            array_push($group1c, $result);
-        }
-        if($result->field_phasenreferenz_target_id == 143) {
-            array_push($group1d, $result);
-        }
-    }
+    //Die Mitglieder der Gruppe werden ermittelt
+    $participants = statistiken_get_group_participants_from_current_user();
 
-    $data = array(
-        array('phase' => 'divergent', 'Anzahl' => sizeof($group1a)),
-        array('phase' => 'konvergent', 'Anzahl' => sizeof($group1b)),
-        array('phase' => 'Vorbereitung', 'Anzahl' => sizeof($group1c)),
-        array('phase' => 'Projektmanagement', 'Anzahl' => sizeof($group1d)),
-
-    );
-
-    $title ="";
-
-    switch($group_number) {
-        case 3:
-            $title = "Gesamtübersicht Administrator";
-            break;
-        case 4:
-            $title = "Gesamtübersicht Projektgruppe 1";
-            break;
-        case 5:
-            $title = "Gesamtübersicht Projektgruppe 2";
-            break;
-        case 6:
-            $title = "Gesamtübersicht Projektgruppe 3";
-            break;
-    }
-
-    $options_pie = array(
-        'title' => $title,
-        'fields' => array(
-            'Anzahl' => array(
-                'label' => t('Anzahl'),
-                'enabled' => TRUE,
-            ),
-        ),
-        'xAxis' => array(
-            'labelField' => 'phase',
-        ),
-        'data' => $data,
-        'type' => 'pie',
-    );
-
-    $build['pie'] =  array(
-        '#theme' => 'visualization',
-        '#options' => $options_pie,
-    );
-
-    return $build;
-
-}
-
-function group_statistics_comparison() {
-
-    $group1a = array();
-    $group1b = array();
-    $group1c = array();
-    $group1d = array();
-    $group2a = array();
-    $group2b = array();
-    $group2c = array();
-    $group2d = array();
-    $group3a = array();
-    $group3b = array();
-    $group3c = array();
-    $group3d = array();
-    $groupAdmina = array();
-    $groupAdminb = array();
-    $groupAdminc = array();
-    $groupAdmind = array();
-
-    for($i=3;$i<=6;$i++) {
-        $userResult = db_query("SELECT * FROM {node} AS node INNER JOIN {field_data_field_phasenreferenz} AS phasenreferenz ON node.nid = phasenreferenz.entity_id INNER JOIN {field_data_field_raumreferenz} AS raumreferenz ON node.nid = raumreferenz.entity_id INNER JOIN {users} AS users ON node.uid = users.uid WHERE node.type = 'dokument' AND users.uid IN(SELECT users.uid FROM {users} AS users INNER JOIN {users_roles} AS zwischentabelle ON users.uid = zwischentabelle.uid INNER JOIN {role} AS role ON zwischentabelle.rid = role.rid WHERE role.rid = :role_id)", array(
-            ':role_id' => $i,
-        ));
-
-    foreach($userResult as $result) {
-        if($result->field_phasenreferenz_target_id == 27) {
-            if($i==3) {
-                array_push($groupAdmina, $result);
-
-            } else if($i==4) {
-                array_push($group1a, $result);
-
-            } else if($i==5) {
-                array_push($group2a, $result);
-
-            } else if($i==6) {
-                array_push($group3a, $result);
-            }
-        }
-        if($result->field_phasenreferenz_target_id == 28) {
-            if($i==3) {
-                array_push($groupAdminb, $result);
-
-            } else if($i==4) {
-                array_push($group1b, $result);
-
-            } else if($i==5) {
-                array_push($group2b, $result);
-
-            } else if($i==6) {
-                array_push($group3b, $result);
-            }
-        }
-        if($result->field_phasenreferenz_target_id == 142) {
-            if($i==3) {
-                array_push($groupAdminc, $result);
-
-            } else if($i==4) {
-                array_push($group1c, $result);
-
-            } else if($i==5) {
-                array_push($group2c, $result);
-
-            } else if($i==6) {
-                array_push($group3c, $result);
-            }        }
-        if($result->field_phasenreferenz_target_id == 143) {
-            if($i==3) {
-                array_push($groupAdmind, $result);
-
-            } else if($i==4) {
-                array_push($group1d, $result);
-
-            } else if($i==5) {
-                array_push($group2d, $result);
-
-            } else if($i==6) {
-                array_push($group3d, $result);
-            }        }
-        }
-    }
-
-    $data = array(
-        array('phase' => 'divergent', 'Projektgruppe_1' => sizeof($group1a), 'Projektgruppe_2' => sizeof($group2a), 'Projektgruppe_3' => sizeof($group3a), 'Projektgruppe_Admin' => sizeof($groupAdmina)),
-        array('phase' => 'konvergent', 'Projektgruppe_1' => sizeof($group1b), 'Projektgruppe_2' => sizeof($group2b), 'Projektgruppe_3' => sizeof($group3b), 'Projektgruppe_Admin' => sizeof($groupAdminb)),
-        array('phase' => 'Vorbereitung', 'Projektgruppe_1' => sizeof($group1c), 'Projektgruppe_2' => sizeof($group2c), 'Projektgruppe_3' => sizeof($group3c), 'Projektgruppe_Admin' => sizeof($groupAdminc)),
-        array('phase' => 'Projektmanagement', 'Projektgruppe_1' => sizeof($group1d), 'Projektgruppe_2' => sizeof($group2d), 'Projektgruppe_3' => sizeof($group3d), 'Projektgruppe_Admin' => sizeof($groupAdmind)),
-
-    );
-
-    $options_line = array(
-        'title' => 'Vergleich bearbeiteter Methoden',
-        'fields' => array(
-            'Projektgruppe_1' => array(
-                'label' => t('Projektgruppe 1'),
-                'enabled' => TRUE,
-            ),
-            'Projektgruppe_2' => array(
-                'label' => t('Projektgruppe 2'),
-                'enabled' => TRUE,
-            ),
-            'Projektgruppe_3' => array(
-                'label' => t('Projektgruppe 3'),
-                'enabled' => TRUE,
-            ),
-            'Projektgruppe_Admin' => array(
-                'label' => t('Administrator'),
-                'enabled' => TRUE,
-            ),
-        ),
-        'xAxis' => array(
-            'labelField' => 'phase',
-        ),
-        'data' => $data,
-        'type' => 'line',
-    );
-
-    $build['lineComparison'] =  array(
-        '#theme' => 'visualization',
-        '#options' => $options_line,
-    );
-    return $build;
-}
-
-function statistiken_group_method_ranking() {
-    $a = array();
-    $b = array();
-    $ergebnis = array();
-    $i=1;
-
-    $participants = get_participants_for_methods2();
+    //Die durchgeführten Methoden der Gruppe werden ermittelt
     $sql = "SELECT * FROM {method_execution} WHERE uid in (" . $participants . ")";
-    $methodResult = db_query($sql);
+    $method_result = db_query($sql);
 
-
-    foreach($methodResult as $name) {
-        array_push($a,$name->name);
+    //Der Name jeder Methode wird in ein Array geschrieben
+    foreach ($method_result as $name) {
+        array_push($method_name_array, $name->name);
     }
 
+    //Die Methodennamen innerhalb des Arrays werden gezählt.
+    $counted_method_names = array_count_values($method_name_array);
 
-    $temp = array_count_values($a);
-    foreach ($temp as $key => $value) {
-        $ergebnis[] = array($value, $key);
+    //Ein neues Array wird befüllt. In diesem Array werden die Häufigkeiten der genutzten Methoden zusammen mit
+    //den Methodennamen der Größe nach absteigend geordnet gespeichert.
+    foreach ($counted_method_names as $key => $value) {
+        $method_name_ranking[] = array($value, $key);
     }
 
-    rsort($ergebnis);
+    rsort($method_name_ranking);
 
-    $sonstige1 = sizeof($a);
-    $sonstige2 = $sonstige1-$ergebnis[0][0];
-    $sonstige = sizeof($ergebnis);
-
-    switch(sizeof($ergebnis)) {
+    //Je nachdem, wie viele Methoden insgesamt genutzt wurden, wird das Array, welches am Ende zurückgegeben wird,
+    //befüllt
+    switch (sizeof($method_name_ranking)) {
         case 0:
-            $data = array();
+            $array = array();
             break;
         case 1:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0]);
             break;
         case 2:
-            $data = array(
-                $array = array(
-                    $ergebnis[0][1] => $ergebnis[0][0],
-                    $ergebnis[1][1] => $ergebnis[1][0]));
+            $array = array(
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0]);
             break;
         case 3:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0]);
             break;
         case 4:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0],
-                $ergebnis[3][1] => $ergebnis[3][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0],
+                $method_name_ranking[3][1] => $method_name_ranking[3][0]);
             break;
         case 5:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0],
-                $ergebnis[3][1] => $ergebnis[3][0],
-                $ergebnis[4][1] => $ergebnis[4][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0],
+                $method_name_ranking[3][1] => $method_name_ranking[3][0],
+                $method_name_ranking[4][1] => $method_name_ranking[4][0]);
             break;
         default:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0],
-                $ergebnis[3][1] => $ergebnis[3][0],
-                $ergebnis[4][1] => $ergebnis[4][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0],
+                $method_name_ranking[3][1] => $method_name_ranking[3][0],
+                $method_name_ranking[4][1] => $method_name_ranking[4][0]);
             break;
     }
 
@@ -457,375 +221,103 @@ function statistiken_group_method_ranking() {
 
 }
 
-function method_ranking() {
 
-    $a = array();
-    $b = array();
-    $ergebnis = array();
-    $i=1;
+/*
+ * Diese Methode ermittelt, welche Methode insgesamt wie häufig genutzt wurde und gibt die fünf häufigsten zurück
+ */
+function statistiken_method_ranking()
+{
 
-    $methodResult = db_query("SELECT * FROM {method_execution}");
+    $method_names = array();
+    $method_name_ranking = array();
 
+    //Alle Methodendurchführungen werden geladen
+    $sql = "SELECT * FROM {method_execution}";
+    $method_result = db_query($sql);
 
-        foreach($methodResult as $name) {
-            array_push($a,$name->name);
-        }
-
-
-    $temp = array_count_values($a);
-    foreach ($temp as $key => $value) {
-        $ergebnis[] = array($value, $key);
+    //Der Name jeder Methode wird in ein Array gespeichert
+    foreach ($method_result as $name) {
+        array_push($method_names, $name->name);
     }
 
-    rsort($ergebnis);
+    //Die Methodennamen werden gezählt und die Häufigkeit der Größe nach absteigend sortiert
+    $counted_method_names = array_count_values($method_names);
+    foreach ($counted_method_names as $key => $value) {
+        $method_name_ranking[] = array($value, $key);
+    }
 
-    $sonstige1 = sizeof($a);
-    $sonstige2 = $sonstige1-$ergebnis[0][0];
-    $sonstige = sizeof($ergebnis);
+    rsort($method_name_ranking);
 
-    switch(sizeof($ergebnis)) {
+    //Je nachdem, wie viele Methoden insgesamt genutzt wurden, wird das Array, welches am Ende zurückgegeben wird,
+    //befüllt
+    switch (sizeof($method_name_ranking)) {
         case 0:
-            $data = array();
+            $array = array();
             break;
         case 1:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0]);
             break;
         case 2:
-            $data = array(
-                $array = array(
-                    $ergebnis[0][1] => $ergebnis[0][0],
-                    $ergebnis[1][1] => $ergebnis[1][0]));
+            $array = array(
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0]);
             break;
         case 3:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0]);
             break;
         case 4:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0],
-                $ergebnis[3][1] => $ergebnis[3][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0],
+                $method_name_ranking[3][1] => $method_name_ranking[3][0]);
             break;
         case 5:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0],
-                $ergebnis[3][1] => $ergebnis[3][0],
-                $ergebnis[4][1] => $ergebnis[4][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0],
+                $method_name_ranking[3][1] => $method_name_ranking[3][0],
+                $method_name_ranking[4][1] => $method_name_ranking[4][0]);
             break;
         default:
             $array = array(
-                $ergebnis[0][1] => $ergebnis[0][0],
-                $ergebnis[1][1] => $ergebnis[1][0],
-                $ergebnis[2][1] => $ergebnis[2][0],
-                $ergebnis[3][1] => $ergebnis[3][0],
-                $ergebnis[4][1] => $ergebnis[4][0]);
+                $method_name_ranking[0][1] => $method_name_ranking[0][0],
+                $method_name_ranking[1][1] => $method_name_ranking[1][0],
+                $method_name_ranking[2][1] => $method_name_ranking[2][0],
+                $method_name_ranking[3][1] => $method_name_ranking[3][0],
+                $method_name_ranking[4][1] => $method_name_ranking[4][0]);
             break;
     }
 
     return $array;
 }
 
-function get_participants_for_methods2() {
+/*
+ * Diese Funktion ermittelt den aktuell angemeldeten Benutzer und gibt ihn zusammen mit seinen Gruppenmitgliedern
+ * zurück
+ */
+function statistiken_get_group_participants_from_current_user()
+{
     $users = array();
     global $user;
     $user_id = $user->uid;
 
+
     $sql = "SELECT ur.rid, r.name, ur.uid FROM {role} AS r INNER JOIN {users_roles} AS ur ON r.rid = ur.rid WHERE ur.rid = (SELECT usro.rid FROM {users_roles} as usro WHERE usro.uid = $user_id)";
+    $user_result = db_query($sql);
 
-    $proresult = db_query($sql);
-
-    foreach($proresult as $pro) {
-        array_push($users, $pro->uid);
+    foreach ($user_result as $u) {
+        array_push($users, $u->uid);
     }
 
-    $list = implode(',', $users);
+    $user_list = implode(',', $users);
 
-    return $list;
-}
-
-function statistiken_create_pie_chart($title, $value) {
-    $testarray = array_keys($value);
-
-    $testString = "[";
-
-    $id = 0;
-    foreach ($value as $item) {
-
-        $color = "black";
-        if($item == 0) {
-            $color = "white";
-        }
+    return $user_list;
 
 
-        $testString .= '{"label":"' . $testarray[$id] . '", "value":' . $item . ', "color":"'.$color.'"},';
-        $id++;
-    }
-
-    $testString = substr($testString, 0, -1);
-    $testString .= "];";
-
-
-    $html = '<script src="http://d3js.org/d3.v3.min.js"></script>';
-    $html .= '<style>
-
-
-svg {
-	width: 960px;
-  height: 500px;
-  display: block;
-  margin: 0 auto;
-}
-
-.svg text {
-	fill: black;
-	font: 10px sans-serif;
-	font-weight: bold;
-	text-anchor: start;
-}
-
-path.slice{
-	stroke-width:2px;
-}
-
-polyline{
-	opacity: .3;
-	stroke: black;
-	stroke-width: 2px;
-	fill: none;
-}
-
-.labelValue
-{
-	font-size: 60%;
-	opacity: .5;
-
-}
-
-.toolTip {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    position: absolute;
-    display: none;
-    width: auto;
-    height: auto;
-    background: none repeat scroll 0 0 white;
-    border: 0 none;
-    border-radius: 8px 8px 8px 8px;
-    box-shadow: -3px 3px 15px #888888;
-    color: black;
-    font: 12px sans-serif;
-    padding: 5px;
-    text-align: center;
-}
-text {
-  font: 12px sans-serif;
-}
-</style>';
-
-    $html .= '<script>
-
-
-d3.select("input[value=\"total\"]").property("checked", true);
-
-var svg = d3.select("body")
-	.append("svg")
-	.append("g")
-
-svg.append("g")
-	.attr("class", "slices");
-svg.append("g")
-	.attr("class", "labelName");
-svg.append("g")
-	.attr("class", "labelValue");
-svg.append("g")
-	.attr("class", "lines");
-
-var width = 960,
-    height = 450,
-	radius = Math.min(width, height) / 2;
-
-var pie = d3.layout.pie()
-	.sort(null)
-	.value(function(d) {
-		return d.value;
-	});
-
-var arc = d3.svg.arc()
-	.outerRadius(radius * 0.8)
-	.innerRadius(radius * 0.4);
-
-var outerArc = d3.svg.arc()
-	.innerRadius(radius * 0.9)
-	.outerRadius(radius * 0.9);
-
-var legendRectSize = (radius * 0.05);
-var legendSpacing = radius * 0.02;
-
-
-var div = d3.select("body").append("div").attr("class", "toolTip");
-
-svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-var colorRange = d3.scale.category20();
-var color = d3.scale.ordinal()
-	.range(colorRange.range());
-
-
-datasetTotal = '.$testString.'
-
-
-change(datasetTotal);
-
-
-function change(data) {
-
-	/* ------- PIE SLICES -------*/
-	var slice = svg.select(".slices").selectAll("path.slice")
-        .data(pie(data), function(d){ return d.data.label });
-
-    slice.enter()
-        .insert("path")
-        .style("fill", function(d) { return color(d.data.label); })
-        .attr("class", "slice");
-
-    slice
-        .transition().duration(1000)
-        .attrTween("d", function(d) {
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                return arc(interpolate(t));
-            };
-        })
-    slice
-        .on("mousemove", function(d){
-            div.style("left", d3.event.pageX+10+"px");
-            div.style("top", d3.event.pageY-25+"px");
-            div.style("display", "inline-block");
-            div.html((d.data.label)+"<br>"+(d.data.value));
-        });
-    slice
-        .on("mouseout", function(d){
-            div.style("display", "none");
-        });
-
-    slice.exit()
-        .remove();
-
-    var legend = svg.selectAll(\'.legend\')
-        .data(color.domain())
-        .enter()
-        .append(\'g\')
-        .attr(\'class\', \'legend\')
-        .attr(\'transform\', function(d, i) {
-            var height = legendRectSize + legendSpacing;
-            var offset =  height * color.domain().length / 2;
-            var horz = -3 * legendRectSize;
-            var vert = i * height - offset;
-            return \'translate(\' + horz + \',\' + vert + \')\';
-        });
-
-    legend.append(\'rect\')
-        .attr(\'width\', legendRectSize)
-        .attr(\'height\', legendRectSize)
-        .style(\'fill\', color)
-        .style(\'stroke\', color);
-
-    legend.append(\'text\')
-        .attr(\'x\', legendRectSize + legendSpacing)
-        .attr(\'y\', legendRectSize - legendSpacing)
-        .text(function(d) { return d; });
-
-
-    /* ------- TEXT LABELS -------*/
-
-    var text = svg.select(".labelName").selectAll("text")
-        .data(pie(data), function(d){ return d.data.label });
-
-    text.enter()
-        .append("text")
-        .attr("dy", ".35em")
-        .style("fill", function(d) { return "red"; })
-        .text(function(d) {
-            return (d.data.label+": "+d.value);
-        });
-
-    function midAngle(d){
-        return d.startAngle + (d.endAngle - d.startAngle)/2;
-    }
-
-    text
-        .transition().duration(1000)
-        .attrTween("transform", function(d) {
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                var d2 = interpolate(t);
-                var pos = outerArc.centroid(d2);
-                pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
-                return "translate("+ pos +")";
-            };
-        })
-        .styleTween("text-anchor", function(d){
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                var d2 = interpolate(t);
-                return midAngle(d2) < Math.PI ? "start":"end";
-            };
-        })
-        .style("fill", function(d) {
-            return (d.data.color);
-        })
-        .text(function(d) {
-            return (d.data.label+": "+d.value);
-        });
-
-
-    text.exit()
-        .remove();
-
-    var polyline = svg.select(".lines").selectAll("polyline")
-        .data(pie(data), function(d){ return d.data.label });
-
-    polyline.enter()
-        .append("polyline");
-
-    polyline.transition().duration(1000)
-        .attrTween("points", function(d){
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                var d2 = interpolate(t);
-                var pos = outerArc.centroid(d2);
-                pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
-                return [arc.centroid(d2), outerArc.centroid(d2), pos];
-            };
-        });
-
-    polyline.exit()
-        .remove();
-};
-
-svg.append("text")
-        .attr("x", 0)
-        .attr("y", 0-height/2+15)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .style("text-decoration", "underline")
-        .text("'.$title.'");
-
-</script>';
-
-
-    return $html;
 }

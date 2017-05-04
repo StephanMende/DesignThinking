@@ -1,0 +1,349 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: kortum
+ * Date: 03.11.2015
+ * Time: 19:20
+ */
+
+require('helperfunctions.php');
+
+//Diese Funktion definiert einen Block, der während der Erstellung eines Protokolls Informationen darüber gibt, welche
+//Punkte bereits abgearbeitet wurden und welche noch zu erledigen sind
+function protocol_template_block_info()
+{
+    $blocks['methods'] = array(
+        'info' => t('Protocol Information'),
+    );
+    return $blocks;
+}
+
+//Diese Funktion definiert einen Block, der während der Erstellung eines Protokolls Informationen darüber gibt, welche
+//Punkte bereits abgearbeitet wurden und welche noch zu erledigen sind
+function protocol_template_block_view($delta)
+{
+    //In diese Block-Variable wird der Informationsblock gespeichert
+    $block = array();
+
+    //Die aktuelle Seite wird aus der URL ausgelesen
+    $path = arg(0);
+
+    global $base_url;
+
+    switch ($delta) {
+        case 0:
+
+            //Sollte es sich bei der aktullen Seite um das Formular mit allgemeinen Informationen handeln, wird der Link
+            //im Block gräulich hinterlegt. Sonst wird nur der Link angezeigt
+            if (!strcmp($path, "protokoll_allgemein")) {
+                $block_information_string = "<a href='" . $base_url . "/protokoll_allgemein' style=\"background-color:#D0D0D0\">allgemeine Informationen</a>";
+            } else {
+                $block_information_string = "<a href='" . $base_url . "/protokoll_allgemein'>allgemeine Informationen</a>";
+            }
+
+            $block_information_string .= '<br>';
+
+            //Sollte es sich bei der aktullen Seite um das Formular mit inhaltlichen Informationen handeln, wird der Link
+            //im Block gräulich hinterlegt. Sonst wird nur der Link angezeigt
+            if (!strcmp($path, "protokoll_vorbereitung")) {
+                $block_information_string .= '<a href="' . $base_url . '/protokoll_vorbereitung" style="background-color:#D0D0D0;">Vorbereitung</a>';
+            } else {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_vorbereitung'>Vorbereitung</a>";
+            }
+
+            $block_information_string .= '<br>';
+
+            //Sollte es sich bei der aktuellen Seite um die Anzeige von offenen Aufgaben der Gruppe handeln, wird der Link
+            //im Block gräulich hinterlegt. Sonst wird nur der Link angezeigt
+            if (!strcmp($path, "protokoll_offene_aufgaben")) {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_offene_aufgaben'style=\"background-color:#D0D0D0\">offene Aufgaben</a>";
+            } else {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_offene_aufgaben'>offene Aufgaben</a>";
+            }
+
+            $block_information_string .= '<br>';
+
+            //Sollte es sich bei der aktuellen Seite um die Anzeige von durchgeführten Methoden handeln, wird der Link
+            //im Block gräulich hinterlegt. Sonst wird nur der Link angezeigt
+            if (!strcmp($path, "protokoll_methoden_uebersicht")) {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_methoden_uebersicht' style=\"background-color:#D0D0D0\">Methodenübersicht</a>";
+            } else {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_methoden_uebersicht'>Methodenübersicht</a>";
+            }
+
+            $block_information_string .= '<br>';
+            $block_information_string .= protocol_template_get_method_execcution_for_block_view();
+
+
+            //Sollte es sich bei der aktuellen Seite um die Anzeige von neuen Aufgaben der Gruppe handeln, wird der Link
+            //im Block gräulich hinterlegt. Sonst wird nur der Link angezeigt
+            if (!strcmp($path, "protokoll_neue_aufgaben")) {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_neue_aufgaben' style=\"background-color:#D0D0D0\">neue Aufgaben</a>";
+            } else {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_neue_aufgaben'>neue Aufgaben</a>";
+            }
+
+            $block_information_string .= '<br>';
+            $block_information_string .= protocol_template_get_new_tasks_for_block_view();
+
+            //Sollte es sich bei der aktullen Seite um das Formular mit dem Fazit der Gruppe handeln, wird der Link
+            //im Block gräulich hinterlegt. Sonst wird nur der Link angezeigt
+            if (!strcmp($path, "protokoll_beschreibungen")) {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_beschreibungen'style=\"background-color:#D0D0D0\">Beschreibungen</a>";
+            } else {
+                $block_information_string .= "<a href='" . $base_url . "/protokoll_beschreibungen'>Beschreibungen</a>";
+            }
+
+            $block_information_string .= '<br>';
+
+            $block['subject'] = t('Protokoll');
+            $block['content'] = $block_information_string;
+            break;
+
+    }
+    return $block;
+}
+
+
+function protocol_template_menu()
+{
+
+    $items['protokoll_erstellen'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_create_new_protocol_form'),
+        'file' => 'protocol_template_create_protocol.inc',
+    );
+
+    $items['protokoll_allgemein'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_set_general_information_form'),
+        'file' => 'protocol_template_general_information.inc',
+    );
+
+    $items['protokoll_vorbereitung'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_set_preparation_form'),
+        'file' => 'protocol_template_preparation.inc',
+    );
+
+    $items['protokoll_offene_aufgaben'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_get_open_task_form'),
+        'file' => 'protocol_template_open_tasks.inc',
+
+    );
+
+    $items['protokoll_methoden_uebersicht'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'access callback' => 'user_is_logged_in',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('protocol_template_get_method_overview_form'),
+        'file' => 'protocol_template_method_overview.inc',
+    );
+
+    $items['protokoll_beschreibungen'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_set_protocol_descriptions_form'),
+        'file' => 'protocol_template_descriptions.inc',
+    );
+
+    $items['protokoll_neue_Aufgaben'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_get_new_task_form'),
+        'file' => 'protocol_template_new_tasks.inc',
+    );
+
+    $items['protokoll_neue_Methodendurchführung'] = array(
+        'title' => 'neue Methode durchführen',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_new_method_execution_form'),
+        'file' => 'protocol_template_new_method_execution.inc',
+    );
+
+    $items['protokoll_methode_aendern/%/%'] = array(
+        'title' => 'Methodendurchführung bearbeiten',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'access callback' => 'user_is_logged_in',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('protocol_template_change_method_execution_form'),
+        'file' => 'protocol_template_new_method_execution.inc',
+    );
+
+    $items['methodenanzeige/%/%'] = array(
+        'title' => 'Methodendurchführung ansehen',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_show_method_execution_form'),
+        'file' => 'protocol_template_new_method_execution.inc',
+    );
+
+    $items['protokoll_neue_Aufgabendurchführung'] = array(
+        'title' => 'neue Aufgabe anlegen',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_new_task_execution_form'),
+        'file' => 'protocol_template_new_task_execution.inc',
+    );
+
+    $items['protokollanzeige/%'] = array(
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_show_protocol_form'),
+        'file' => 'protocol_template_show_protocol.inc',
+    );
+
+    $items['change_protocol_general_information/%'] = array(
+        'title' => 'Protokoll ändern',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_change_protocol_general_information_form'),
+        'file' => 'protocol_template_change_protocol.inc',
+    );
+
+    $items['change_protocol_content_information/%'] = array(
+        'title' => 'Protokoll ändern',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'page callback' => 'drupal_get_form',
+        'access callback' => 'user_is_logged_in',
+        'page arguments' => array('protocol_template_change_protocol_content_information_form'),
+        'file' => 'protocol_template_change_protocol.inc',
+    );
+
+    $items['change_protocol_method_information/%'] = array(
+        'title' => 'Methode ändern',
+        'type' => MENU_CALLBACK,
+        'access arguments' => array('access content'),
+        'access callback' => 'user_is_logged_in',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('protocol_template_change_protocol_method_information_form'),
+        'file' => 'protocol_template_change_protocol.inc',
+    );
+
+    $items['delete_task/%/%'] = array(
+        'title' => 'Publications',
+        'access callback' => 'user_is_logged_in',
+        'page callback' => 'protocol_template_delete_task_form',
+        'file' => 'protocol_template_delete_task.inc',
+    );
+
+    $items['delete_file/%/%/%'] = array(
+        'title' => 'Publications',
+        'access callback' => 'user_is_logged_in',
+        'page callback' => 'protocol_template_delete_file',
+        'file' => 'protocol_template_delete_task.inc',
+    );
+
+
+    return $items;
+}
+
+/*
+ * Diese Funktion lädt alle neuen Aufgaben des offenen Protokolls aus der Datenbank zu konvertiert die Anzeige zu
+ * einem HTML-String, dieser im Block-Wegweiser angezeigt wird
+ */
+function protocol_template_get_new_tasks_for_block_view()
+{
+    //Die Gruppenmitglieder werden geladen
+    $users = protocol_template_get_participants_from_logged_in_user_group();
+
+    //Es wird das offene Protokoll der Gruppe geladen
+    $protocol_id = 0;
+
+    $sql = "SELECT * FROM {protocol} AS pro WHERE pro.uid IN ($users) AND pro.finished = 0";
+    $protocol_result = db_query($sql);
+
+    foreach ($protocol_result as $protocol) {
+        $protocol_id = $protocol->protocol_id;
+    }
+
+    //Es werden alle Aufgaben, die innerhalb des aktuellen Protokolls erstellt wurden, aus der Datenbank geladen
+    $sql = "SELECT * FROM {task} AS t WHERE t.protocol_id = $protocol_id";
+    $task_result = db_query($sql);
+
+    //In diese Variable werden alle neuen Aufgaben untereinander dargestellt
+    $new_task_string = "";
+
+    //Als extra-Sicherheitsstufe wird erneut geprüft, ob es offenes Protokoll existiert
+    $new_protocol_validation = protocol_template_check_current_open_protocol();
+
+    //Sollte ein offenes Protokoll existieren
+    if ($new_protocol_validation["exist"] == 1) {
+
+        //Es wird über alle Aufgaben iteriert
+        foreach ($task_result as $task) {
+
+            //Sollte es sich um eine offene Aufgabe handeln
+            if ($task->done == 0) {
+                $new_task_string .= "<div style='text-indent:40px;'>$task->short_description</div>";
+            }
+        }
+    }
+
+    return $new_task_string;
+}
+
+/*
+ * Diese Funktion lädt alle Methodendurchführungen des offenen Protokolls aus der Datenbank zu konvertiert die Anzeige zu
+ * einem HTML-String, dieser im Block-Wegweiser angezeigt wird
+ */
+function protocol_template_get_method_execcution_for_block_view()
+{
+    global $base_url;
+
+    //In diese Variable werden alle durchgeführten Methoden untereinander gespeichert
+    $method_execution_string = "";
+
+    //Die Gruppenmitglieder werden geladen
+    $users = protocol_template_get_participants_from_logged_in_user_group();
+
+    //Die ID des offenen Protokolls wird geladen
+    $protcol_id = protocol_template_get_current_open_group_protocol($users);
+
+    //Die Methodendurchführungen, die zu dem gefundenen Protokoll zugeordnet wurden, werden geladen
+    $sql = "SELECT * FROM {method_execution} as m WHERE m.protocol_id = $protcol_id";
+    $method_execution_result = db_query($sql);
+
+    //Als extra-Sicherheitsstufe wird erneut geprüft, ob es offenes Protokoll existiert
+    $method_execution_validation = protocol_template_check_current_open_protocol();
+
+    //Sollte ein offenes Protokoll existieren
+    if ($method_execution_validation["exist"] == 1) {
+        foreach ($method_execution_result as $method_execution) {
+            $method_execution_string .= "<div style='text-indent:40px;'><a href='$base_url/show_method/$method_execution->method_execution_id/pXs8hYVUqe/'>$method_execution->name</a></div>";
+        }
+    }
+
+    return $method_execution_string;
+}

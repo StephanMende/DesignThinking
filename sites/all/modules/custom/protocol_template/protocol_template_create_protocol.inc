@@ -1,0 +1,149 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: jonaskortum
+ * Date: 05.11.16
+ * Time: 10:53
+ */
+
+/*
+ * Diese Funktion wird aufgerufen, wenn der Nutzer ein neues Protokoll anlegen möchte.
+ * Sie erzeugt ein Formular, in das der Nutzer allgemeine Informationen zum Protokoll
+ * eintragen kann.
+ */
+function protocol_template_create_new_protocol_form($form, &$form_submit)
+{
+
+    //Es wird geschaut, ob bereits ein offenes Protokoll existiert
+    $reminder = protocol_template_check_current_open_protocol();
+
+    //Sollte kein offenes Protokoll existieren, kann das Formular erstellt werden
+    if ($reminder["exist"] == 0) {
+
+        //Die Protokoll-Arten werden erstellt
+        $types = array(
+            "gruppenintern" => t("gruppenintern"),
+            "gesamter Kurs" => t("gesamter Kurs"),
+            "Präsentation" => t("Präsentation"),
+        );
+
+        //Die Gruppenmitglieder werden ermittelt
+        $users = protocol_template_get_participants_from_logged_in_user_group();
+        $user_array = explode(',', $users);
+        $user_name_array = array();
+
+        //für jeden Benutzer werden Vor- und Nachname ermittelt und in ein Array gespeichert
+        foreach ($user_array as $user) {
+            $user_element = user_load($user);
+            $username = $user_element->field_first_name['und'][0]['value'] . " " . $user_element->field_last_name['und'][0]['value'];
+            $user_name_array[$user] = $username;
+        }
+
+        //Das Format für die Eingabe eines Startdatum wird definiert
+        $dateformat = 'Y-m-d H:i';
+        $label = t('Aktuelles Datum');
+        $timestamp = time();
+
+        if (empty($timestamp)) {
+            $d = new DateTime('@' . $timestamp);
+            $date_value = $d->format($dateformat);
+        } else {
+            $d = new DateTime();
+            $date_value = $d->format($dateformat);
+        }
+
+
+        $form['new_protocol'] = array(
+            '#title' => "allgemeine Informationen",
+            '#type' => 'fieldset',
+            '#description' => "Um ein neues Protokoll anlegen zu können, müssen zunächst folgende allgemeine
+            Informationen zum Protokoll eingetragen werden."
+        );
+
+        $form['new_protocol']['teilnehmer'] = array(
+            '#title' => t('Teilnehmer des Treffens'),
+            '#type' => 'select',
+            '#multiple' => true,
+            '#options' => $user_name_array,
+            '#required' => TRUE,
+        );
+
+        $form['new_protocol']['start'] = array(
+            '#type' => 'date_popup',
+            '#date_timezone' => date_default_timezone(),
+            '#date_format' => $dateformat,
+            '#date_year_range' => '-3:+3',
+            '#title' => $label,
+            '#required' => TRUE,
+            '#default_value' => $date_value,
+        );
+
+        $form['new_protocol']['place'] = array(
+            '#type' => 'textfield',
+            '#require' => TRUE,
+            '#title' => t('Ort des Treffens'),
+            '#required' => TRUE,
+
+        );
+
+        $form['new_protocol']["type"]["plugin_select"] = array(
+            "#type" => "select",
+            "#title" => t("Art des Treffens"),
+            "#options" => $types,
+            '#required' => TRUE
+
+        );
+
+        $form['submit'] = array(
+            '#type' => 'submit',
+            '#value' => 'Weiter',
+            '#submit' => array('protocol_template_create_new_protocol')
+        );
+    } else {
+        drupal_set_message('Es existiert noch ein offenes Protokoll.
+        <a href="protokoll_allgemein">Hier einsehen.</a>
+        ', "error");
+    }
+
+    return $form;
+}
+
+/*
+ * Diese Funktion speichert die eingegebenen Daten des Nutzers in die Datenbank und legt
+ * somit ein neues Protokoll an
+ */
+function protocol_template_create_new_protocol($form, &$form_state)
+{
+
+    //Es wird geschaut, ob bereits ein offenes Protokoll existiert
+    $reminder = protocol_template_check_current_open_protocol();
+
+    //Sollte kein offenes Protokoll existieren, kann ein neues Protokoll erstellt werden
+
+    if ($reminder["exist"] == 0) {
+
+        //die teilnehmenden Nutzer werden ermittelt und für die Speicherung konvertiert
+        $users = $form_state['values']['teilnehmer'];
+        $users = implode(',', $users);
+
+        //Die ID des aktuell angemeldeten Nutzers wird ermittelt
+        global $user;
+        $user_id = $user->uid;
+
+        //Weitere Informationen werden aus den Formular-Feldern geladen
+        $place = $form_state['values']['place'];
+        $type = $form_state['values']['plugin_select'];
+        $date = date("Y-m-d H:i:s");
+        $start = $form_state['values']['start'];
+
+        //Protokoll wird angelegt
+        $sql = "INSERT INTO {protocol} (place, type, uid, date, finished, preparation, problems, conclusion, participants, start_date, outlook)
+          VALUES ('$place','$type', $user_id, '$date', 0,'','','','$users','$start', '');";
+        db_query($sql);
+
+        drupal_goto('/protokoll_vorbereitung');
+    } else {
+        drupal_set_message("Es ist ein Fehler aufgetreten. Es existiert bereits ein offenes Protokoll. <a href=\"protokoll_allgemein\">Hier einsehen.</a>");
+    }
+
+}

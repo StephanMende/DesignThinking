@@ -1,4 +1,4 @@
 name = Task Reminder
 description = Erinnert den Benutzer an anstehende Aufgaben
 core = 7.x
-dependencies[] = test_module
+dependencies[] = protocol_template

@@ -8,21 +8,18 @@
 
 require_once(realpath(".") . "/sites/all/libraries/dompdf-0.6.1/dompdf_config.inc.php");
 
+require_once('protocol_overview_pdf_general_information.inc');
+
 include('mpdf60/mpdf.php');
 
-/**
- * Implements block_info
- */
 function protocol_overview_menu()
 {
     $items['protokoll_uebersicht'] = array(
-        'access callback' => true,
         'access callback' => 'user_is_logged_in',
-        'page callback' => 'get_group_protocols',
+        'page callback' => 'protocol_overview_show_protocol_overview',
     );
 
     $items['protokoll_pdf_erstellen/%'] = array(
-        'access callback' => true,
         'access callback' => 'user_is_logged_in',
         'page callback' => 'create_protocol_pdf',
         'file' => 'protocol_overview_create_pdf.inc',
@@ -30,52 +27,580 @@ function protocol_overview_menu()
 
     $items['show_total_protocol/%'] = array(
         'title' => 'Protokoll erstellen',
-        'access callback' => true,
         'access callback' => 'user_is_logged_in',
-        'page callback' => 'create_total_protocol',
+        'page callback' => 'create_total_documentation',
         'file' => 'protocol_overview_create_pdf.inc',
     );
 
-    $items['admin/config/user-interface/protocol_overview'] = array(
-        'title' => 'Protokoll Übersicht',
-        'access callback' => true,
-        'access callback' => 'user_is_logged_in',
-        'page callback' => 'drupal_get_form',
-        'page arguments' => array('protocol_overview_erstellenForm'),
-    );
     return $items;
 }
 
-function protocol_overview_erstellenForm($form, &$form_submit)
+/*
+ * Diese Funktion erstellt eine Übersicht über die bisher angelegten Protokolle einer Gruppe. Diese wird in Form
+ * einer Tabelle angezeigt. Zusätzlich wird die Design-Thinking-Grafik mit dynamischen Punkten erstellt, wobei jeder
+ * Punkt ein fertiges Protokoll repräsentiert.
+ */
+function protocol_overview_show_protocol_overview()
 {
-    $form['fill_user'] = array(
-        '#type' => 'submit',
-        '#value' => 'User-Tabelle befüllen',
-        '#submit' => array('back_to_new_task')
+    global $base_url;
 
-    );
+    //Benutzer der Gruppe werden geladen
+    $users = protocol_overview_get_participants_from_logged_in_user_group();
 
-    $form['fill_user_settings'] = array(
-        '#type' => 'submit',
-        '#value' => 'User-Settings befüllen',
-        '#submit' => array('back_to_new_task')
+    //Protokolle der Benutzer werden geladen
+    $sql = "SELECT * FROM {protocol} WHERE uid IN ($users) AND finished = 1 ORDER BY date";
+    $protocol_result = db_query($sql);
 
-    );
-    return $form;
+    //In dieses Array werden alle geladenen Protokolle abgespeichert
+    $protocol_array = array();
+
+    foreach ($protocol_result as $protocol) {
+        array_push($protocol_array, $protocol);
+    }
+
+    /* Innerhalb dieses if-Blocks wird die Anzahl der anzuzeigenden Punkte ermittelt und analysiert, ob diese
+     * auf die DT-Grafik passen. Sollte dies nicht der Fall sein, wird der vertikale Abstand zwischen zwei
+     * Punkten verringert und erneut geprüft. Im Anschluss wird die Grafik mit den Punkten in eine Variable gespeichert
+     */
+    if (protocol_overview_get_height_from_dynamic_points($protocol_array, 40) > 820) {
+        if (protocol_overview_get_height_from_dynamic_points($protocol_array, 38) > 820) {
+            if (protocol_overview_get_height_from_dynamic_points($protocol_array, 36) > 820) {
+                $dynamic_graphic = protocol_overview_create_dynamic_graphic($protocol_array, 34);
+            } else {
+                $dynamic_graphic = protocol_overview_create_dynamic_graphic($protocol_array, 36);
+            }
+        } else {
+            $dynamic_graphic = protocol_overview_create_dynamic_graphic($protocol_array, 38);
+        }
+    } else {
+        $dynamic_graphic = protocol_overview_create_dynamic_graphic($protocol_array, 40);
+    }
+
+    //Die dynamische Grafik wird dem String hinzugefügt, der am Ende der Funktion zurückgegeben wird
+    $protocol_overview_string = $dynamic_graphic;
+
+    //Der Kopf der Tabelle wird erzeugt
+    $protocol_overview_string .= "
+        <table>
+            <th>Nr.</th>
+            <th>Datum</th>
+            <th>Methoden</th>
+            <th>Fazit</th>
+            <th>Raum</th>
+            <th>Phase</th>
+            <th>Aktionen</th>";
+
+    global $user;
+
+    $group = end($user->roles);
+    $role_id = 0;
+    $sql = "SELECT * FROM {role} WHERE name = '" . $group . "'";
+    $result = db_query($sql);
+
+    foreach ($result as $item) {
+        $role_id = $item->rid;
+    }
+
+    //Es wird ein Link erzeugt, der eine vollständige Dokumentation erstellt. Dieser Link wird überhalb der Tabelle angezeigt
+    $protocol_overview_string .= "<br><br><a href='" . $base_url . "/show_total_protocol/" . $role_id . "'>Das gesamte Dokument als PDF anzeigen (kann etwas dauern)</a>";
+
+    //Hilfsvariable, welche die angezeigten Protokolle zählt
+    $protocol_counter = 1;
+
+    //Es wird über jedes Protokoll iteriert
+    foreach ($protocol_array as $protocol) {
+
+        //String-Variable, welche alle nötigen Attribute eines Protokolls aufnimmt und in die Tabelle einfügt
+        $protocol_string = "";
+
+        //Start- und Endzeitpunkt des Protokolls wird ermittelt
+        $start_date = new DateTime($protocol->start_date);
+        $end_date = new DateTime($protocol->end_date);
+        $converted_start_date = $start_date->format('d.m.Y H:i');
+        $converted_end_date = $end_date->format('d.m.Y H:i');
+
+        //Lädt die zum Protokoll gehörenden Methodendurchführung
+        $methods = protocol_overview_get_all_methods_from_protocol($protocol->protocol_id);
+
+        //Falls Methoden zum Protokoll existieren
+        if (sizeof($methods) > 0) {
+
+            //Die Namen der Methoden werden in Form einer Aufzählung dargestellt
+            $protocol_string .= '<ul>';
+
+            foreach ($methods as $m) {
+                $protocol_string .= "
+                    <li>
+                        <a href='" . $base_url . "/methodenanzeige/$m->method_execution_id/t8HVhPRlPZ'>$m->name</a>
+                    </li>";
+            }
+            $protocol_string .= '</ul>';
+
+            //Falls keine Methode durchgeführt wurde, wird dies in der Tabelle vermerkt
+        } else {
+            $protocol_string = "Keine Methoden durchgeführt";
+        }
+
+        //Fazit des Protokolls wird geladen
+        $conclusion = $protocol->conclusion;
+
+        //Falls kein Fazit existiert, wird dies in der Tabelle vermerkt
+        if (!strcmp($conclusion, "")) {
+            $conclusion = "Keine Bewertung als Freitext vorhanden";
+        }
+
+        //Zeile der Tabelle wird erstellt
+        $protocol_overview_string = $protocol_overview_string . "
+            <tr>
+                <td>$protocol_counter</td>
+                <td>$converted_start_date -<br>$converted_end_date</td>
+                <td>$protocol_string</td><td>$conclusion</td>
+                <td>$protocol->raum_end</td><td>$protocol->phase_end</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href='" . $base_url . "/protokollanzeige/$protocol->protocol_id'>anzeigen</a>
+                        </li>
+                        <li>
+                            <a href='" . $base_url . "/protokoll_pdf_erstellen/$protocol->protocol_id'>pdf</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>";
+        $protocol_counter = $protocol_counter + 1;
+    }
+
+    //Tabelle wird geschlossen
+    $protocol_overview_string .= "</table>";
+
+    return $protocol_overview_string;
 }
 
+/*
+ * Diese Funktion liest alle Methodendurchführungen einer Gruppe zu einem Protokoll aus der Datenbank aus. Die ID des
+ * Protokolls wird dabei als Parameter übergeben
+ */
+function protocol_overview_get_all_methods_from_protocol($protocol_id)
+{
+    //Variable, die alle Methoden des Protokolls abspeichert
+    $methods = array();
 
-function getParticipants900()
+    $sql = "SELECT * FROM {method_execution} WHERE protocol_id = $protocol_id";
+    $method_result = db_query($sql);
+
+    foreach ($method_result as $m) {
+        array_push($methods, $m);
+    }
+
+    return $methods;
+}
+
+/*
+ * Diese Funktion erstellt die Design-Thinking-Grafik mit den dynamischen Punkten. Dabei werden die Protokolle als
+ * Parameter übergeben. Weiterhin wird ein Y-Wert übergeben, der den vertikalen Abstand der Punkte zueinander definiert
+ */
+function protocol_overview_create_dynamic_graphic($protocol_elements, $y_value)
+{
+
+    //Der Y-Wert wird aus dem Übergabeparameter ausgelesen
+    $y_space = $y_value;
+
+    /*
+     * Für jedes Protokoll werden Name von Raum und Phase ermittelt und zusätzlich geschaut, ob es sich um eine
+     * Vorbereitungsmethode oder Projektmanagementmethode handelt. Diese werden nicht in der Grafik angezeigt.
+     */
+    $protocol_room_phase = array();
+    $protocols = $protocol_elements;
+    foreach ($protocols as $protocol) {
+        array_push($protocol_room_phase, $protocol->raum_end . " " . $protocol->phase_end);
+    }
+
+    //In dieses Array werden die dynamischen Punkte zusammen mit deren Verlinkungen gespeichert
+    $dynamic_points = array();
+    $dynamic_points['nodes'] = array();
+    $dynamic_points['links'] = array();
+
+    //Hilfsvariable, die die Durchläufe durch die Protokolle zählt
+    $counter = 0;
+
+    //Diese Variable speichert den Verlauf der Protokolle in Form von Zahlen ab. 1 == Problemraum divergent, 6 ==
+    //Implementierungsraum konvergent
+    $reference_array = array();
+
+    //Feste x und y Werte für den ersten Punkt im divergenten Problemraum
+    $y = 240;
+    $x = 25;
+
+    //Es wird über jedes Protokoll iteriert
+    for ($i = 0; $i < sizeof($protocol_room_phase); $i++) {
+
+        //Raum und Phase der Gruppe nach Ende des Protokolls
+        $name = $protocol_room_phase[$i];
+
+        switch ($name) {
+
+            case 'Problemraum divergent':
+
+                //Sollte es der erste Punkt der Grafik sein:
+                if ($counter == 0) {
+
+                    //Der erste Punkt wird in das zugehörige Array gespeichert
+                    array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+
+                    //Protokoll befindet sich in der ersten der sechs Prozessstufen
+                    array_push($reference_array, "1");
+                    $counter++;
+                } else {
+
+                    //Wenn das vorige Protokoll in gleichem Raum bzw. gleicher Phase befindet...
+                    if ($reference_array[$counter - 1] <= 1) {
+                        $x = $x + 40;
+                        if ($x > 185) {
+                            $x = 25;
+                            $y = $y + $y_space;
+                        }
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                        array_push($reference_array, "1");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in einem späteren Prozessschritt befunden haben, wird eine neue
+                        //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                    } else {
+                        $y = $y + $y_space;
+                        $x = 25;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+                        array_push($reference_array, "1");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case 'Problemraum konvergent':
+
+                //Sollte es der erste Punkt der Grafik sein:
+                if ($counter == 0) {
+                    $x = 245;
+                    $y = 240;
+
+                    //Der erste Punkt wird in das zugehörige Array gespeichert
+                    array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+
+                    //Protokoll befindet sich in der zweiten der sechs Prozessstufen
+                    array_push($reference_array, "2");
+                    $counter++;
+                } else {
+
+                    //Sollte sich das vorige Protokoll in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                    if ($reference_array[$counter - 1] < 2) {
+                        $x = 245;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                        array_push($reference_array, "2");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                        //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                    } else if ($reference_array[$counter - 1] == 2) {
+                        $x = $x + 40;
+                        if ($x > 405) {
+                            $x = 245;
+                            $y = $y + $y_space;
+                        }
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                        array_push($reference_array, "2");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in einem späteren Prozessschritt befunden haben, wird eine neue
+                        //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                    } else if ($reference_array[$counter - 1] > 2) {
+                        $x = 245;
+                        $y = $y + $y_space;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+                        array_push($reference_array, "2");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case 'Lösungsraum divergent':
+
+                //Sollte es der erste Punkt der Grafik sein:
+                if ($counter == 0) {
+                    $x = 461;
+                    $y = 240;
+
+                    //Der erste Punkt wird in das zugehörige Array gespeichert
+                    array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+
+                    //Protokoll befindet sich in der dritten der sechs Prozessstufen
+                    array_push($reference_array, "3");
+                    $counter++;
+                } else {
+
+                    //Sollte sich das vorige Protokoll in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                    if ($reference_array[$counter - 1] < 3) {
+                        $x = 461;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                        array_push($reference_array, "3");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                        //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                    } else if ($reference_array[$counter - 1] == 3) {
+                        $x = $x + 40;
+                        if ($x > 622) {
+                            $x = 461;
+                            $y = $y + $y_space;
+                        }
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                        array_push($reference_array, "3");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in einem späteren Prozessschritt befunden haben, wird eine neue
+                        //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                    } else if ($reference_array[$counter - 1] > 3) {
+                        $x = 461;
+                        $y = $y + $y_space;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+                        array_push($reference_array, "3");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case "Lösungsraum konvergent":
+
+                //Sollte es der erste Punkt der Grafik sein:
+                if ($counter == 0) {
+                    $x = 677;
+                    $y = 240;
+
+                    //Der erste Punkt wird in das zugehörige Array gespeichert
+                    array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+
+                    //Protokoll befindet sich in der vierten der sechs Prozessstufen
+                    array_push($reference_array, "4");
+                    $counter++;
+                } else {
+
+                    //Sollte sich das vorige Protokoll in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                    if ($reference_array[$counter - 1] < 4) {
+                        $x = 677;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                        array_push($reference_array, "4");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                        //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                    } else if ($reference_array[$counter - 1] == 4) {
+                        $x = $x + 40;
+                        if ($x > 854) {
+                            $x = 677;
+                            $y = $y + $y_space;
+                        }
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                        array_push($reference_array, "4");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in einem späteren Prozessschritt befunden haben, wird eine neue
+                        //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                    } else if ($reference_array[$counter - 1] > 4) {
+                        $x = 677;
+                        $y = $y + $y_space;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+                        array_push($reference_array, "4");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case "Implementierungsraum divergent":
+
+                //Sollte es der erste Punkt der Grafik sein:
+                if ($counter == 0) {
+                    $x = 891;
+                    $y = 240;
+
+                    //Der erste Punkt wird in das zugehörige Array gespeichert
+                    array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+
+                    //Protokoll befindet sich in der fünften der sechs Prozessstufen
+                    array_push($reference_array, "5");
+                    $counter++;
+                } else {
+
+                    //Sollte sich das vorige Protokoll in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                    if ($reference_array[$counter - 1] < 5) {
+                        $x = 891;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                        array_push($reference_array, "5");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                        //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                    } else if ($reference_array[$counter - 1] == 5) {
+                        $x = $x + 40;
+                        if ($x > 1051) {
+                            $x = 891;
+                            $y = $y + $y_space;
+                        }
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                        array_push($reference_array, "5");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in einem späteren Prozessschritt befunden haben, wird eine neue
+                        //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                    } else if ($reference_array[$counter - 1] > 5) {
+                        $x = 891;
+                        $y = $y + $y_space;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+                        array_push($reference_array, "5");
+                        $counter++;
+                    }
+                }
+                break;
+
+            case "Implementierungsraum konvergent":
+
+                //Sollte es der erste Punkt der Grafik sein:
+                if ($counter == 0) {
+                    $x = 1111;
+                    $y = 240;
+
+                    //Der erste Punkt wird in das zugehörige Array gespeichert
+                    array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+
+                    //Protokoll befindet sich in der sechsten der sechs Prozessstufen
+                    array_push($reference_array, "6");
+                    $counter++;
+
+                } else {
+
+                    //Sollte sich das vorige Protokoll in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                    if ($reference_array[$counter - 1] < 6) {
+                        $x = 1111;
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                        array_push($reference_array, "6");
+                        $counter++;
+
+                        //Sollte sich das vorige Protokoll in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                        //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                    } else if ($reference_array[$counter - 1] == 6) {
+                        $x = $x + 40;
+                        if ($x > 1271) {
+                            $x = 1111;
+                            $y = $y + $y_space;
+                        }
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+                        array_push($reference_array, "6");
+                        $counter++;
+                    }
+                }
+                break;
+        }
+
+        //Die Verlinkungen der Punkte werden erstellt
+        if ($i > 0) {
+            array_push($dynamic_points['links'], array('source' => $i - 1, 'target' => $i));
+        }
+    }
+
+
+    $chart = array(
+        'id' => 'visualization',
+        'type' => 'gantt',
+        'data' => ($dynamic_points),
+    );
+
+    $d3_chart = d3_draw($chart);
+
+
+    return $d3_chart;
+}
+
+/*
+ * Diese Funktion bestimmt den vertikalen Abstand der dynamischen Punkte zueinander innerhalb der Design-Thinking-Grafik.
+ * Sollten die Punkte über die Grafik hinaus ragen, wird der vertikale Abstand verkleinert.
+ */
+function protocol_overview_get_height_from_dynamic_points($protocol_array, $y_value_reference)
+{
+
+    $protocol_room_phase = array();
+
+    //Die Protokolle werden aus dem Übergabeparameter geladen
+    $protocols = $protocol_array;
+
+    //Aus jedem Protokoll wird der Raum und die Phase der Gruppe nach Beendigung des Protokolls ausgelesen, um einen
+    //Weg von Protokoll zu Protokoll erkennen zu können
+    foreach ($protocols as $protocol) {
+        array_push($protocol_room_phase, $protocol->raum_end . " " . $protocol->phase_end);
+
+
+    }
+
+    //In dieses Array wird die Reihenfolge der Protokolle in Form von Zahlen gespeichert.
+    $number_reference_array = array();
+
+    foreach ($protocol_room_phase as $protocol) {
+        switch ($protocol) {
+            case "Problemraum divergent":
+                array_push($number_reference_array, 1);
+                break;
+            case "Problemraum konvergent":
+                array_push($number_reference_array, 2);
+                break;
+            case "Lösungsraum divergent":
+                array_push($number_reference_array, 3);
+                break;
+            case "Lösungsraum konvergent":
+                array_push($number_reference_array, 4);
+                break;
+            case "Implementierungsraum divergent":
+                array_push($number_reference_array, 5);
+                break;
+            case "Implementierungsraum konvergent";
+                array_push($number_reference_array, 6);
+                break;
+        }
+    }
+
+    $y_value = 240;
+    $counter = 1;
+
+    //Es wird über das Protokoll-Zahlen-Array iteriert, um am Ende den voraussichtlichen Y-Wert des letzten Punktes
+    //zu erhalten
+    for ($i = 0; $i < sizeof($number_reference_array) - 1; $i++) {
+
+        if ($number_reference_array[$i + 1] > $number_reference_array[$i]) {
+            $counter = 1;
+        } else if ($number_reference_array[$i + 1] == $number_reference_array[$i]) {
+            $counter++;
+            if ($counter == 6) {
+                $y_value = $y_value + $y_value_reference;
+                $counter = 1;
+            }
+        } else {
+            $counter = 1;
+            $y_value = $y_value + $y_value_reference;
+        }
+    }
+
+    return $y_value;
+
+}
+
+/*
+ * Diese Funktin lädt alle Gruppenmitglieder des aktuell angemeldeten Nutzers aus der Datenbank
+ */
+function protocol_overview_get_participants_from_logged_in_user_group()
 {
     $users = array();
     global $user;
     $user_id = $user->uid;
 
     $sql = "SELECT ur.rid, r.name, ur.uid FROM {role} AS r INNER JOIN {users_roles} AS ur ON r.rid = ur.rid WHERE ur.rid = (SELECT usro.rid FROM {users_roles} as usro WHERE usro.uid = $user_id)";
+    $user_result = db_query($sql);
 
-    $proresult = db_query($sql);
-
-    foreach ($proresult as $pro) {
+    foreach ($user_result as $pro) {
         array_push($users, $pro->uid);
     }
 
@@ -84,659 +609,6 @@ function getParticipants900()
     return $list;
 }
 
-
-function get_group_protocols()
-{
-    global $base_url;
-
-    $users = getParticipants2();
-    $sql = "SELECT * FROM {protocol} WHERE uid IN ($users) AND finished = 1 ORDER BY date";
-    $result = db_query($sql);
-
-    $test = array();
-
-    foreach ($result as $r) {
-        array_push($test, $r);
-
-    }
-
-
-    if (get_height($test, 40) > 820) {
-        if(get_height($test, 38) > 820) {
-            if(get_height($test, 36) > 820) {
-                $chart = protocol_overview_d3_gantt($test, 34);
-            } else {
-                $chart = protocol_overview_d3_gantt($test, 36);
-            }
-        } else {
-            $chart = protocol_overview_d3_gantt($test, 38);
-        }
-    } else {
-        $chart = protocol_overview_d3_gantt($test, 40);
-    }
-
-    $tempString = $chart;
-    $tempString .= "<table><th>Nr.</th><th>Datum</th><th>Methoden</th><th>Fazit</th><th>Raum</th><th>Phase</th> <th>Aktionen</th>";
-
-    $number = 1;
-
-    $tempString .= "<br><br><a href='" . $base_url . "/show_total_protocol/0'>Das gesamte Dokument als PDF anzeigen (kann etwas dauern)</a>";
-
-    foreach ($test as $r) {
-        $date = new DateTime($r->start_date);
-        $date2 = new DateTime($r->end_date);
-        $deadline2 = $date->format('d.m.Y H:i');
-        $deadline3 = $date2->format('d.m.Y H:i');
-        $tempString2 = "";
-        $methods = get_protocol_methods($r->protocol_id);
-        if (sizeof($methods) > 0) {
-            $tempString2 .= '<ul>';
-
-            foreach ($methods as $m) {
-                $tempString2 .= " <li><a href='" . $base_url . "/methodenanzeige/$m->method_execution_id/t8HVhPRlPZ'>$m->name</a></li>";
-            }
-            $tempString2 .= '</ul>';
-        } else {
-            $tempString2 = "Keine Methoden durchgeführt";
-        }
-
-        $fazit = $r->conclusion;
-
-        if (!strcmp($fazit, "")) {
-            $fazit = "Keine Bewertung als Freitext vorhanden";
-        }
-
-        $tempString = $tempString . "<tr><td>$number</td><td>$deadline2 -<br>$deadline3</td><td>$tempString2</td><td>$fazit</td><td>$r->raum_end</td><td>$r->phase_end</td><td><ul> <li><a href='" . $base_url . "/protokollanzeige/$r->protocol_id'>anzeigen</a></li> <li><a href='" . $base_url . "/protokoll_pdf_erstellen/$r->protocol_id'>pdf</a></li></ul></td></tr></tr>";
-        $number = $number + 1;
-    }
-
-
-    $tempString .= "</table>";
-
-
-    return $tempString;
-}
-
-function get_protocol_methods($protocol_id)
-{
-    $methods = array();
-    $sql = "SELECT * FROM {method_execution} WHERE protocol_id = $protocol_id";
-    $result = db_query($sql);
-
-    foreach ($result as $r) {
-        array_push($methods, $r);
-    }
-
-    return $methods;
-}
-
-function test($protocol, $counter)
-{
-    $awesome_pro = $protocol;
-    $date_start = new DateTime($protocol->start_date);
-    $date_end = new DateTime($protocol->end_date);
-    $deadline2 = $date_start->format('d.m.Y');
-    $deadline3 = $date_start->format('d.m.Y H:i:s');
-    $deadline4 = $date_end->format('d.m.Y H:i:s');
-
-    $group_uid = explode(",",$protocol->participants);
-    $group_uid2 = $group_uid[0];
-
-    $user2 = user_load($group_uid2);
-    $group = end($user2->roles);
-
-
-    $general_information = '
-        <style>
-        table {
-            border-collapse: collapse;
-        }
-
-        table, td, th {
-            border: 1px solid black;
-        }
-    </style>
-        <h2 style="text-align:center">Tagesbericht '.$group.' vom '.$deadline2.'</h2>
-        <div>
-            <table border="1" width="100%">
-            <tr>
-            <th font color="#fff" bgcolor="#444444" align="left">Bezeichnung</th>
-            <th font color="#fff" bgcolor="#444444" align="left">Information</th>
-        </tr>
-                <tr>
-                    <td width="25%">Protokoll Nr.</td>
-                    <td>'.$counter.'</td>
-                </tr>
-                <tr>
-                    <td>Teilnehmer</td>
-                    <td>'.parse_participants($protocol->participants).'<br></td>
-                </tr>
-                <tr>
-                    <td>Ort</td>
-                    <td>'.$protocol->place.'</td>
-                </tr>
-                <tr>
-                    <td>Art</td>
-                    <td>'.$protocol->type.'</td>
-                </tr>
-                <tr>
-                    <td>Datum</td>
-                    <td>'.$deadline3.' - '.$deadline4.'</td>
-                </tr>
-                <tr>
-                    <td>Autor</td>
-                    <td>'.get_username($protocol->uid).'</td>
-                </tr>
-            </table>
-        </div>';
-
-    $open_tasks = protocol_overview_get_relevant_open_tasks($protocol);
-    $number = 1;
-
-    $new_tasks = protocol_overview_get_relevant_new_tasks($protocol);
-
-    $new_task_string = '
-<div>
-<br>
-    <h3style="text-align:center">neue Aufgabenzuweisungen</h3>
-        <table border="1" width="100%">
-            <tr>
-                <th font color="#fff" bgcolor="#444444" align="left">Nr.</th>
-                <th font color="#fff" bgcolor="#444444" align="left">Kurzbezeichnung</th>
-                <th font color="#fff" bgcolor="#444444" align="left">Teilnehmer</th>
-                <th font color="#fff" bgcolor="#444444" align="left">Aufgabe</th>
-                <th font color="#fff" bgcolor="#444444" align="left">Deadline</th>
-            </tr>';
-
-    $number = 1;
-
-    if (!$new_tasks->rowCount()) {
-        $new_task_string .= '
-        <tr>
-            <td colspan="5" align="center">keine neuen Aufgaben vorhanden</td>
-
-        </tr>';
-
-    } else {
-        foreach ($new_tasks as $t) {
-            $date = new DateTime($t->deadline);
-            $deadline3 = $date->format('d.m.Y H:i:s');
-            $new_task_string .= '
-        <tr>
-            <td width="5%">' . $number . '</td>
-            <td>' . $t->short_description . '</td>
-            <td width="15%">' . protocol_overview_get_username($t->uid) . '</td>
-            <td>' . $t->task . '</td>
-            <td width="25%">' . $deadline3 . '</td>
-        </tr>';
-            $number = $number + 1;
-        }
-    }
-
-
-    $new_task_string .= '</table></div>';
-
-    $end = '
-    </body>
-</html>';
-
-
-    $methods = protocol_overview_get_relevant_methods($protocol->protocol_id);
-    global $base_url;
-    $newString = "";
-
-    foreach ($methods as $m) {
-        $newString .= $m->name . "<br>";
-    }
-
-    $content_string = '
-<div>
-    <table border="1" width="100%">
-    <tr>
-            <th font color="#fff" bgcolor="#444444" align="left">Bezeichnung</th>
-            <th font color="#fff" bgcolor="#444444" align="left">Information</th>
-        </tr>
-        <tr>
-            <td width="15%"><b>Inhalt</b></td>
-            <td>' . $protocol->preparation . '</td>
-        </tr>
-        <tr>
-            <td width="15%"><b>angewandte<br>Methoden</b></td>
-            <td>' . $newString . '</td>
-        </tr>
-        <tr>
-            <td width="15%"><b>Probleme</b></td>
-            <td>' . $protocol->problems . '</td>
-        </tr>
-        <tr>
-            <td width="15%"><b>Fazit</b></td>
-            <td>' . $protocol->conclusion . '</td>
-        </tr>
-    </table>
-</div>';
-
-    $methods = protocol_overview_get_relevant_methods($protocol->protocol_id);
-
-    $method_string = '
-<br>
-<div>';
-    $method_string .= '<h3 style="text-align:center">Übersicht der durchgeführten Methoden</h3>';
-
-    if (!$methods->rowCount()) {
-        $method_string .= '
-        <table border="1" width="100%">
-
-            <tr>
-
-            <td colspan="5" align="center">Es wurden keine Methoden durchgeführt</td>
-
-        </tr><br></table><br><br>';
-
-    }
-
-    foreach ($methods as $m) {
-
-        $image = $base_url . "/";
-        if ($m->rating == 20) {
-            $image .= "one.png";
-        } else if ($m->rating == 40) {
-            $image .= "two.png";
-        } else if ($m->rating == 60) {
-            $image .= "three.png";
-        } else if ($m->rating == 80) {
-            $image .= "four.png";
-        } else if ($m->rating == 100) {
-            $image .= "five.png";
-        }
-
-        $method_string .= '
-    <table border="1" width="100%">
-    <tr>
-                <th font color="#fff" bgcolor="#444444" colspan="2" style="text-align:center">'.$m->name.'</th>
-            </tr>
-        <tr>
-            <td width="18%"><b>Methodenname</b></td>
-            <td>' . $m->name . '</td>
-        </tr>
-        <tr>
-            <td width="18%"><b>Raum</b></td>
-            <td>' . $m->room . '</td>
-        </tr>
-        <tr>
-            <td width="18%"><b>Phase</b></td>
-            <td>' . $m->phase . '</td>
-        </tr>
-        <tr>
-            <td width="18%"><b>Ziel</b></td>
-            <td>' . $m->goal . '</td>
-        </tr>
-        <tr>
-            <td width="18%"><b>Durchführung</b></td>
-            <td>' . $m->execution . '</td>
-        </tr>
-        <tr>
-            <td width="18%"><b>Bewertung</b></td>
-            <td><img src=' . $image . ' height=20></td>
-        </tr>
-        <tr>
-            <td width="18%"><b>Bewertung</b></td>
-            <td>' . $m->evaluation . '</td>
-        </tr>
-        <tr>
-            <td width="18%"><b>Bilder</b></td><td align="center">
-
-        ';
-
-        /*
-        $path = explode(",",$m->path);
-
-
-
-        $numItems = count($path);
-        $i = 0;
-
-        foreach($path as $p) {
-
-            if (strlen($p) > 0) {
-                $filepath='/design_thinking_tool/sites/default/files/'.$p.'';
-
-                $basename = "Abbildung x: " . preg_replace('/^.+[\\\\\\/]/', '', $filepath);
-
-                $method_string .= "<img src='$filepath' height='200' width='200' alt=Selfhtml><br><b>$basename</b><br>";
-                if(++$i != $numItems) {
-                    $method_string .="<br>";
-                }
-
-            }
-
-
-        }
-        */
-
-        $method_string .= protocol_overview_get_images_for_pdf($m->method_execution_id);
-
-        $method_string .= '
-    </td></tr></table>
-    <br>
-    <br>';
-    }
-
-    $method_string .= '
-</div>';
-
-    $users = getParticipants2();
-    $sql = "SELECT * FROM {protocol} WHERE uid IN ($users) AND protocol_id < " . $awesome_pro->protocol_id . " ORDER BY date";
-    $result = db_query($sql);
-
-    $sql2 = "SELECT * FROM {protocol} WHERE uid IN ($users) AND protocol_id <= " . $awesome_pro->protocol_id . " ORDER BY date";
-    $result2 = db_query($sql2);
-
-    $test = array();
-    $test2 = array();
-
-    foreach ($result as $r) {
-        array_push($test, $r);
-    }
-
-    foreach ($result2 as $r2) {
-        array_push($test2, $r2);
-    }
-
-    $position_before_meeting = "<h3 style=\"text-align:center\">Phase im Design-Thinking-Prozess vor dem Meeting</h3>" . protocol_overview_generate_graphic($test);
-    $position_after_meeting = "<h3 style=\"text-align:center\">Phase im Design-Thinking-Prozess nach dem Meeting</h3>" . protocol_overview_generate_graphic($test2);
-
-
-    $endString = $general_information . "<br>" . $position_before_meeting . "<br><h3 style=\"text-align:center\">Inhalt des Tagesberichts</h3>" . $content_string . $new_task_string . $method_string . $position_after_meeting . "<br>" . $end;
-
-    return $endString;
-}
-
-function protocol_overview_d3_gantt($result, $y_wert)
-{
-
-    $y_abstand = $y_wert;
-
-    $test = array();
-    $protocols = $result;
-    foreach ($protocols as $protocol) {
-        array_push($test, $protocol->raum_end . " " . $protocol->phase_end);
-    }
-    $stuff = array();
-    $stuff['nodes'] = array();
-    $stuff['links'] = array();
-
-
-    $counter = 0;
-    $referenz_array = array();
-    $y = 240;
-    $x = 25;
-
-
-    for ($i = 0; $i < sizeof($test); $i++) {
-
-
-        $name = $test[$i];
-        switch ($name) {
-
-             case 'Problemraum divergent':
-                 if ($counter == 0) {
-                     array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
-                     array_push($referenz_array, "1");
-                     $counter++;
-                 } else {
-                     if($referenz_array[$counter-1] <= 1) {
-                         $x = $x+40;
-                         if($x > 185) {
-                             $x = 25;
-                             $y = $y+$y_abstand;
-                         }
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
-                         array_push($referenz_array, "1");
-                         $counter++;
-                     } else {
-                         $y = $y+$y_abstand;
-                         $x = 25;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
-                         array_push($referenz_array, "1");
-                         $counter++;
-                     }
-                 }
-                 break;
-
-             case 'Problemraum konvergent':
-                 if ($counter == 0) {
-                     $x = 245;
-                     $y = 240;
-                     array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                     array_push($referenz_array, "2");
-                     $counter++;
-                 } else {
-                     if($referenz_array[$counter-1] <2) {
-                         $x = 245;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                         array_push($referenz_array, "2");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] == 2) {
-                         $x = $x+40;
-                         if($x > 405) {
-                             $x = 245;
-                             $y = $y+$y_abstand;
-                         }
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                         array_push($referenz_array, "2");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] >2) {
-                         $x = 245;
-                         $y = $y+$y_abstand;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                         array_push($referenz_array, "2");
-                         $counter++;
-                     }
-                 }
-                 break;
-
-             case 'Lösungsraum divergent':
-                 if ($counter == 0) {
-                     $x = 461;
-                     $y = 240;
-                     array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                     array_push($referenz_array, "3");
-                     $counter++;
-                 } else {
-                     if($referenz_array[$counter-1] < 3) {
-                         $x = 461;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                         array_push($referenz_array, "3");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] == 3) {
-                         $x = $x+40;
-                         if($x > 622) {
-                             $x = 461;
-                             $y = $y+$y_abstand;
-                         }
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                         array_push($referenz_array, "3");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] >3) {
-                         $x = 461;
-                         $y = $y+$y_abstand;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                         array_push($referenz_array, "3");
-                         $counter++;
-                     }
-                 }
-                 break;
-
-             case "Lösungsraum konvergent":
-                 if ($counter == 0) {
-                     $x = 677;
-                     $y = 240;
-                     array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                     array_push($referenz_array, "4");
-                     $counter++;
-                 } else {
-                     if($referenz_array[$counter-1] < 4) {
-                         $x = 677;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                         array_push($referenz_array, "4");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] == 4) {
-                         $x = $x+40;
-                         if($x > 854) {
-                             $x = 677;
-                             $y = $y+$y_abstand;
-                         }
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                         array_push($referenz_array, "4");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] >4) {
-                         $x = 677;
-                         $y = $y+$y_abstand;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                         array_push($referenz_array, "4");
-                         $counter++;
-                     }
-                 }
-                 break;
-
-             case "Implementierungsraum divergent":
-                 if ($counter == 0) {
-                     $x = 891;
-                     $y = 240;
-                     array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                     array_push($referenz_array, "5");
-                     $counter++;
-                 } else {
-                     if($referenz_array[$counter-1] < 5) {
-                         $x = 891;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                         array_push($referenz_array, "5");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] == 5) {
-                         $x = $x+40;
-                         if($x > 1051) {
-                             $x = 891;
-                             $y = $y+$y_abstand;
-                         }
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                         array_push($referenz_array, "5");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] >5) {
-                         $x = 891;
-                         $y = $y+$y_abstand;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                         array_push($referenz_array, "5");
-                         $counter++;
-                     }
-                 }
-                 break;
-
-             case "Implementierungsraum konvergent":
-                 if ($counter == 0) {
-                     $x = 1111;
-                     $y = 240;
-                     array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
-                     array_push($referenz_array, "6");
-                     $counter++;
-
-                 } else {
-                     if($referenz_array[$counter-1] < 6) {
-                         $x = 1111;
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
-                         array_push($referenz_array, "6");
-                         $counter++;
-                     } else if ($referenz_array[$counter-1] == 6) {
-                         $x = $x+40;
-                         if($x > 1271) {
-                             $x = 1111;
-                             $y = $y+$y_abstand;
-                         }
-                         array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
-                         array_push($referenz_array, "6");
-                         $counter++;
-                     }
-                 }
-                 break;
-         }
-
-         if($i>0) {
-             array_push($stuff['links'], array('source' => $i-1, 'target' => $i));
-         }
-     }
-
-
-        $chart = array(
-            'id' => 'visualization',
-            'type' => 'gantt',
-            'data' => ($stuff),
-        );
-
-        $d3_chart = d3_draw($chart);
-
-
-
-        return $d3_chart;
-}
-
-function get_height($test2, $referenz) {
-
-
-
-    $test = array();
-    $protocols = $test2;
-    foreach ($protocols as $protocol) {
-        array_push($test, $protocol->raum_end . " " . $protocol->phase_end);
-
-
-    }
-
-    $zahlenArray = array();
-
-
-    foreach ($test as $item) {
-        switch($item) {
-            case "Problemraum divergent":
-                array_push($zahlenArray, 1);
-                break;
-            case "Problemraum konvergent":
-                array_push($zahlenArray, 2);
-                break;
-            case "Lösungsraum divergent":
-                array_push($zahlenArray, 3);
-                break;
-            case "Lösungsraum konvergent":
-                array_push($zahlenArray, 4);
-                break;
-            case "Implementierungsraum divergent":
-                array_push($zahlenArray, 5);
-                break;
-            case "Implementierungsraum konvergent";
-                array_push($zahlenArray, 6);
-                break;
-        }
-    }
-
-    $y_wert = 240;
-    $counter = 1;
-    for ($i=0;$i<sizeof($zahlenArray)-1;$i++) {
-
-        if ($zahlenArray[$i+1] > $zahlenArray[$i]) {
-            $counter = 1;
-        } else if ($zahlenArray[$i+1] == $zahlenArray[$i])  {
-            $counter ++;
-            if($counter == 6) {
-                $y_wert = $y_wert + $referenz;
-                $counter = 1;
-            }
-        } else {
-            $counter = 1;
-            $y_wert = $y_wert + $referenz;
-        }
-    }
-
-    return $y_wert;
-
-}
 
 
 

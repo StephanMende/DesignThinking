@@ -6,63 +6,78 @@
  * Time: 09:56
  */
 
-function reflection_menu() {
+function reflection_menu()
+{
     $items['persoenliche_reflexion'] = array(
         'title' => 'Persönliche Reflexion',
-        'access callback' => true,
         'page callback' => 'drupal_get_form',
         'access callback' => 'user_is_logged_in',
-        'page arguments' => array('reflection_get_form'),
+        'page arguments' => array('reflection_get_user_reflection_form'),
     );
 
     $items['gruppenreflexion'] = array(
         'title' => 'Gruppenreflexion',
-        'access callback' => true,
         'page callback' => 'drupal_get_form',
         'access callback' => 'user_is_logged_in',
-        'page arguments' => array('reflection_group_get_form'),
+        'page arguments' => array('reflection_get_group_reflection_form'),
         'file' => 'group_reflection.inc',
     );
 
     return $items;
 }
 
-function reflection_get_form($form, &$form_submit) {
+/*
+ * Diese Funktion erstellt ein Formular, in das der Nutzer seine persönliche Reflexion eintragen kann. Dieses
+ * Formular enthält eine Textarea und einen Submit-Button
+ */
+function reflection_get_user_reflection_form($form, &$form_submit)
+{
 
-    $reflection = reflection_get_reflection();
+    //Sollte es bereits eine gespeicherte Reflexion des Benutzers geben, wird diese im Vorfeld geladen und in die
+    //Textarea eingefügt
+    $reflection = reflection_get_saved_user_reflection();
 
-    $form['test'] = array(
+    $form['personal_reflection'] = array(
         '#title' => "persönliche Reflexion",
         '#type' => 'fieldset',
-        '#description' => "Am Ende der Projektphase soll jedes Gruppenmitglied ein persönliches Fazit ziehen. Dort können sowohl positive als auch negative Aspekte der Projektphase genannt werden."
+        '#description' => "Am Ende der Projektphase soll jedes Gruppenmitglied ein persönliches Fazit ziehen.
+            Dort können sowohl positive als auch negative Aspekte der Projektphase genannt werden."
     );
-    $form['test']['task'] = array(
-        '#title' => t('Fazit'),
+    $form['personal_reflection']['reflection'] = array(
+        '#title' => t('reflection'),
         '#resizable' => FALSE,
         "#default_value" => $reflection->reflection,
         '#type' => 'textarea',
     );
 
-    $form['save_reflection'] = array(
+    $form['submit'] = array(
         '#type' => 'submit',
         '#value' => 'Fazit speichern',
-        '#submit' => array('reflection_save_reflection')
+        '#submit' => array('reflection_save_user_reflection')
 
     );
 
     return $form;
 }
 
+/*
+ * Diese Funktion liest alle nötigen Felder des Formulares aus und speichert die Reflexion in der Datenbank ab
+ */
+function reflection_save_user_reflection($form, &$form_state)
+{
 
-function reflection_save_reflection($form, &$form_state) {
-
+    //der aktuell angemeldete User wird ermittelt
     global $user;
-    $task = $form_state['values']['task'];
 
-    if (check_current_reflection()) {
-        $sql = "UPDATE {user_reflection} SET reflection = '$task' WHERE uid = ".$user->uid;
+    //Die eingebene Reflexion wird ausgelesen
+    $task = $form_state['values']['reflection'];
+
+    //Falls schon eine gespeicherte Reflexion in der Datenbank vorliegt, wird diese aktualsiert. Falls nicht, wird ein
+    //neuer Eintrag erstellt
+    if (reflection_check_if_there_is_already_a_reflection()) {
+        $sql = "UPDATE {user_reflection} SET reflection = '$task' WHERE uid = " . $user->uid;
     } else {
-        $sql = "INSERT INTO {user_reflection} (uid,reflection) VALUES(".$user->uid.",'".$task."');";
+        $sql = "INSERT INTO {user_reflection} (uid,reflection) VALUES(" . $user->uid . ",'" . $task . "');";
     }
 
     db_query($sql);
@@ -70,26 +85,36 @@ function reflection_save_reflection($form, &$form_state) {
     drupal_goto("");
 }
 
-function check_current_reflection() {
+/*
+ * Diese Funktion überprüft, ob bereits eine gespeicherte Reflexion der Nutzers in der Datenbank vorhanden ist
+ */
+function reflection_check_if_there_is_already_a_reflection()
+{
+
     global $user;
-    $reflection = false;
-    $sql = "SELECT * FROM {user_reflection} WHERE uid = ".$user->uid;
+    $found_a_reflection = false;
+    $sql = "SELECT * FROM {user_reflection} WHERE uid = " . $user->uid;
     $result = db_query($sql);
     foreach ($result as $r) {
-        $reflection = true;
+        $found_a_reflection = true;
     }
 
-    return $reflection;
+    return $found_a_reflection;
 
 }
 
-function reflection_get_reflection() {
+/*
+ * Diese Funktion lädt die gespeicherte persönliche Reflexion des Nutzers aus der Datenbank. Sollte noch keine
+ * vorhanden sein, wird ein leerer String zurückgegeben
+ */
+function reflection_get_saved_user_reflection()
+{
     global $user;
     $reflection = "";
-    $sql = "SELECT * FROM {user_reflection} WHERE uid = ".$user->uid;
-    $result = db_query($sql);
-    foreach ($result as $r) {
-        $reflection = $r;
+    $sql = "SELECT * FROM {user_reflection} WHERE uid = " . $user->uid;
+    $reflection_result = db_query($sql);
+    foreach ($reflection_result as $ref) {
+        $reflection = $ref;
     }
 
     return $reflection;

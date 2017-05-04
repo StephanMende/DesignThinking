@@ -1,0 +1,3 @@
+name = Protokoll-Template
+description = Dieses Modul bietet einen Workflow, in dem ein Gruppenprotokoll schrittweise erstellt werden kann
+core = 7.x

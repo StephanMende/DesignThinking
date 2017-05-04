@@ -6,70 +6,8 @@
  * Time: 13:33
  */
 
-
-function task_assignment_views_post_execute(&$view) {
-
-    if(!strcmp($view->name, "calendar")) {
-        $result2 = array();
-
-        foreach ($view->result as $result) {
-            global $user;
-            $te = $result;
-
-
-            $sql = "SELECT * FROM {node} as node WHERE node.nid = '$te->nid'";
-            $result3 = db_query($sql);
-
-            foreach($result3 as $pro) {
-                if(compareRoles($user->uid,$pro->uid )) {
-                    array_push($result2,$result);
-                }
-
-            }
-
-        }
-
-        $view2 = $view;
-        $view2->result = $result2;
-
-        return $view2;
-    } else {
-        return $view;
-    }
-
-
-
-
-}
-
-function compareRoles($uid1, $uid2) {
-
-    $role1 = "";
-    $role2 = "";
-
-    $sql = "SELECT * FROM {users_roles} WHERE uid = $uid1";
-    $result3 = db_query($sql);
-
-    foreach($result3 as $r3) {
-        $role1 = $r3->rid;
-    }
-
-    $sql = "SELECT * FROM {users_roles} WHERE uid = $uid2";
-    $result4 = db_query($sql);
-
-    foreach($result4 as $r4) {
-        $role2 = $r4->rid;
-    }
-
-    if($role1 == $role2 || $role2 == 3) {
-        return true;
-    } else {
-        return false;
-    }
-
-}
-
-function task_assignment_menu() {
+function task_assignment_menu()
+{
     $items['neue_Aufgabenzuweisung'] = array(
         'page callback' => 'drupal_get_form',
         'page arguments' => array('task_assignment_form'),
@@ -84,202 +22,80 @@ function task_assignment_menu() {
         'access callback' => 'user_is_logged_in',
         'access arguments' => array('access content'),
         'type' => MENU_CALLBACK,
+        'file' => 'task_assignment_appointment.inc'
     );
 
     return $items;
 }
 
-function task_assignment_appointment_form() {
-    $form['test'] = array(
-        '#title' => "neue Aufgabe erstellen",
-        '#type' => 'fieldset',
-        '#description' => "Es kann eine Mail an einen beliebigen Empfänger versendet werden. Die Adresse des Absenders ist standardmäßig die registrierte Mail-Adresse des Benutzers."
-    );
+/*
+ * Diese Funktion erstellt ein Formular, in das der Nutzer eine neue Aufgabe eintragen kann.
+ */
+function task_assignment_form()
+{
+    //Die Gruppenmitglieder werden geladen und deren Vor- und Nachnamen ermittelt, um diese in das Dropdown-Menü
+    //bei der Aufgabenzuweisung optimal anzeigen zu können
+    $users = task_assignment_get_participants_from_logged_in_user_group();
+    $user_list = explode(',', $users);
 
-    $form['test']['short_description'] = array(
-        '#type' => 'textfield',
-        '#require' => TRUE,
-        '#title' => t('Kurzbezeichnung des Termins'),
-    );
+    $user_name_list = array();
 
-    $form['test']['task'] = array(
-        '#title' => t('Aufgabenbeschreibung'),
-        '#resizable' => FALSE,
-        '#type' => 'textarea',
-    );
+    //Hier werden die einzelnen Auswahlmöglichkeiten für die spätere Priorisierung erstellt
+    $types = array("niedrig" => "niedrig", "mittel" => "mittel", "hoch" => "hoch");
 
+    foreach ($user_list as $u) {
+        $user_element = user_load($u);
+        $username = $user_element->field_first_name['und'][0]['value'] . " " . $user_element->field_last_name['und'][0]['value'];
+        $user_name_list[$u] = $username;
+    }
+
+    //Das Format für die Eingabe eines Fälligkeitsdatums wird definiert
     $dateformat = 'Y-m-d H:i';
-    $label = t('Custom date');
+    $label = t('Aktuelles Datum');
     $timestamp = time();
-    $dbv = $timestamp;
-    if (empty($dbv)) {
-        $d = new DateTime('@'.$dbv);
-        $value = $d->format($dateformat);
+
+    if (empty($timestamp)) {
+        $d = new DateTime('@' . $timestamp);
+        $date_value = $d->format($dateformat);
     } else {
         $d = new DateTime();
-        $value = $d->format($dateformat);
+        $date_value = $d->format($dateformat);
     }
 
-    $form['test']['deadline'] = array(
-        '#type' => 'date_popup',
-        '#date_timezone' => date_default_timezone(),
-        '#date_format' => $dateformat,
-        '#date_year_range' => '-3:+3',
-        '#title' => $label,
-        '#default_value' => $value,
-    );
-
-    $form['back'] = array(
-        '#type' => 'submit',
-        '#value' => 'Abbrechen',
-        '#submit' => array('back_to_home')
-    );
-
-    $form['submit'] = array(
-        '#type' => 'submit',
-        '#value' => 'Speichern',
-        '#submit' => array('save_new_appointment_assignment')
-    );
-
-    return $form;
-}
-
-function save_new_appointment_assignment($form, &$form_state) {
-
-    $short_description = $form_state['values']['short_description'];
-    $task = $form_state['values']['task'];
-    $deadline = $form_state['values']['deadline'];
-
-    if(!strlen($short_description) <1 && !strlen($task) <1) {
-        $node = new stdClass();
-        $node->type = 'event';
-        node_object_prepare($node);
-
-// Define language (currently language neutral)
-        $node->language = LANGUAGE_NONE;
-
-// Basic content
-        $node->title = $short_description;
-        $node->body[$node->language][0]['value'] = $task;
-
-        $date = new DateTime($deadline);
-
-        $date->sub(new DateInterval('PT1H'));
-        $deadline2 = $date->format('Y-m-d H:i:s');
-
-        $deadline2 = str_replace(" ", "T", $deadline2);
-
-        $username = "TERMIN";
-
-        $referenz = "";
-
-        global $user;
-
-
-
-        $sql = "INSERT INTO {appointment} (appointment, date, short_description, uid) VALUES('$task', '$deadline','$short_description', $user->uid)";
-        $result = db_query($sql);
-
-
-        $sql2 = "SELECT appointment_id from {appointment} ORDER BY appointment_id DESC LIMIT 1";
-        $result2 = db_query($sql2);
-
-        foreach($result2 as $ko) {
-            $referenz = $ko->appointment_id;
-        }
-
-        $node->field_event_date[$node->language][0]['value'] = $deadline2;
-        $node->field_event_date[$node->language][0]['timezone'] = "Europe/Berlin";
-        $node->field_event_date[$node->language][0]['timezone_db'] = "Europe/Berlin";
-        $node->field_art[$node->language][0]['tid'] = 1;
-        $node->field_referenznummer[$node->language][0]['value'] = $referenz;
-        $node->field_referenzmitglied[$node->language][0]['value'] = $username->name;
-// Save node
-        node_save($node);
-
-        drupal_set_message("Termin wurde erfolgreich angelegt");
-        drupal_goto("gruppentermine");
-    } else {
-        if(strlen($short_description) <1) {
-            drupal_set_message("Bitte trage eine Kurzbezeichnung ein!", "error");
-        }
-
-        if(strlen($task) <1) {
-            drupal_set_message("Bitte trage eine Terminbeschreibung ein!", "error");
-        }
-    }
-
-
-
-
-}
-
-function task_assignment_form() {
-
-    $path = drupal_get_path('module', 'fivestar');
-    drupal_add_js($path . '/js/fivestar.js');
-    drupal_add_css($path . '/css/fivestar.css');
-
-    $dateformat = 'Y-m-d H:i';
-    $label = t('Custom date');
-    $timestamp = time();
-    $dbv = $timestamp;
-
-    $parts = getParticipants2();
-    $list = explode(',', $parts);
-    $new_parts = array();
-
-    foreach ($list as $p) {
-        $user=user_load($p);
-        $username=$user->field_first_name['und'][0]['value'] . " " . $user->field_last_name['und'][0]['value'];;
-        $new_parts[$p] = $username;
-    }
-
-    if (empty($dbv)) {
-        $d = new DateTime('@'.$dbv);
-        $value = $d->format($dateformat);
-    } else {
-        $d = new DateTime();
-        $value = $d->format($dateformat);
-    }
-
-    $form['test'] = array(
+    $form['new_task'] = array(
         '#title' => "neue Aufgabe erstellen",
         '#type' => 'fieldset',
-        '#description' => "Es kann eine Mail an einen beliebigen Empfänger versendet werden. Die Adresse des Absenders ist standardmäßig die registrierte Mail-Adresse des Benutzers."
+        '#description' => "In diesem Formular kann ein neuer Termin angelegt werden."
     );
 
-    $form['test']['short_description'] = array(
+    $form['new_task']['short_description'] = array(
         '#type' => 'textfield',
         '#require' => TRUE,
         '#title' => t('Kurzbezeichnung der Aufgabe'),
     );
 
-    $form['test']["raum"]["responsible"] = array(
+    $form['new_task']["raum"]["responsible"] = array(
         "#type" => "select",
         "#title" => t("Verantwortliche Person"),
-        "#options" => $new_parts,
+        "#options" => $user_name_list,
     );
 
-    $form['test']['task'] = array(
+    $form['new_task']['task'] = array(
         '#title' => t('Aufgabenbeschreibung'),
         '#resizable' => FALSE,
         '#type' => 'textarea',
     );
 
-    $form['test']['deadline'] = array(
+    $form['new_task']['deadline'] = array(
         '#type' => 'date_popup',
         '#date_timezone' => date_default_timezone(),
         '#date_format' => $dateformat,
         '#date_year_range' => '-3:+3',
         '#title' => $label,
-        '#default_value' => $value,
+        '#default_value' => $date_value,
     );
 
-    $types = array("niedrig" => "niedrig", "mittel" => "mittel", "hoch" => "hoch");
-
-
-    $form['test']["raum2"]["prio"] = array(
+    $form['new_task']["raum2"]["prio"] = array(
         "#type" => "select",
         "#title" => t("Priorität der Aufgabe"),
         "#options" => $types,
@@ -288,7 +104,7 @@ function task_assignment_form() {
     $form['back'] = array(
         '#type' => 'submit',
         '#value' => 'Abbrechen',
-        '#submit' => array('back_to_home')
+        '#submit' => array('task_assignment_back_to_home')
     );
 
     $form['submit'] = array(
@@ -297,106 +113,302 @@ function task_assignment_form() {
         '#submit' => array('save_new_task_assignment')
     );
 
-
-
     return $form;
 }
 
-function back_to_home($form, &$form_state) {
+/*
+ * Diese Funktion leitet den Nutzer zurück zum Dashboard
+ */
+function task_assignment_back_to_home($form, &$form_state)
+{
     drupal_goto("");
 
 }
 
-function remove_body_field_validation(&$element, &$form_state, $form) {
+/*
+ * Diese Funktion dient als Hook, die aktiviert wird, sobald der Kalender aufgerufen wird. Nomalerweise werden hier
+ * alle Termine angezeigt, die als Node gespeichert wurden. Diese Hook durchsucht alle Termine und sortiert die aus,
+ * die nicht zu der Gruppe des aktuell angemeldeten Nutzers gehören. Somit ist der Kalender für jede Gruppe personalisiert.
+ */
+function task_assignment_views_post_execute(&$view)
+{
 
-    if ($element['#field_name'] == 'body') {
-        $element['#required'] = FALSE;
-        // Clear previous validation errors.
-        $errors = &drupal_static('form_set_error', array());
-        $err_key = $element['#field_name'] . '][' . LANGUAGE_NONE;
-        if (array_key_exists($err_key, $errors)) {
-            unset($errors[$err_key]);
+    //Sollte die aufgerufene Seite der Kalender der Gruppe sein...
+    if (!strcmp($view->name, "calendar")) {
+
+        //Dieses Array speichert später alle Nodes, die der Gruppe des aktuell angemeldeten Nutzers zugeordnet werden
+        //können
+        $group_nodes = array();
+
+        //Jeder Node, der im Kalender angezeigt werden würde, wird analysiert
+        foreach ($view->result as $result) {
+
+            //Der aktuell angemeldete Nuter wird ermittelt
+            global $user;
+
+            //Das aktuelle Kalender-Element wird in eine neue Variable gespeichert
+            $calendar_element = $result;
+
+            //Der entsprechende Node wird aus der Datenbank geladen
+            $sql = "SELECT * FROM {node} as node WHERE node.nid = '$calendar_element->nid'";
+            $node_result = db_query($sql);
+
+            //Für jeden gefundenen Node wird überprüft, ob er zu der Gruppe des aktuell angemeldeten Nutzers gehört
+            //Wenn ja, wird er in ein separates Array gespeichert, welches am Ende dem Kalender übergeben wird.
+            foreach ($node_result as $node) {
+
+                //Sollte sich der Node der Gruppe des aktuell angemeldeten Nutzers zuordnen lassen...
+                if (task_assignment_compare_roles($user->uid, $node->uid)) {
+                    array_push($group_nodes, $result);
+                }
+            }
         }
-        return;
+
+        //Der aktuelle view wird in eine lokale Variable gespeichert
+        $local_view = $view;
+
+        //Im Anschluss wird diese Variable mit den sortierten Nodes befüllt
+        $local_view->result = $group_nodes;
+
+        //Am Ende wird der veränderte Node zurückgegeben
+        return $local_view;
+
+        //Für alle anderen Seiten des Informationsssystems wird der View nicht verändert
+    } else {
+        return $view;
+    }
+}
+
+/*
+ * Diese Funktion erhält eine Nutzer-ID des aktuell angemeldeten Nutzers und eine User-ID eines erstellten Nodes
+ * als Übergabeparameter und überprüft, ob sich diese IDs derselben Rollen-ID zuordnen lassen. So kann herausgefunden
+ * werden, welche Nodes bei der Verwendung der Gruppenkalenders für die entsprechende Gruppe angezeigt werden sollen
+ * und welche nicht.
+ */
+function task_assignment_compare_roles($user_id, $node_user_id)
+{
+
+    //In diese Variable wird die Rollen ID der übergebenen User-ID eingespeichert
+    $role_from_user_id = "";
+
+    //In diese Variable wird die Rollen-ID der übergebenen Node-User-ID eingespeichert
+    $role_from_node_user_id = "";
+
+    //Die Rollen-ID (Gruppen-iD) der übergebenen User-ID wird ermittelt
+    $sql = "SELECT * FROM {users_roles} WHERE uid = $user_id";
+    $user_id_result = db_query($sql);
+
+    foreach ($user_id_result as $uid) {
+        $role_from_user_id = $uid->rid;
+    }
+
+    //Die Rollen-ID (Gruppen-ID) der übergebenen User-ID eines Nodes wird ermittelt
+    $sql = "SELECT * FROM {users_roles} WHERE uid = $node_user_id";
+    $node_user_id_result = db_query($sql);
+
+    foreach ($node_user_id_result as $nuid) {
+        $role_from_node_user_id = $nuid->rid;
+    }
+
+    //Sollten sich die Rollen-IDs gleichen oder sollte es sich bei der User-ID des Nodes um die des Administrators
+    //handeln, wird true zurückgegeben, sodass der Node im Kalender angezeigt wird. Sollte es keine Übereinstimmung
+    //geben, wird fals zurückgegeben und der Node wird nicht im Kalender angezeigt.
+    if ($role_from_user_id == $role_from_node_user_id || $role_from_node_user_id == 3) {
+        return true;
+    } else {
+        return false;
     }
 
 }
 
-function save_new_task_assignment($form, &$form_state) {
-
+/*
+ * Diese Funktion lädt alle vom Benutzer eingegebenen Informationen und speichert sie in die Datenbank. Zeitgleich wird
+ * ein neuer Node erstellt, sodass die Aufgabe auch im Kalender angezeigt werden kann.
+ */
+function save_new_task_assignment($form, &$form_state)
+{
+    //Die nötigen Informationen werden aus den Formular-Elementen geladen
     $user_id = $form_state['values']['responsible'];
-    $protocol_id =0;
     $task = $form_state['values']['task'];
     $deadline = $form_state['values']['deadline'];
     $short_description = $form_state['values']['short_description'];
     $priority = $form_state['values']['prio'];
 
-    if(!strlen($short_description) <1 && !strlen($task) <1) {
-        $node = new stdClass();
+    //Da die Aufgabe keinem Protokoll zugeordnet wird, wird hier die ID 0 vergeben
+    $protocol_id = 0;
 
-        // Set content type
-        $node->type = 'event';
-
-// Prepare defaults
-        node_object_prepare($node);
-
-// Define language (currently language neutral)
-        $node->language = LANGUAGE_NONE;
-
-// Basic content
-        $node->title = $short_description;
-        $node->body[$node->language][0]['value'] = $task;
-
-// Example if using custom fields
+    //Sofern alle nötigen Eingaben gemacht wurden...
+    if (!strlen($short_description) < 1 && !strlen($task) < 1) {
 
 
         $date = new DateTime($deadline);
-
         $date->sub(new DateInterval('PT1H'));
-        $deadline2 = $date->format('Y-m-d H:i:s');
-
-        $deadline2 = str_replace(" ", "T", $deadline2);
-        //$deadline2 = $deadline2 . ":00";
-        //drupal_set_message($deadline2);
-
-        $test = '2016-12-20T22:30:00';
+        $deadline_for_node = $date->format('Y-m-d H:i:s');
+        $deadline_for_node = str_replace(" ", "T", $deadline);
 
         $username = user_load($user_id);
 
-        $referenz = "";
-
-
-
-
+        //Die Aufgabe wird in die dafür vorgesehene Datenbanktabelle gespeichert
         $sql = "INSERT INTO {task} (uid, task, deadline, protocol_id, done, short_description, priority) VALUES($user_id, '$task','$deadline', $protocol_id, 0, '$short_description', '$priority')";
-        $result = db_query($sql);
+        db_query($sql);
 
-
+        //Die ID der zuvor gespeicherten Aufgabe wird ermittelt
         $sql2 = "SELECT task_id from {task} ORDER BY task_id DESC LIMIT 1";
-        $result2 = db_query($sql2);
+        $last_task_result = db_query($sql2);
 
-        foreach($result2 as $ko) {
-            $referenz = $ko->task_id;
+        $last_inserted_task_id = "";
+
+        foreach ($last_task_result as $last_task) {
+            $last_inserted_task_id = $last_task->task_id;
         }
 
-        $node->field_event_date[$node->language][0]['value'] = $deadline2;
-        $node->field_event_date[$node->language][0]['timezone'] = "Europe/Berlin";
-        $node->field_event_date[$node->language][0]['timezone_db'] = "Europe/Berlin";
-        $node->field_art[$node->language][0]['tid'] = 2;
-        $node->field_referenznummer[$node->language][0]['value'] = $referenz;
-        $node->field_referenzmitglied[$node->language][0]['value'] = $username->name;
-// Save node
-        node_save($node);
+        //Für die Anzeige im Kalender wird ein neuer Node erstellt
+        task_assaignment_create_node_for_calendar_view($short_description, $task, $deadline_for_node, 2, $last_inserted_task_id, $username);
+
+        //Die Deadline der Aufgabe wird für die Info-Mail erneut konvertiert
+        $deadline = $date->format('d.m.Y H:i:s');
+
+        //Es wird eine Info-Mail an den Benutzer versendet, dem die Aufgabe zugewiesen wurde
+        task_assignment_send_info_mail_after_task_assignment($username, $short_description, $deadline);
+
         drupal_set_message("Aufgabe wurde angelegt");
         drupal_goto("/gruppenaufgaben");
+
+        //Falls nicht alle Informationen eingegeben wurden, wird eine Fehlermeldung ausgegeben
     } else {
-        if(strlen($short_description) <1) {
+        if (strlen($short_description) < 1) {
             drupal_set_message("Bitte trage eine Kurzbezeichnung ein!", "error");
         }
 
-        if(strlen($task) <1) {
+        if (strlen($task) < 1) {
             drupal_set_message("Bitte trage eine Aufgabenbeschreibung ein!", "error");
         }
     }
 }
 
+/*
+ * Diese Funktion empfängt die vom Benutzer eingegebenen Daten und baut daraus ein Mail-Objekt, welches im
+ * Anschluss abgeschickt wird.
+ */
+function task_assignment_send_personal_mail($from, $to, $cc, $subject, $body)
+{
+
+    $fake_module = 'foo'; // or whatever you want
+    $fake_key = 'bar'; // or whatever you want
+
+    $message = array(
+        'id' => $fake_module . '_' . $fake_key,
+        'from' => $from,
+        'to' => $to,
+        'subject' => $subject,
+        'body' => $body,
+        'headers' => array(
+            'Return-Path' => $from,
+            'MIME-Version' => '1.0',
+            'Content-Transfer-Encoding' => '8Bit',
+            'Content-Type' => 'text/plain; charset=UTF-8;',
+        ),
+    );
+
+    //Mail-Element wird validiert
+    $system = drupal_mail_system($fake_module, $fake_key);
+
+    //Falls Mail erfolgreich versendet wurde
+    if ($system->mail($message)) {
+        drupal_set_message("Email wurde gesendet!");
+    } else {
+        drupal_set_message("Email wurde nicht gesendet!", "error");
+    }
+}
+
+//Vorgefertigte Funktion von Drupal, welche die Mail abschickt
+function task_assignment_mail($key, &$message, $params)
+{
+    switch ($key) {
+        case 'newsletter':
+            $headers = array(
+                'MIME-Version' => '1.0',
+                'Content-Type' => 'text/html; charset=UTF-8;',
+                'Content-Transfer-Encoding' => '8Bit',
+                'X-Mailer' => 'Drupal'
+            );
+
+            foreach ($headers as $key => $value) {
+                $message['headers'][$key] = $value;
+            }
+            $message['subject'] = $params['subject'];
+            $message['body'] = array(0 => t($params['body']));
+            break;
+    }
+}
+
+/*
+ * Diese Funktion baut ein neues Node-Element und speichert dies in die Datenbank ab. So können sowohl Aufgaben
+ * als auch Termine der Gruppe im Kalender angezeigt werden
+ */
+function task_assaignment_create_node_for_calendar_view($short_description, $task, $deadline, $tid, $last_inserted_node_id, $username)
+{
+
+    //Um den Termin im Kalender anzuzeigen, wird außerdem ein neuer Node erstellt.
+    $node = new stdClass();
+    $node->type = 'event';
+    node_object_prepare($node);
+    $node->language = LANGUAGE_NONE;
+
+    //die Attribute des Nodes werden befüllt
+    $node->title = $short_description;
+    $node->body[$node->language][0]['value'] = $task;
+
+    //Das Fälligkeitsdatum des Termins wird soweit konvertiert, dass es dem Node hinzugefügt werden kann
+    $date = new DateTime($deadline);
+    $date->sub(new DateInterval('PT1H'));
+    $time_for_node = $date->format('Y-m-d H:i:s');
+    $time_for_node = str_replace(" ", "T", $time_for_node);
+
+    $node->field_event_date[$node->language][0]['value'] = $time_for_node;
+    $node->field_event_date[$node->language][0]['timezone'] = "Europe/Berlin";
+    $node->field_event_date[$node->language][0]['timezone_db'] = "Europe/Berlin";
+    $node->field_art[$node->language][0]['tid'] = $tid;
+    $node->field_referenznummer[$node->language][0]['value'] = $last_inserted_node_id;
+    $node->field_referenzmitglied[$node->language][0]['value'] = $username->name;
+
+    //Im Anschluss wir der Node gespeichert
+    node_save($node);
+
+}
+
+/*
+ * Diese Funktion ermittelt die Gruppenteilnehmer des aktuell angemeldeten Nutzers
+ */
+function task_assignment_get_participants_from_logged_in_user_group()
+{
+    $users = array();
+    global $user;
+    $user_id = $user->uid;
+
+    $sql = "SELECT ur.rid, r.name, ur.uid FROM {role} AS r INNER JOIN {users_roles} AS ur ON r.rid = ur.rid WHERE ur.rid = (SELECT usro.rid FROM {users_roles} as usro WHERE usro.uid = $user_id)";
+    $user_result = db_query($sql);
+
+    foreach ($user_result as $u) {
+        array_push($users, $u->uid);
+    }
+
+    $list = implode(',', $users);
+
+    return $list;
+}
+
+/*
+ * Diese Funktion versendet eine Info-Mail an den Benutzer, dem eine Aufgabe zugeordnet wurde
+ */
+function task_assignment_send_info_mail_after_task_assignment($username, $short_description, $deadline)
+{
+    $from = "noreply@dtt.de";
+    $to = "kortumj@uni-hildesheim.de";
+    $cc = "";
+    $subject = "neue Aufgabe";
+    $body = "Hallo " . $username->name . "!  \r\nIhnen wurde eine Aufgabe mit der Kurzbeschreibung " . $short_description . " zugewiesen.\r\nDie Deadline ist am " . $deadline . "! \r\nDiese Mail wurde automatisch generiert. \r\nMit freundlichen Grüßen
+        \r\nIhr Design-Thinking-Bot";
+
+    task_assignment_send_personal_mail($from, $to, $cc, $subject, $body);
+}

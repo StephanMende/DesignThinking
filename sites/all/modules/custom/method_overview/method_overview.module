@@ -26,13 +26,34 @@ function method_overview_menu()
     return $items;
 }
 
-function method_overview_change_method_form($form, &$form_submit) {
+/*
+ * Diese Funktion baut die Übersicht über die durchgeführten Methoden als Tabelle plus die dazugehörige Design-Thinking-
+ * Grafik
+ */
+function method_overview_change_method_form($form, &$form_submit)
+{
+
+    //Die übergebene ID der Methode
     $method_id = arg(1);
-    $current_method = get_current_method_for_method_overview($method_id);
 
-    $methods = get_available_methods_for_change();
+    //Anhand der ID wird die aktuelle Methode aus der Datenbank geladen
+    $current_method = method_overview_get_current_method_for_method_overview($method_id);
 
-    $form["method"]["plugin_select1"] = array(
+    //Für das Dropdown-Menü werden alle verfügbaren Methoden aus der Datenbank geladen
+    $methods = method_overview_get_available_methods_for_change();
+
+    //Array-Variable, in der alle Räume gespeichert sind für die Auswahl der Position der Gruppe nach Beendigung
+    //der Methode
+    $types_room = array("Problemraum" => "Problemraum", "Lösungsraum" => "Lösungsraum", "Implementierungsraum" => "Implementierungsraum");
+
+    //Array-Variable, in der alle Phasn gespeichert sind für die Auswahl der Position der Gruppe nach Beendigung
+    //der Methode
+    $types_phase = array("konvergent" => "konvergent", "divergent" => "divergent");
+
+    //Alle zur Methodendurchführung hochgeladenen Dateien werden aus der Datenbank geladen
+    $method_execution_data = method_overview_get_all_images($current_method->method_execution_id);
+
+    $form["method"]["choose_method"] = array(
         "#type" => "select",
         "#title" => t("Bitte passende Methode aussuchen"),
         "#options" => $methods,
@@ -40,7 +61,7 @@ function method_overview_change_method_form($form, &$form_submit) {
         "#description" => t("Wähle Methode."),
     );
 
-    $form["phase"]["plugin_select2"] = array(
+    $form["phase"]["choose_phase"] = array(
         "#type" => "select",
         "#title" => t("Bitte passende Phase aussuchen"),
         "#default_value" => $current_method->phase,
@@ -51,7 +72,7 @@ function method_overview_change_method_form($form, &$form_submit) {
         "#description" => t("Wähle Phase."),
     );
 
-    $form["raum"]["plugin_select3"] = array(
+    $form["room"]["choose_room"] = array(
         "#type" => "select",
         "#title" => t("Bitte passenden Raum aussuchen"),
         "#default_value" => $current_method->room,
@@ -63,87 +84,77 @@ function method_overview_change_method_form($form, &$form_submit) {
         "#description" => t("Wähle Raum."),
     );
 
-    $form['grund'] = array(
+    $form['reason'] = array(
         '#title' => t('Grund der Methodenwahl'),
         '#resizable' => FALSE,
         "#default_value" => $current_method->reason,
         '#type' => 'textarea'
     );
 
-    $form['ziel'] = array(
+    $form['goal'] = array(
         '#title' => t('Ziel der Methode'),
         '#resizable' => FALSE,
         "#default_value" => $current_method->goal,
         '#type' => 'textarea'
     );
 
-    $form['ausfuehrung'] = array(
+    $form['execution'] = array(
         '#title' => t('Ausführung der Methode'),
         '#resizable' => FALSE,
         "#default_value" => $current_method->execution,
         '#type' => 'textarea'
     );
 
-    $form['rating'] = array(
+    $form['rating_star'] = array(
         '#type' => 'fivestar',
         '#stars' => 5,
         '#default_value' => $current_method->rating,
         '#title' => t('Bewertung der Methode.'),
     );
 
-    $form['bewertung'] = array(
+    $form['rating'] = array(
         '#title' => t('Bewertung der Ergebnisse'),
         '#resizable' => FALSE,
         "#default_value" => $current_method->evaluation,
         '#type' => 'textarea'
     );
 
-    $types = array("Problemraum" => "Problemraum", "Lösungsraum" => "Lösungsraum", "Implementierungsraum" => "Implementierungsraum");
-
-
-    $form["raum2"]["plugin_select_raum_end"] = array(
+    $form["raum_end"]["select_raum_end"] = array(
         "#type" => "select",
         "#title" => t("Raum am Ende des Treffens (In welchem Raum befindet ihr euch nach der Methodendurchführung?)"),
-        "#options" => $types,
+        "#options" => $types_room,
         '#default_value' => $current_method->raum_end,
     );
 
-    $types2 = array("konvergent" => "konvergent", "divergent" => "divergent");
-
-
-    $form["phase3"]["plugin_select_phase_end"] = array(
+    $form["phase3"]["select_phase_end"] = array(
         "#type" => "select",
         "#title" => t("Phase am Ende des Treffens (In welcher Phase befindet ihr euch nach der Methodendurchführung?)"),
-        "#options" => $types2,
+        "#options" => $types_phase,
         '#default_value' => $current_method->phase_end,
     );
-
-    $test = method_overview_get_all_images($current_method->method_execution_id);
 
     $form['file'] = array(
         '#type' => 'file',
         '#name' => 'files[]',
-        '#title' => t('Upload some photos'),
+        '#title' => t('Dateiupload'),
         '#attributes' => array('multiple' => 'multiple'),
     );
 
-
     $form['form_item'] = array(
         '#type' => 'markup',
-        '#title' => t('My Form Item'),
-        '#prefix' => $test,
+        '#prefix' => $method_execution_data,
     );
 
     $form['submit'] = array(
         '#type' => 'submit',
         '#value' => 'Speichern',
-        '#submit' => array('update_method_execution_from_method_overview')
+        '#submit' => array('method_overview_update_method_execution_from_method_overview')
     );
 
     $form['delete'] = array(
         '#type' => 'submit',
         '#value' => 'Löschen',
-        '#submit' => array('delete_method_execution_in_method_overview')
+        '#submit' => array('method_overview_delete_method_execution_in_method_overview')
     );
 
     $form['back'] = array(
@@ -153,182 +164,284 @@ function method_overview_change_method_form($form, &$form_submit) {
     );
 
 
-
     return $form;
 }
 
-function get_current_method_for_method_overview($id) {
+/*
+* Diese Funktion lädt alle Attribute einer Methode aus der Datenbank. Die ID der Methode wird als Parameter
+* übergeben
+*/
+function method_overview_get_current_method_for_method_overview($id)
+{
+
     $method = "";
     $sql = "SELECT * FROM {method_execution} WHERE method_execution_id = $id";
+    $method_execution_result = db_query($sql);
 
-    $result = db_query($sql);
-    foreach($result as $r) {
-        $method = $r;
+    //Die gefundene Methode wird in eine Variable gespeichert, die am Ende zurückgegeben wird
+    foreach ($method_execution_result as $m) {
+        $method = $m;
     }
     return $method;
 }
 
-function method_overview_show_methods() {
+/*
+ *
+ */
+function method_overview_show_methods()
+{
     global $base_url;
-    $counter = 1;
-    $methods = get_relevant_methods_for_overview();
 
-    $tempString = method_overview_d3_gantt(get_relevant_methods_for_overview(), 40);
+    //Alle relevanten methoden werden geladen
+    $methods = method_overview_get_relevant_methods_for_overview();
 
-    $tempString .= "<table><th>Nr.</th><th>Datum</th><th>Methodenname</th><th> Bewertung</th><th> Bewertung</th><th> Aktionen</th></th>";
+    //dynamische Grafik wird erstellt
+    $method_string = method_overview_build_dynamic_graphic(method_overview_get_relevant_methods_for_overview(), 40);
 
+    //Kopf der Tabelle wird erstellt
+    $method_string .= "
+        <table>
+            <th>Nr.</th>
+            <th>Datum</th>
+            <th>Methodenname</th>
+            <th>Raum der Methode</th>
+            <th>Phase der Methode</th>
+            <th>Bewertung</th>
+            <th>Raum der Gruppe</th>
+            <th>Phase der Gruppe</th>
+            <th>Aktionen</th>";
 
+    //Helfer-ID zur korrekten Zählweise der Methoden
+    $method_counter = 1;
+
+    //Über jede Methode wird iteriert
     foreach ($methods as $r) {
 
+        //Das passende Image der Bewertung der Methode wird geladen
         $image = "";
-        if($r->rating == 20) {
+        if ($r->rating == 20) {
             $image = "one.png";
-        } else if($r->rating == 40) {
+        } else if ($r->rating == 40) {
             $image = "two.png";
-        } else if($r->rating == 60) {
+        } else if ($r->rating == 60) {
             $image = "three.png";
-        } else if($r->rating == 80) {
+        } else if ($r->rating == 80) {
             $image = "four.png";
-        } else if($r->rating == 100) {
+        } else if ($r->rating == 100) {
             $image = "five.png";
         }
 
-        $deadline2 = "";
+        //Datum der Erstellung wird ermittelt
+        $creation_date = "";
         $date = new DateTime($r->creation_date);
-        $deadline2 .= $date->format('d.m.Y');
+        $creation_date .= $date->format('d.m.Y');
 
-        $bewertung = $r->evaluation;
-
-        if(!strcmp($bewertung, "")) {
-            $bewertung = "Keine Bewertung als Freitext vorhanden";
-        }
-
+        //Weitere Attribute der Methode werden geladen
+        $rating = $r->evaluation;
         $method_id = $r->method_execution_id;
         $protocol_id = $r->protocol_id;
-        $tempString = $tempString . "<tr><td>".$counter.".</td><td>".$deadline2."</td><td>
-        <a href='methodenanzeige/$method_id/zqjvEz44Qx'>$r->name</a></td>
-        <td><img src=".$image." height=\"100\" width=\"100\"></td>
-            <td>$bewertung</td>
-            <td><ul><li><a href='".$base_url."/protokoll_methode_aendern/".$method_id."/zqjvEz44Qx' >bearbeiten</a></li><li><a href='".$base_url."/protokollanzeige/".$protocol_id."' >Link zum Protokoll</a></li></ul></td></tr></tr>";
-        $counter = $counter + 1;
+
+        if (!strcmp($rating, "")) {
+            $rating = "Keine Bewertung als Freitext vorhanden";
+        }
+
+        //Die Tabelle wird befüllt
+        $method_string = $method_string . "
+        <tr>
+            <td>" . $method_counter . ".</td><td>" . $creation_date . "</td>
+            <td><a href='methodenanzeige/$method_id/zqjvEz44Qx'>$r->name</a></td>
+            <td>$r->room</td>
+            <td>$r->phase</td>
+            <td><img src=" . $image . " height=\"100\" width=\"100\"></td>
+            <td>$r->raum_end</td>
+            <td>$r->phase_end</td>
+            <td>
+                <ul>
+                    <li><a href='" . $base_url . "/protokoll_methode_aendern/" . $method_id . "/zqjvEz44Qx' >bearbeiten</a></li>
+                    <li><a href='" . $base_url . "/protokollanzeige/" . $protocol_id . "' >Link zum Protokoll</a></li>
+                </ul>
+            </td>
+        </tr>";
+        $method_counter++;
 
     }
 
-    $tempString .= "</table>";
+    //Tabelle wird geschlossen
+    $method_string .= "</table>";
 
-    return $tempString;
+    //Grafik und Tabelle werden zurückgegeben
+    return $method_string;
 }
 
-function method_overview_get_all_images($id) {
+
+function method_overview_get_all_images($id)
+{
     global $base_url;
-    $sql = "SELECT * FROM {method_execution_data} WHERE method_execution_id = ".$id;
 
-    $result = db_query($sql);
+    //Die Bezeichnungen der Daten werden aus der Datenbank gelesen
+    $sql = "SELECT * FROM {method_execution_data} WHERE method_execution_id = " . $id;
+    $data_result = db_query($sql);
 
-    $temp = "";
+    //Dieser String wird zurückgegeben. Er enthält alle Dateien als HTML-Code
+    $data_string = "";
 
-    foreach($result as $r) {
-        $allowed =  array('gif','png' ,'jpg');
-        $filename = $r->path;
+    //es wird über alle Dateien iteriert
+    foreach ($data_result as $data) {
+
+        //Diese Datentypen sind für eine Anzeige erlaubt. Alle anderen Datentypen werden als Link dargestellt
+        $allowed = array('gif', 'png', 'jpg');
+
+        //Die Dateiendung der Datei wird ermittelt
+        $filename = $data->path;
         $basename = preg_replace('/^.+[\\\\\\/]/', '', $filename);
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        if(in_array($ext,$allowed) ) {
-            $path = "/$base_url/sites/default/files/".$r->path;
 
-            $temp .= "<img style=\"max-width:540px;\" src='".$path."'alt=Selfhtml><br><b>$basename</b><a href='/$base_url/delete_file/$id/$basename/zqjvEz44Qx'\">&nbsp;&nbsp;Löschen</a><br><br>";
+        //Sofern die Dateiendung erlaubt ist, kann es angezeigt werden
+        if (in_array($ext, $allowed)) {
+            $path = "/$base_url/sites/default/files/" . $data->path;
+            $data_string .= "<img style=\"max-width:540px;\" src='" . $path . "'alt=Selfhtml><br><b>$basename</b><a href='/$base_url/delete_file/$id/$basename/zqjvEz44Qx'\">&nbsp;&nbsp;Löschen</a><br><br>";
         } else {
-            $temp .= '<a href="/'.$base_url.'/sites/default/files/'.$r->path.'" target="_blank">'.$basename.'</a><a href="/delete_file/'.$id.'/'.$basename.'/zqjvEz44Qx">&nbsp;&nbsp;Löschen</a><br><br>';
+            $data_string .= '<a href="/' . $base_url . '/sites/default/files/' . $data->path . '" target="_blank">' . $basename . '</a><a href="/delete_file/' . $id . '/' . $basename . '/zqjvEz44Qx">&nbsp;&nbsp;Löschen</a><br><br>';
         }
     }
 
-    return $temp;
+    //Bilder und andere hochgeladenen Daten werden zurückgegeben
+    return $data_string;
 }
 
-function get_relevant_methods_for_overview() {
-    $participants = get_participants_for_methods();
+
+/*
+* Diese Methode ermittelt alle Methoden, die von der Gruppe durchgeführt wurden.
+ */
+function method_overview_get_relevant_methods_for_overview()
+{
+    //Teilnehmer der Gruppe werden ermittelt
+    $participants = method_overview_get_participants_for_methods();
+
+    //Methoden der Teilnehmer werden ausgelesen
     $sql = "SELECT * FROM {method_execution} WHERE uid in (" . $participants . ") ORDER BY creation_date";
     $result = db_query($sql);
 
     return $result;
 }
 
-function get_available_methods_for_change() {
-    $methods = array();
+
+/*
+ * Diese Funktion lädt alle verfügbaren Methoden aus der Datenbank
+ */
+function method_overview_get_available_methods_for_change()
+{
+    $method_names = array();
     $sql = "SELECT title, nid FROM {node} WHERE type = 'methode' ORDER BY title";
-    $result = db_query($sql);
-    foreach ($result as $r) {
-        $methods[$r->title] = $r->title;
+    $node_result = db_query($sql);
+
+    foreach ($node_result as $node) {
+        $method_names[$node->title] = $node->title;
     }
-    return $methods;
+    return $method_names;
 }
 
-function get_participants_for_methods() {
+/*
+ * Diese Methode ermittelt die Teilnehmer der Gruppe des angemeldeten Users und gibt sie als Stringliste zurück.
+ */
+function method_overview_get_participants_for_methods()
+{
+    //User-ID wird ermittelt
     $users = array();
     global $user;
     $user_id = $user->uid;
 
+
     $sql = "SELECT ur.rid, r.name, ur.uid FROM {role} AS r INNER JOIN {users_roles} AS ur ON r.rid = ur.rid WHERE ur.rid = (SELECT usro.rid FROM {users_roles} as usro WHERE usro.uid = $user_id)";
+    $user_id_result = db_query($sql);
 
-    $proresult = db_query($sql);
-
-    foreach($proresult as $pro) {
-        array_push($users, $pro->uid);
+    foreach ($user_id_result as $u) {
+        array_push($users, $u->uid);
     }
 
-    $list = implode(',', $users);
+    //User-Array wird in einen String geladen, die Namen werden durch Komma getrennt
+    $user_list = implode(',', $users);
 
-    return $list;
+    return $user_list;
 }
 
-function delete_method_execution_in_method_overview() {
+/*
+ * Diese Methode löscht eine vorhandene Methodendurchführung aus der Datenbank. Gleichzeitig werden alle damit
+ * verbundenen hochgeladenenen Dateien aus der Datenbank gelöscht
+ */
+function method_overview_delete_method_execution_in_method_overview()
+{
+    //Die ID der Methode wird übergeben
     $method_id = arg(1);
-    $sql = "DELETE FROM {method_execution} WHERE method_execution_id = $method_id";
-    $result = db_query($sql);
-    $sql2 = "DELETE FROM {method_execution_data} WHERE method_execution_id = $method_id";
-    db_query($sql2);
+
+    //Die Methodendurchführung mit allen Attributen wird gelöscht
+    $method_sql = "DELETE FROM {method_execution} WHERE method_execution_id = $method_id";
+    db_query($method_sql);
+
+    //Die hochgeladenen Dateien zur Methodendurchfühung werden gelöscht
+    $data_sql = "DELETE FROM {method_execution_data} WHERE method_execution_id = $method_id";
+    db_query($data_sql);
+
     drupal_set_message("Objekt wurde gelöscht");
     drupal_goto('/method_overview');
 
 }
 
-function method_overview_back_to_method_overview() {
+/*
+ * Diese Funktion leitet den Benutzer weiter zur Methodenübersicht
+ */
+function method_overview_back_to_method_overview()
+{
     drupal_goto('/methoden_uebersicht');
 }
 
-function update_method_execution_from_method_overview($form, &$form_state) {
+/*
+* Diese Funktion liest alle Elemente des Formulares aus und speichert sie in die Datenbank. Sollte diese Methode
+* bereits in der Datenbank vorhanden sein, wird der Eintrag aktualisiert.
+ */
+function method_overview_update_method_execution_from_method_overview($form, &$form_state)
+{
+    //Die ID der Methode
     $method_id = arg(1);
-    $rating = $form_state['values']['rating'];
-    $method = $form_state['values']['plugin_select1'];
-    $phase = $form_state['values']['plugin_select2'];
-    $raum = $form_state['values']['plugin_select3'];
-    $ziel = $form_state['values']['ziel'];
-    $ausfuehrung = $form_state['values']['ausfuehrung'];
-    $fazit = $form_state['values']['bewertung'];
-    $grund =  $form_state['values']['grund'];
-    $raum2 = $form_state['values']['plugin_select_raum_end'];
-    $phase2 = $form_state['values']['plugin_select_phase_end'];
 
+    $rating = $form_state['values']['rating_star'];
+    $method = $form_state['values']['choose_method'];
+    $phase = $form_state['values']['choose_phase'];
+    $room = $form_state['values']['choose_room'];
+    $goal = $form_state['values']['goal'];
+    $execution = $form_state['values']['execution'];
+    $conclusion = $form_state['values']['rating'];
+    $reason = $form_state['values']['reason'];
+    $raum_end = $form_state['values']['select_raum_end'];
+    $phase_end = $form_state['values']['select_phase_end'];
 
-    $sql = "UPDATE {method_execution} SET name = '$method', evaluation = '$fazit', room = '$raum', phase = '$phase', goal = '$ziel', execution = '$ausfuehrung', rating = '$rating', raum_end = '$raum2', phase_end ='$phase2', reason = '$grund' WHERE method_execution_id = '$method_id'";
-    $result = db_query($sql);
+    //Methodendurchführung wird aktualisiert
+    $sql = "UPDATE {method_execution} SET name = '$method', evaluation = '$conclusion', room = '$room', phase = '$phase', goal = '$goal', execution = '$execution', rating = '$rating', raum_end = '$raum_end', phase_end ='$phase_end', reason = '$reason' WHERE method_execution_id = '$method_id'";
+    db_query($sql);
 
-    $num_files = count($_FILES['files']['name']);
-    $main_path = "";
+    //Hochgeladene Dateien werden gezählt
+    $data = count($_FILES['files']['name']);
 
-    for ($i = 0; $i < $num_files; $i++) {
+    //Es wird über alle neu hochgeladenen Dateien iteriert
+    for ($i = 0; $i < $data; $i++) {
+
+        //Datei wird für die Speicherung vorbereitet
         $file = file_save_upload($i, array(
             'file_validate_is_audio' => array(),
+            //Es wird überprüft, ob die Datei eine gültige Dateiendung besitzt
             'file_validate_extensions' => array('png pdf jpg jpeg mp3 mp4'),
             'file_validate_size' => array(50 * 1024 * 1024),
         ));
+
+        //Falls die Überprüfung erfolgreich war, wird die Datei gespeichert
         if ($file) {
             $file->status = FILE_STATUS_PERMANENT;
-            //$mydir = 'public://methods/';
-            //file_prepare_directory($mydir, FILE_CREATE_DIRECTORY);
             if ($file = file_move($file, 'public://methods')) {
                 $file->status = FILE_STATUS_PERMANENT;
                 $form_state['values']['file'][$i] = $file;
                 $path = substr($file->uri, 9);
+
+                //Referenz der Datei wird in eine eigene Datenbanktabelle geschrieben
                 $sql = "INSERT INTO {method_execution_data} (method_execution_id, path) VALUES($method_id, '$path')";
                 db_query($sql);
             }
@@ -339,254 +452,397 @@ function update_method_execution_from_method_overview($form, &$form_state) {
     drupal_goto('/methoden_uebersicht');
 }
 
-function method_overview_d3_gantt($result, $y_wert)
+/*
+ * Diese Funktion baut die dynamische Design-Thinking-Grafik. Als Übergabeparameter werden die nötigen Methoden und
+ * der nötige vertikale Abstand der Punkte übergeben
+ */
+function method_overview_build_dynamic_graphic($method_elements, $y_wert)
 {
 
-    $link_reference_1 = -1;
-    $link_reference_2 = 0;
-    $check = true;
+    //Die beiden Hilfsvariablen dienen dazu, eine Verlinkung zwischen zwei Punkten zu erstellen
+    $first_link_reference = -1;
+    $second_link_reference = 0;
 
-    $y_abstand = $y_wert;
+    //Diese Variable prüft bei jeder Methode, ob es sich umd eine Projektmanagement bzw. Vorbereitungsphase handelt
+    //oder nicht
+    $is_linkable_method = true;
 
-    $test = array();
+    //Variable, die den vertikalen Abstand der Punkte beschreibt
+    $y_space = $y_wert;
+
+    //Dieses Array speichert Raum und Phase jeder Methode ab
+    $method_room_phase = array();
+
+    //Dieses Array speichert für jede Methode ab, ob es sich um eine Vorbereitungs- oder Projektmanagement-Methode
+    //handelt oder nicht. Diese werden innerhalb der Grafik nicht angezeigt
     $validation = array();
-    $protocols = $result;
-    foreach ($protocols as $protocol) {
-        $validation["name"] = $protocol->raum_end . " " . $protocol->phase_end;
 
-        if(!strcmp($protocol->room, "Vorbereitung") || !strcmp($protocol->room, "Projektmanagement")) {
+    //Diese Variable enthält alle Methoden
+    $method_array = $method_elements;
+
+    /*
+     * Für jede Methode werden Name von Raum und Phase ermittelt und zusätzlich geschaut, ob es sich um eine
+     * Vorbereitungsmethode oder Projektmanagementmethode handelt. Diese werden nicht in der Grafik angezeigt.
+     */
+    foreach ($method_array as $method) {
+
+        $validation["name"] = $method->raum_end . " " . $method->phase_end;
+
+        if (!strcmp($method->room, "Vorbereitung") || !strcmp($method->room, "Projektmanagement")) {
             $validation["valid"] = 0;
         } else {
             $validation["valid"] = 1;
         }
-        array_push($test, $validation);
+        array_push($method_room_phase, $validation);
     }
-    $stuff = array();
-    $stuff['nodes'] = array();
-    $stuff['links'] = array();
 
+    //In dieses Array werden die dynamischen Punkte zusammen mit deren Verlinkung gespeichert
+    $dynamic_points = array();
+    $dynamic_points['nodes'] = array();
+    $dynamic_points['links'] = array();
+
+    //Hilfsvariable, die die Durchläufe durch die Methoden zählt
     $counter = 0;
-    $referenz_array = array();
+
+    //Diese Variable speichert den Verlauf der Methoden in Form von Zahlen ab. 1 == Problemraum divergent, 6 ==
+    //Implementierungsraum konvergent
+    $reference_array = array();
+
+    //Feste x und y Werte für den ersten Punkt im divergenten Problemraum
     $y = 240;
     $x = 25;
 
+    //Es wird über jede Methodendurchführung iteriert
+    for ($i = 0; $i < sizeof($method_room_phase); $i++) {
 
-    for ($i = 0; $i < sizeof($test); $i++) {
+        //Raum und Phase der Methode
+        $name = $method_room_phase[$i]["name"];
 
-        $name = $test[$i]["name"];
-
-        if($test[$i]["valid"]) {
+        //Wenn es sich um keine Vorbereitungs- oder Projektmanagement-Methode handelt:
+        if ($method_room_phase[$i]["valid"]) {
             switch ($name) {
                 case 'Problemraum divergent':
+
+                    //Sollte es der erste Punkt der Grafik sein:
                     if ($counter == 0) {
-                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
-                        array_push($referenz_array, "1");
+
+                        //Der erste Punkt wird in das zugehörige Array gespeichert
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+
+                        //Methode befindet sich in der ersten der sechs Prozessstufen
+                        array_push($reference_array, "1");
                         $counter++;
                     } else {
-                        if($referenz_array[$counter-1] <= 1) {
-                            $x = $x+40;
-                            if($x > 185) {
+
+                        //Wenn sich die vorige Methode in gleichem Raum bzw. gleicher Phase befindet...
+                        if ($reference_array[$counter - 1] <= 1) {
+                            $x = $x + 40;
+                            if ($x > 185) {
                                 $x = 25;
-                                $y = $y+$y_abstand;
+                                $y = $y + $y_space;
                             }
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
-                            array_push($referenz_array, "1");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+
+                            //Methode befindet sich in der ersten der sechs Prozessstufen
+                            array_push($reference_array, "1");
                             $counter++;
+
+                            //Sollte sich die vorige Methode in einem späteren Prozessschritt befunden haben, wird eine neue
+                            //Reihe eröffnet, also der y-Wert und x-Wert angepasst
                         } else {
-                            $y = $y+$y_abstand;
+                            $y = $y + $y_space;
                             $x = 25;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
-                            array_push($referenz_array, "1");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "green"));
+
+                            //Methode befindet sich in der ersten der sechs Prozessstufen
+                            array_push($reference_array, "1");
                             $counter++;
                         }
                     }
                     break;
 
                 case 'Problemraum konvergent':
+
+                    //Sollte es der erste Punkt der Grafik sein:
                     if ($counter == 0) {
                         $x = 245;
                         $y = 240;
-                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                        array_push($referenz_array, "2");
+
+                        //Der erste Punkt wird in das zugehörige Array gespeichert
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+
+                        //Methode befindet sich in der zweiten der sechs Prozessstufen
+                        array_push($reference_array, "2");
                         $counter++;
                     } else {
-                        if($referenz_array[$counter-1] <2) {
+
+                        //Sollte sich die vorige methode in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                        if ($reference_array[$counter - 1] < 2) {
                             $x = 245;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                            array_push($referenz_array, "2");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+
+                            //Methode befindet sich in der zweiten der sechs Prozessstufen
+                            array_push($reference_array, "2");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] == 2) {
-                            $x = $x+40;
-                            if($x > 405) {
+
+                            //Sollte sich die vorige Methode in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                            //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                        } else if ($reference_array[$counter - 1] == 2) {
+                            $x = $x + 40;
+                            if ($x > 405) {
                                 $x = 245;
-                                $y = $y+$y_abstand;
+                                $y = $y + $y_space;
                             }
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                            array_push($referenz_array, "2");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+
+                            //Methode befindet sich in der zweiten der sechs Prozessstufen
+                            array_push($reference_array, "2");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] >2) {
+
+                            //Sollte sich die vorige Methode in einem späteren Prozessschritt befunden haben, wird eine neue
+                            //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                        } else if ($reference_array[$counter - 1] > 2) {
                             $x = 245;
-                            $y = $y+$y_abstand;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
-                            array_push($referenz_array, "2");
+                            $y = $y + $y_space;
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "red"));
+
+                            //Methode befindet sich in der zweiten der sechs Prozessstufen
+                            array_push($reference_array, "2");
                             $counter++;
                         }
                     }
                     break;
 
                 case 'Lösungsraum divergent':
+
+                    //Sollte es der erste Punkt der Grafik sein:
                     if ($counter == 0) {
                         $x = 461;
                         $y = 240;
-                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                        array_push($referenz_array, "3");
+
+                        //Der erste Punkt wird in das zugehörige Array gespeichert
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+
+                        //Methode befindet sich in der dritten der sechs Prozessstufen
+                        array_push($reference_array, "3");
                         $counter++;
                     } else {
-                        if($referenz_array[$counter-1] < 3) {
+
+                        //Sollte sich die vorige Methode in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                        if ($reference_array[$counter - 1] < 3) {
                             $x = 461;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                            array_push($referenz_array, "3");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+
+                            //Methode befindet sich in der dritten der sechs Prozessstufen
+                            array_push($reference_array, "3");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] == 3) {
-                            $x = $x+40;
-                            if($x > 622) {
+
+                            //Sollte sich die vorige Methode in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                            //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                        } else if ($reference_array[$counter - 1] == 3) {
+                            $x = $x + 40;
+                            if ($x > 622) {
                                 $x = 461;
-                                $y = $y+$y_abstand;
+                                $y = $y + $y_space;
                             }
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                            array_push($referenz_array, "3");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+
+                            //Methode befindet sich in der dritten der sechs Prozessstufen
+                            array_push($reference_array, "3");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] >3) {
+
+                            //Sollte sich die vorige Methode in einem späteren Prozessschritt befunden haben, wird eine neue
+                            //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                        } else if ($reference_array[$counter - 1] > 3) {
                             $x = 461;
-                            $y = $y+$y_abstand;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
-                            array_push($referenz_array, "3");
+                            $y = $y + $y_space;
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "blue"));
+
+                            //Methode befindet sich in der dritten der sechs Prozessstufen
+                            array_push($reference_array, "3");
                             $counter++;
                         }
                     }
                     break;
 
                 case "Lösungsraum konvergent":
+
+                    //Sollte es der erste Punkt der Grafik sein:
                     if ($counter == 0) {
                         $x = 677;
                         $y = 240;
-                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                        array_push($referenz_array, "4");
+
+                        //Der erste Punkt wird in das zugehörige Array gespeichert
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+
+                        //Methode befindet sich in der vierten der sechs Prozessstufen
+                        array_push($reference_array, "4");
                         $counter++;
                     } else {
-                        if($referenz_array[$counter-1] < 4) {
+
+                        //Sollte sich die vorige Methode in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                        if ($reference_array[$counter - 1] < 4) {
                             $x = 677;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                            array_push($referenz_array, "4");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+
+                            //Methode befindet sich in der vierten der sechs Prozessstufen
+                            array_push($reference_array, "4");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] == 4) {
-                            $x = $x+40;
-                            if($x > 854) {
+
+                            //Sollte sich die vorige Methode in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                            //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                        } else if ($reference_array[$counter - 1] == 4) {
+                            $x = $x + 40;
+                            if ($x > 854) {
                                 $x = 677;
-                                $y = $y+$y_abstand;
+                                $y = $y + $y_space;
                             }
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                            array_push($referenz_array, "4");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+
+                            //Methode befindet sich in der vierten der sechs Prozessstufen
+                            array_push($reference_array, "4");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] >4) {
+
+                            //Sollte sich die vorige Methode in einem späteren Prozessschritt befunden haben, wird eine neue
+                            //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                        } else if ($reference_array[$counter - 1] > 4) {
                             $x = 677;
-                            $y = $y+$y_abstand;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
-                            array_push($referenz_array, "4");
+                            $y = $y + $y_space;
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "yellow"));
+
+                            //Methode befindet sich in der vierten der sechs Prozessstufen
+                            array_push($reference_array, "4");
                             $counter++;
                         }
                     }
                     break;
 
                 case "Implementierungsraum divergent":
+
+                    //Sollte es der erste Punkt der Grafik sein:
                     if ($counter == 0) {
                         $x = 891;
                         $y = 240;
-                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                        array_push($referenz_array, "5");
+
+                        //Der erste Punkt wird in das zugehörige Array gespeichert
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+
+                        //Methode befindet sich in der fünften der sechs Prozessstufen
+                        array_push($reference_array, "5");
                         $counter++;
                     } else {
-                        if($referenz_array[$counter-1] < 5) {
+
+                        //Sollte sich die vorige Methode in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                        if ($reference_array[$counter - 1] < 5) {
                             $x = 891;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                            array_push($referenz_array, "5");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+
+                            //Methode befindet sich in der fünften der sechs Prozessstufen
+                            array_push($reference_array, "5");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] == 5) {
-                            $x = $x+40;
-                            if($x > 1051) {
+
+                            //Sollte sich die vorige methode in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                            //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                        } else if ($reference_array[$counter - 1] == 5) {
+                            $x = $x + 40;
+                            if ($x > 1051) {
                                 $x = 891;
-                                $y = $y+$y_abstand;
+                                $y = $y + $y_space;
                             }
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                            array_push($referenz_array, "5");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+
+                            //Methode befindet sich in der fünften der sechs Prozessstufen
+                            array_push($reference_array, "5");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] >5) {
+
+                            //Sollte sich die vorige Methode in einem späteren Prozessschritt befunden haben, wird eine neue
+                            //Reihe eröffnet, also der y-Wert und x-Wert angepasst
+                        } else if ($reference_array[$counter - 1] > 5) {
                             $x = 891;
-                            $y = $y+$y_abstand;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
-                            array_push($referenz_array, "5");
+                            $y = $y + $y_space;
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "black"));
+
+                            //Methode befindet sich in der fünften der sechs Prozessstufen
+                            array_push($reference_array, "5");
                             $counter++;
                         }
                     }
                     break;
 
                 case "Implementierungsraum konvergent":
+
+                    //Sollte es der erste Punkt der Grafik sein:
                     if ($counter == 0) {
                         $x = 1111;
                         $y = 240;
-                        array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
-                        array_push($referenz_array, "6");
+
+                        //Der erste Punkt wird in das zugehörige Array gespeichert
+                        array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+
+                        //Methode befindet sich in der sechsten der sechs Prozessstufen
+                        array_push($reference_array, "6");
                         $counter++;
 
                     } else {
-                        if($referenz_array[$counter-1] < 6) {
+
+                        //Sollte sich die vorige Methode in einem früheren Prozessschritt befinden, bleibt der y-Wert gleich
+                        if ($reference_array[$counter - 1] < 6) {
                             $x = 1111;
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
-                            array_push($referenz_array, "6");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+
+                            //Methode befindet sich in der sechsten der sechs Prozessstufen
+                            array_push($reference_array, "6");
                             $counter++;
-                        } else if ($referenz_array[$counter-1] == 6) {
-                            $x = $x+40;
-                            if($x > 1271) {
+
+                            //Sollte sich die vorige Methode in demselben Prozessschritt befinden, bleibt der y-Wert gleich, sofern
+                            //sofern noch keine fünf Punkte in einer Reihe vorhanden sind.
+                        } else if ($reference_array[$counter - 1] == 6) {
+                            $x = $x + 40;
+                            if ($x > 1271) {
                                 $x = 1111;
-                                $y = $y+$y_abstand;
+                                $y = $y + $y_space;
                             }
-                            array_push($stuff['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
-                            array_push($referenz_array, "6");
+                            array_push($dynamic_points['nodes'], array('x' => $x, 'y' => $y, 'fixed' => true, 'color' => "brown"));
+
+                            //Methode befindet sich in der sechsten der sechs Prozessstufen
+                            array_push($reference_array, "6");
                             $counter++;
                         }
                     }
                     break;
             }
 
-
-
         } else {
-            $check = false;
+            $is_linkable_method = false;
 
         }
 
-        if($i>0) {
+        //Wenn es mindestens der zweite Durchlauf der Schleife ist
+        if ($i > 0) {
 
-            if($check) {
-                $link_reference_1++;
-                $link_reference_2++;
+            //Wenn es sich um eine Methode handelt, die angezeigt werden soll:
+            if ($is_linkable_method) {
+                $first_link_reference++;
+                $second_link_reference++;
 
-                array_push($stuff['links'], array('source' => $link_reference_1, 'target' => $link_reference_2));
+                //Verbindung der beiden Punkte wird ins Array gespeichert
+                array_push($dynamic_points['links'], array('source' => $first_link_reference, 'target' => $second_link_reference));
             } else {
-                if($link_reference_1 >=0) {
-                    array_push($stuff['links'], array('source' => $link_reference_1, 'target' => $link_reference_2));
-                    $check = true;
-                }
-                $check = true;
 
+                //Wenn es eine andere Methode ist, wird diese übersprungen
+                if ($first_link_reference >= 0) {
+                    array_push($dynamic_points['links'], array('source' => $first_link_reference, 'target' => $second_link_reference));
+                }
+                $is_linkable_method = true;
             }
         }
     }
 
+    //Grafik wird erstellt
     $chart = array(
         'id' => 'visualization',
         'type' => 'gantt',
-        'data' => ($stuff),
+        'data' => ($dynamic_points),
     );
 
     $d3_chart = d3_draw($chart);
