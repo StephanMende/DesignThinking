@@ -40,7 +40,12 @@ function protocol_template_show_protocol_form($form, &$form_submit)
     }
 
     //Die Gruppenmitglieder werden aus der Datenbank geladen
-    $users = protocol_template_get_participants_from_logged_in_user_group();
+    if (in_array('administrator', $user->roles)) {
+        $users = protocol_template_get_participants_by_protocol($protocol_id);
+    } else {
+        $users = protocol_template_get_participants_from_logged_in_user_group();
+    }
+
     $user_list = explode(',', $users);
 
     //Sollte sich der Autor des Protokolls mit der ID eines der Gruppenmitglieder gleichen
@@ -64,9 +69,6 @@ function protocol_template_show_protocol_form($form, &$form_submit)
         //In dieses Array werden alle Protokoll-IDs der Gruppe gespeichert
         $protocol_array = array();
 
-        //Die Gruppenmitglieder werden ermittelt
-        $users = protocol_template_get_participants_from_logged_in_user_group();
-
         //Die Protokolle der Gruppe werden ermittelt
         $sql = "SELECT * FROM {protocol} WHERE uid IN ($users) ORDER BY protocol_id";
         $protocol_before_meeting_result = db_query($sql);
@@ -85,9 +87,8 @@ function protocol_template_show_protocol_form($form, &$form_submit)
         //die Protokollnummer des aktuellen Protokolls wird erstellt
         $protocol_nr++;
 
-
         //Die Tabelle mit allgemeinen Informationen zum Protokoll wird erstellt
-        $general_information_string = protocol_template_get_display_general_information($protocol_nr, $protocol, $converted_start_date, $converted_end_date);
+        $general_information_string = protocol_template_get_display_general_information($protocol_nr, $protocol_id, $converted_start_date, $converted_end_date);
 
         //Aufgaben, die innerhalb des Protokolls neu angelegt wurden, werden geladen
         $new_tasks = protocol_template_get_new_tasks_from_protocol($protocol);
@@ -114,8 +115,12 @@ function protocol_template_show_protocol_form($form, &$form_submit)
         //Für jede Methodendurchführung wird eine Tabelle erstellt. Diese Tabellen werden zurückgegeben
         $method_string = protocol_template_get_display_method_information($method_array);
 
-        //Die Gruppenmitglieder werden geladen
-        $users = protocol_template_get_participants_from_logged_in_user_group();
+        //Die Gruppenmitglieder werden aus der Datenbank geladen
+        if (in_array('administrator', $user->roles)) {
+            $users = protocol_template_get_participants_by_protocol($protocol_id);
+        } else {
+            $users = protocol_template_get_participants_from_logged_in_user_group();
+        }
 
         //Alle Protokolle exklusiv des aktuellen Protokolls werden aus der Datenbank geladen
         $sql = "SELECT * FROM {protocol} WHERE uid IN ($users) AND protocol_id < " . $protocol_id . " ORDER BY date";
@@ -266,8 +271,11 @@ function protocol_template_get_display_headline($start_date)
  * Diese Funktion erstellt die Anzeige für die allgemeinen Informationen zum Protokoll. Diese wird in Form von
  * HTML-Code zurückgegeben
  */
-function protocol_template_get_display_general_information($protocol_nr, $protocol, $converted_start_date, $converted_end_date)
+function protocol_template_get_display_general_information($protocol_nr, $protocol_id, $converted_start_date, $converted_end_date)
 {
+
+    $protocol = protocol_template_get_protocol_from_id($protocol_id);
+
     $general_information_string = '
         <div>
             <table border="1" width="100%">
@@ -669,4 +677,22 @@ function protocol_template_get_new_tasks_from_protocol($protocol_id)
     $task_result = db_query($sql);
 
     return $task_result;
+}
+
+function protocol_template_get_protocol_from_id($protocol_id)
+{
+
+    //Diese Variable speichert das Protokoll ab
+    $protocol = "";
+
+    //Das Protokoll wird aus der Datenbank geladen
+    $sql = "SELECT * FROM {protocol} WHERE protocol_id = $protocol_id";
+    $protocol_result = db_query($sql);
+
+    //Das geladene Protokoll wird in die dafür angelegte Variable gespeichert
+    foreach ($protocol_result as $pro) {
+        $protocol = $pro;
+    }
+
+    return $protocol;
 }

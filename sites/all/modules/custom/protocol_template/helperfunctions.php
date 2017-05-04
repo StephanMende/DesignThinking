@@ -26,6 +26,29 @@ function protocol_template_get_participants_from_logged_in_user_group()
     return $user_list;
 }
 
+//Diese Funktion lädt alle Gruppenmitglieder des angemeldeten Nutzers aus der Datenbank
+function protocol_template_get_participants_by_protocol($protocol_id)
+{
+    $protocol = protocol_template_get_protocol_from_id($protocol_id);
+
+    $users = array();
+
+    $author = $protocol->uid;
+    $user = user_load($author);
+    $user_id = $user->uid;
+
+    $sql = "SELECT ur.rid, r.name, ur.uid FROM {role} AS r INNER JOIN {users_roles} AS ur ON r.rid = ur.rid WHERE ur.rid = (SELECT usro.rid FROM {users_roles} as usro WHERE usro.uid = $user_id)";
+    $role_result = db_query($sql);
+
+    foreach ($role_result as $role) {
+        array_push($users, $role->uid);
+    }
+
+    $user_list = implode(',', $users);
+
+    return $user_list;
+}
+
 
 /*
  * Diese FUnktion lädt das aktuell offene Protokoll einer Gruppe aus der Datenbank. Die Mitglieder der Gruppe
