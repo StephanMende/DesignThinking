@@ -11,7 +11,7 @@
  */
 function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
 {
-    
+
     //Es wird geschaut, ob bereits ein offenes Protokoll existiert
     $reminder = protocol_template_check_current_open_protocol();
 
@@ -60,6 +60,9 @@ function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
             $d = new DateTime();
             $date_value = $d->format($dateformat);
         }
+
+        date_default_timezone_set('Europe/Berlin');
+        drupal_set_message("heutiges Datum: " . date("d.m.Y H:i"));
 
         drupal_set_message($date_value);
 
