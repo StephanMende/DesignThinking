@@ -51,7 +51,7 @@ function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
         //Das Format für die Eingabe eines Enddatums wird definiert
         $dateformat = 'Y-m-d H:i';
         $label = t('Aktuelles Datum');
-        $timestamp = time();
+        $timestamp = REQUEST_TIME;
 
         if (empty($timestamp)) {
             $d = new DateTime('@' . $timestamp);
@@ -62,6 +62,8 @@ function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
         }
 
         drupal_set_message($date_value);
+
+
 
         $form['description']['deadline'] = array(
             '#type' => 'date_popup',
