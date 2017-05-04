@@ -30,9 +30,10 @@ function task_assignment_appointment_form()
     );
 
     //Das Format für die Eingabe eines Fälligkeitsdatums wird definiert
+    date_default_timezone_set('Europe/Berlin');
     $dateformat = 'Y-m-d H:i';
     $label = t('Aktuelles Datum');
-    $timestamp = time();
+    $timestamp = date("Y-m-d H:i");
 
     if (empty($timestamp)) {
         $d = new DateTime('@' . $timestamp);

@@ -47,6 +47,7 @@ function protocol_template_set_general_information_form($form, &$form_submit)
         $joined_participants = explode(",", $content["participants"]);
 
         //Das Format für die Eingabe eines Startdatum wird definiert
+        date_default_timezone_set('Europe/Berlin');
         $dateformat = 'Y-m-d H:i';
         $label = t('Aktuelles Datum');
 

@@ -14,7 +14,7 @@ function protocol_template_new_task_execution_form($form, &$form_submit)
 
     //Die Gruppenteilnehmer des aktuell angemeldeten Nutzers werden aus der Datenbank geladen, die ID ermittelt und
     //im Anschluss der Vor- und Nachname geladen, welche für die Anzeige im Protokoll benötigt werden
-    $users = protocol_template_get_new_task_table();
+    $users = protocol_template_get_participants_from_logged_in_user_group();
     $user_array = explode(',', $users);
     $user_name_array = array();
 
@@ -25,9 +25,10 @@ function protocol_template_new_task_execution_form($form, &$form_submit)
     }
 
     //Das Format für die Eingabe eines Fälligkeitsdatums wird definiert
+    date_default_timezone_set('Europe/Berlin');
     $dateformat = 'Y-m-d H:i';
     $label = t('Aktuelles Datum');
-    $timestamp = time();
+    $timestamp = date("Y-m-d H:i");
 
     if (empty($timestamp)) {
         $d = new DateTime('@' . $timestamp);
