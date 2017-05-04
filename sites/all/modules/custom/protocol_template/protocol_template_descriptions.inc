@@ -49,9 +49,10 @@ function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
         );
 
         //Das Format für die Eingabe eines Enddatums wird definiert
+        date_default_timezone_set('Europe/Berlin');
         $dateformat = 'Y-m-d H:i';
         $label = t('Aktuelles Datum');
-        $timestamp = time();
+        $timestamp = date("Y-m-d H:i");
 
         if (empty($timestamp)) {
             $d = new DateTime('@' . $timestamp);
@@ -60,9 +61,6 @@ function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
             $d = new DateTime();
             $date_value = $d->format($dateformat);
         }
-
-        date_default_timezone_set('Europe/Berlin');
-        drupal_set_message("heutiges Datum: " . date("d.m.Y H:i"));
 
         drupal_set_message($date_value);
 
