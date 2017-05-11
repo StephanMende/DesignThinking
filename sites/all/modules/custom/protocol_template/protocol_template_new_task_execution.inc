@@ -6,6 +6,9 @@
  * Time: 11:30
  */
 
+require_once ("protocol_template_new_tasks.inc");
+
+
 /*
  * Diese Funktion erstellt ein Formular, in das eine neue Aufgabe eingetragen werden kann
  */
@@ -105,7 +108,7 @@ function protocol_template_save_new_task($form, &$form_state)
     $responsible_user_id = $form_state['values']['responsible'];
 
     //Um das aktuell offene Protokoll zu ermitteln, müssen zunächst die Gruppenteilnehmer erneut geladen werden
-    $parts = protocol_template_get_new_task_table();
+    $parts = protocol_template_get_participants_from_logged_in_user_group();
 
     //Im Anschluss wird in der Datenbank geschaut, welches Protokoll von der Gruppe noch nicht geschlossen wurde. Sollte
     //keines vorhanden sein, wird die ID 0 übergeben, was bedeutet, dass die Aufgabe keinem Protokoll zugeordnet wird
