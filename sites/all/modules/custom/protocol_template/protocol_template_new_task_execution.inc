@@ -174,10 +174,12 @@ function protocol_template_save_new_task($form, &$form_state)
     } else {
         if (strlen($short_description) < 1) {
             drupal_set_message("Bitte trage eine Kurzbezeichnung ein!", "error");
+            $form_state['redirect'] = FALSE;
         }
 
         if (strlen($task) < 1) {
             drupal_set_message("Bitte trage eine Aufgabenbeschreibung ein!", "error");
+            $form_state['redirect'] = FALSE;
         }
     }
 }

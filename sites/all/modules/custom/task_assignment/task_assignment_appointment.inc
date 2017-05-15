@@ -105,10 +105,12 @@ function save_new_appointment_assignment($form, &$form_state)
 
         if (strlen($short_description) < 1) {
             drupal_set_message("Bitte trage eine Kurzbezeichnung ein!", "error");
+            $form_state['redirect'] = FALSE;
         }
 
         if (strlen($task) < 1) {
             drupal_set_message("Bitte trage eine Terminbeschreibung ein!", "error");
+            $form_state['redirect'] = FALSE;
         }
     }
 }

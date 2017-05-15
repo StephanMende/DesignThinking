@@ -178,15 +178,19 @@ function protocol_template_save_changed_general_protocol($form, &$form_state)
     } else {
         if (strlen($place) < 1) {
             drupal_set_message("Bitte trage einen Ort ein!", "error");
+            $form_state['redirect'] = FALSE;
         }
         if (strlen($type) < 1) {
             drupal_set_message("Bitte trage eine Art ein!", "error");
+            $form_state['redirect'] = FALSE;
         }
         if (strlen($users) < 1) {
             drupal_set_message("Bitte wähle die Teilnehmer aus!", "error");
+            $form_state['redirect'] = FALSE;
         }
         if (strlen($start) < 1) {
             drupal_set_message("Bitte wähle die Startzeit aus!", "error");
+            $form_state['redirect'] = FALSE;
         }
     }
 }
