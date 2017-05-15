@@ -175,7 +175,7 @@ function protocol_template_get_group_position_after_finish($protocol_id, $object
         if ($protocol_result->rowCount() > 0) {
 
             //Werden Raum und Phase davon übernommen
-            foreach ($method_result as $item) {
+            foreach ($protocol_result as $item) {
                 $room = $item->raum_end;
                 $phase = $item->phase_end;
             }
