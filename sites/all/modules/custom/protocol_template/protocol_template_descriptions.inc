@@ -51,7 +51,7 @@ function protocol_template_set_protocol_descriptions_form($form, &$form_submit)
         //Das Format für die Eingabe eines Enddatums wird definiert
         date_default_timezone_set('Europe/Berlin');
         $dateformat = 'Y-m-d H:i';
-        $label = t('Aktuelles Datum');
+        $label = t('Endzeit des Treffens');
         $timestamp = date("Y-m-d H:i");
 
         if (empty($timestamp)) {

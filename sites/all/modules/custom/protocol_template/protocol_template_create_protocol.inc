@@ -42,7 +42,7 @@ function protocol_template_create_new_protocol_form($form, &$form_submit)
         //Das Format für die Eingabe eines Startdatum wird definiert
         date_default_timezone_set('Europe/Berlin');
         $dateformat = 'Y-m-d H:i';
-        $label = t('Aktuelles Datum');
+        $label = t('Startzeit des Treffens');
         $timestamp = date("Y-m-d H:i");
 
         if (empty($timestamp)) {

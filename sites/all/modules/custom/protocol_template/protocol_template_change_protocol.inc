@@ -46,7 +46,7 @@ function protocol_template_change_protocol_general_information_form($form, &$for
         //Das Format für die Eingabe eines Enddatums wird definiert
         date_default_timezone_set('Europe/Berlin');
         $dateformat = 'Y-m-d H:i';
-        $label = t('Aktuelles Datum');
+        $label = t('Endzeit des Treffens');
 
         $form['change_protocol'] = array(
             '#title' => "allgemeine Informationen",
