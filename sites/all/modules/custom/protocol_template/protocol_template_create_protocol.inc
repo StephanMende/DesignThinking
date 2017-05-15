@@ -53,20 +53,22 @@ function protocol_template_create_new_protocol_form($form, &$form_submit)
             $date_value = $d->format($dateformat);
         }
 
+        print_r($user_name_array);
+
 
         $form['new_protocol'] = array(
             '#title' => "allgemeine Informationen",
             '#type' => 'fieldset',
             '#description' => "Um ein neues Protokoll anlegen zu können, müssen zunächst folgende allgemeine
-            Informationen zum Protokoll eingetragen werden."
+            Informationen zum Protokoll eingetragen werden. Als Autor wird automatisch das Gruppenmitglied eingetragen,
+            das das Protokoll angelegt hat."
         );
 
         $form['new_protocol']['teilnehmer'] = array(
-            '#title' => t('Teilnehmer des Treffens'),
-            '#type' => 'select',
-            '#multiple' => true,
+            '#type' => 'checkboxes',
             '#options' => $user_name_array,
             '#required' => TRUE,
+            '#title' => t('Teilnehmer des Treffens'),
         );
 
         $form['new_protocol']['start'] = array(
@@ -115,7 +117,6 @@ function protocol_template_create_new_protocol_form($form, &$form_submit)
  */
 function protocol_template_create_new_protocol($form, &$form_state)
 {
-
     //Es wird geschaut, ob bereits ein offenes Protokoll existiert
     $reminder = protocol_template_check_current_open_protocol();
 
@@ -124,8 +125,19 @@ function protocol_template_create_new_protocol($form, &$form_state)
     if ($reminder["exist"] == 0) {
 
         //die teilnehmenden Nutzer werden ermittelt und für die Speicherung konvertiert
-        $users = $form_state['values']['teilnehmer'];
-        $users = implode(',', $users);
+        $new_array = array();
+
+        $users2 = $form_state['values']['teilnehmer'];
+
+        foreach ($users2 as $item) {
+            if ($item != 0) {
+                array_push($new_array, $item);
+            }
+        }
+
+        $users2 = implode(',', $new_array);
+        drupal_set_message($users2);
+
 
         //Die ID des aktuell angemeldeten Nutzers wird ermittelt
         global $user;
@@ -136,6 +148,8 @@ function protocol_template_create_new_protocol($form, &$form_state)
         $type = $form_state['values']['plugin_select'];
         $date = date("Y-m-d H:i:s");
         $start = $form_state['values']['start'];
+
+
 
         //Protokoll wird angelegt
         $sql = "INSERT INTO {protocol} (place, type, uid, date, finished, preparation, problems, conclusion, participants, start_date, outlook)

@@ -54,16 +54,17 @@ function protocol_template_set_general_information_form($form, &$form_submit)
         $form['new_protocol'] = array(
             '#title' => "allgemeine Informationen",
             '#type' => 'fieldset',
-            '#description' => "Im ersten Schritt des Protokolls müssen zunächst allgemeine Informationen zum Treffen eingegeben werden."
+            '#description' => "Um ein neues Protokoll anlegen zu können, müssen zunächst folgende allgemeine
+            Informationen zum Protokoll eingetragen werden. Als Autor wird automatisch das Gruppenmitglied eingetragen,
+            das das Protokoll angelegt hat."
         );
 
         $form['new_protocol']['teilnehmer'] = array(
-            '#title' => t('Teilnehmer des Treffens'),
-            '#type' => 'select',
-            '#multiple' => true,
+            '#type' => 'checkboxes',
             '#options' => $user_name_array,
-            '#default_value' => $joined_participants,
             '#required' => TRUE,
+            '#default_value' => $joined_participants,
+            '#title' => t('Teilnehmer des Treffens'),
         );
 
         $form['new_protocol']['start'] = array(
@@ -119,8 +120,17 @@ function protocol_template_update_general_information($form, &$form_state)
     $user_id = $user->uid;
 
     //Die Teilnehmer am Meeting werden ermittelt
+    $new_array = array();
+
     $users = $form_state['values']['teilnehmer'];
-    $users = implode(',', $users);
+
+    foreach ($users as $item) {
+        if ($item != 0) {
+            array_push($new_array, $item);
+        }
+    }
+
+    $users = implode(',', $new_array);
 
     //Die restlichen Informationen werden aus den Formular-Feldern geladen
     $place = $form_state['values']['place'];
