@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * Implement hook_schema()
+ */
+
+function task_assignment_schema() {
+    $schema = array();
+
+    $schema['appointment'] = array(
+            'description' => 'The table contains all appointments',
+            'fields' => array(
+                'appointment_id' => array(
+                    'description' => 'The primary identifier for an appointment.',
+                    'type' => 'int',
+                    'unsigned' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'appointment' => array(
+                    'description' => 'Title of the appointment',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'date' => array(
+                    'description' => 'Date of the appointment',
+                    'type' => 'varchar',
+                    'mysql_type' => 'datetime',
+                    'not null' => FALSE,
+                ),
+                'short_description' => array(
+                    'description' => 'Short description of the appointment',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'uid' => array(
+                    'description' => 'The user id',
+                    'type' => 'int',
+                    'not null' => FALSE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                    'not null' => TRUE,
+                ),
+            ),
+
+            'primary key' => array('appointment_id'),
+        );
+
+    return $schema;
+}
+
+/**
+ * Implements hook_update_N()
+ */
+
+function task_assignment_update_7000() {
+    drupal_install_schema('appointment');
+}

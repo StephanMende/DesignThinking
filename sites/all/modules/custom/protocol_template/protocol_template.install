@@ -1,0 +1,342 @@
+<?php
+
+/**
+ * Implement hook_schema()
+ */
+
+function protocol_template_schema() {
+    $schema = array();
+
+    $schema['method_execution'] = array(
+            'description' => 'The table contains all method executions',
+            'fields' => array(
+                'method_execution_id' => array(
+                    'description' => 'The primary identifier for a method execution.',
+                    'type' => 'int',
+                    'unsigned' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'uid' => array(
+                    'description' => 'The user id',
+                    'type' => 'int',
+                    'not null' => TRUE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                ),
+                'protocol_id' => array(
+                    'description' => 'The ID of the current protocol',
+                    'type' => 'int',
+                    'not null' => TRUE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                ),
+                'name' => array(
+                    'description' => 'The name of the method',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'evaluation' => array(
+                    'description' => 'The evaluation of the method execution',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'room' => array(
+                    'description' => 'The room of the method',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'phase' => array(
+                     'description' => 'The phase of the method',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'goal' => array(
+                     'description' => 'The goal of the method execution',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'execution' => array(
+                     'description' => 'The execution of the method execution',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'creation_date' => array(
+                     'description' => 'The creation date of the method execution',
+                     'type' => 'varchar',
+                     'mysql_type' => 'datetime',
+                     'not null' => FALSE,
+                ),
+                'rating' => array(
+                     'description' => 'The rating of the method execution',
+                     'type' => 'int',
+                     'not null' => FALSE,
+                     'sortable' => TRUE,
+                     'views' => TRUE,
+                     'not null' => TRUE,
+                ),
+                'raum_end' => array(
+                     'description' => 'The room after the method execution',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'phase_end' => array(
+                     'description' => 'The phase after the method execution',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'reason' => array(
+                     'description' => 'The reason why the group choose the method',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+            ),
+            'primary key' => array('method_execution_id'),
+    );
+
+    $schema['method_execution_data'] = array(
+            'description' => 'The table contains all method paths for the method execution data',
+            'fields' => array(
+                'method_execution_id' => array(
+                    'description' => 'The primary identifier for a method execution data.',
+                    'type' => 'int',
+                    'unsigned' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'path' => array(
+                    'description' => 'The path for the method execution',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+            ),
+            'primary key' => array('method_execution_id'),
+    );
+
+    return $schema;
+}
+
+$schema['protocol'] = array(
+            'description' => 'The table contains all protocols',
+            'fields' => array(
+                'protocol_id' => array(
+                    'description' => 'The primary identifier for a protocol.',
+                    'type' => 'int',
+                    'unsigned' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'place' => array(
+                    'description' => 'The place of the protocol',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'type' => array(
+                    'description' => 'The type of the protocol',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'uid' => array(
+                    'description' => 'The user id from the author of the protocol',
+                    'type' => 'int',
+                    'not null' => TRUE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                ),
+                'date' => array(
+                     'description' => 'The creation date of the protocol',
+                     'type' => 'varchar',
+                     'mysql_type' => 'datetime',
+                     'not null' => FALSE,
+                ),
+                'finished' => array(
+                    'description' => 'The status of the protocol. 0 == open, 1 == finished',
+                    'type' => 'int',
+                    'not null' => TRUE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                ),
+                'preparation' => array(
+                    'description' => 'The preparation of the protocol',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'problems' => array(
+                    'description' => 'The problems of the protocol',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'conclusion' => array(
+                    'description' => 'The conclusion of the protocol',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'participants' => array(
+                     'description' => 'The participants of the protocol',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'raum_end' => array(
+                     'description' => 'The room after finishing the protocol',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'phase_end' => array(
+                     'description' => 'The phase after finishing the protocol',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'review' => array(
+                     'description' => 'The review of the last protocol',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+                'start_date' => array(
+                     'description' => 'The start date of the protocol',
+                     'type' => 'varchar',
+                     'mysql_type' => 'datetime',
+                     'not null' => FALSE,
+                ),
+                'end_date' => array(
+                     'description' => 'The end date of the protocol',
+                     'type' => 'varchar',
+                     'mysql_type' => 'datetime',
+                     'not null' => FALSE,
+                ),
+                'outlook' => array(
+                     'description' => 'The outlook to the next protocol',
+                     'type' => 'varchar',
+                     'length' => 1024,
+                     'not null' => FALSE,
+                     'default' => '',
+                ),
+            ),
+            'primary key' => array('method_execution_id'),
+    );
+
+$schema['task'] = array(
+            'description' => 'The table contains all tasks',
+            'fields' => array(
+                'task_id' => array(
+                    'description' => 'The primary identifier for a task.',
+                    'type' => 'int',
+                    'unsigned' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'task' => array(
+                    'description' => 'Title of the task',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'deadline' => array(
+                    'description' => 'Deadline of a task',
+                    'type' => 'varchar',
+                    'mysql_type' => 'datetime',
+                    'not null' => FALSE,
+                ),
+                'protocol_id' => array(
+                    'description' => 'The ID of the referenced protocol',
+                    'type' => 'int',
+                    'not null' => FALSE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'done' => array(
+                    'description' => 'Status of the task. 0 == open, 1 == done',
+                    'type' => 'int',
+                    'not null' => FALSE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'short_description' => array(
+                    'description' => 'Short description of the task',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+                'reminder3' => array(
+                    'description' => 'Second reminder for an email. 0 == open, 1 == done',
+                    'type' => 'int',
+                    'not null' => FALSE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'reminder1' => array(
+                    'description' => 'First reminder for an email. 0 == open, 1 == done',
+                    'type' => 'int',
+                    'not null' => FALSE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'uid' => array(
+                    'description' => 'The user id for the task',
+                    'type' => 'int',
+                    'not null' => FALSE,
+                    'sortable' => TRUE,
+                    'views' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'priority' => array(
+                    'description' => 'Priority of the task',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+            ),
+
+            'primary key' => array('task_id'),
+        );
+
+/**
+ * Implements hook_update_N()
+ */
+
+function method_execution_update_7000() {
+    drupal_install_schema('method_execution');
+    drupal_install_schema('method_execution_data');
+    drupal_install_schema('protocol');
+    drupal_install_schema('task');
+}

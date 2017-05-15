@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * Implement hook_schema()
+ */
+
+function reflection_schema() {
+    $schema = array();
+
+    $schema['group_reflection'] = array(
+            'description' => 'The table contains all group reflections',
+            'fields' => array(
+                'role_id' => array(
+                    'description' => 'The ID of the group',
+                    'type' => 'int',
+                    'not null' => TRUE,
+                ),
+                'reflection' => array(
+                    'description' => 'The reflection of the group',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+            ),
+        );
+
+    $schema['user_reflection'] = array(
+            'description' => 'The table contains all user reflections',
+            'fields' => array(
+                'uid' => array(
+                    'description' => 'The ID of the user',
+                    'type' => 'int',
+                    'not null' => TRUE,
+                ),
+                'reflection' => array(
+                    'description' => 'The reflection of the user',
+                    'type' => 'varchar',
+                    'length' => 1024,
+                    'not null' => FALSE,
+                    'default' => '',
+                ),
+            ),
+        );
+
+    return $schema;
+}
+
+/**
+ * Implements hook_update_N()
+ */
+
+function reflection_update_7000() {
+    drupal_install_schema('group_reflection');
+    drupal_install_schema('user_reflection');
+}
