@@ -101,7 +101,9 @@ function create_pdf_document_from_a_protocol($protocol, $role_id)
     //Um das passende Protokoll zu finden, werden zunächst alle Protokolle der Gruppe geladen. Im Anschluss
     //werden diese in ein Array gespeichert und nach der Protokoll_ID des übergebenen Protokolls gesucht, um
     //die Nummer des Protokolls zu ermitteln
-    $users = protocol_overview_get_participants_from_logged_in_user_group();
+
+    //$users = protocol_overview_get_participants_from_logged_in_user_group();
+    $users = protocol_overview_get_participants_by_protocol($protocol_element->protocol_id);
     $sql = "SELECT * FROM {protocol} WHERE uid IN ($users) ORDER BY protocol_id";
     $before_meeting_result = db_query($sql);
 
@@ -535,4 +537,45 @@ function protocol_overview_generate_graphic($methods)
     $graphic = protocol_overview_pdf_create_dynamic_graphic($circles, $lines);
 
     return $graphic;
+}
+
+//Diese Funktion lädt alle Gruppenmitglieder des angemeldeten Nutzers aus der Datenbank
+function protocol_overview_get_participants_by_protocol($protocol_id)
+{
+    $protocol = protocol_overview_get_protocol_from_id($protocol_id);
+
+    $users = array();
+
+    $author = $protocol->uid;
+    $user = user_load($author);
+    $user_id = $user->uid;
+
+    $sql = "SELECT ur.rid, r.name, ur.uid FROM {role} AS r INNER JOIN {users_roles} AS ur ON r.rid = ur.rid WHERE ur.rid = (SELECT usro.rid FROM {users_roles} as usro WHERE usro.uid = $user_id)";
+    $role_result = db_query($sql);
+
+    foreach ($role_result as $role) {
+        array_push($users, $role->uid);
+    }
+
+    $user_list = implode(',', $users);
+
+    return $user_list;
+}
+
+function protocol_overview_get_protocol_from_id($protocol_id)
+{
+
+    //Diese Variable speichert das Protokoll ab
+    $protocol = "";
+
+    //Das Protokoll wird aus der Datenbank geladen
+    $sql = "SELECT * FROM {protocol} WHERE protocol_id = $protocol_id";
+    $protocol_result = db_query($sql);
+
+    //Das geladene Protokoll wird in die dafür angelegte Variable gespeichert
+    foreach ($protocol_result as $pro) {
+        $protocol = $pro;
+    }
+
+    return $protocol;
 }
