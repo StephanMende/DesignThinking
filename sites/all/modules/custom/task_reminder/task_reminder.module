@@ -113,7 +113,7 @@ function task_reminder_get_content()
             <td>$task->short_description</td>
             <td>$username</td><td>$task->task</td>
             <td>$deadline</td><td>$task->priority</td>
-            <td><a href='" . $base_url . "/delete_task/$task->task_id/zqjvEz44Qx'>erledigt</a></td>
+            <td><a href='" . $base_url . "/delete_task/$task->task_id/zqjvEz44Qx'>als erledigt markieren</a></td>
         </tr>";
     }
 
