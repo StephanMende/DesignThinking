@@ -100,12 +100,12 @@ function protocol_overview_pdf_method_overview($method_array)
         ';
 
         //Es werden all Dateien geladen, die zu der Methode hochgeladen wurden
-        $method_string .= protocol_overview_get_images_for_pdf($method->method_execution_id);
+        $method_string .= "</td>
+            </tr>
+        </table>".protocol_overview_get_images_for_pdf($method->method_execution_id);
 
         $method_string .= '
-                </td>
-            </tr>
-        </table>
+
         <br>
         <br>';
     }

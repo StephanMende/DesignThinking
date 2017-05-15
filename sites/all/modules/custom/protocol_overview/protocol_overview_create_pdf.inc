@@ -179,7 +179,7 @@ function protocol_overview_get_images_for_pdf($id)
     $result = db_query($sql);
 
     //Die String Variable wird angelegt, um sie später mit den Dateien zu befüllen
-    $data_string = "";
+    $data_string = "<div>";
 
     //Sollte es keine Dateien geben, wird eine Info zurückgegeben
     if (!$result->rowCount()) {
@@ -202,10 +202,15 @@ function protocol_overview_get_images_for_pdf($id)
 
                 //Der Dateipfad der Datei wird ermittelt
                 $path = $base_url . "/sites/default/files/" . $r->path;
-                $data_string .= "<img style=\"max-width:350px;\" src='" . $path . "' height='300' width='700' alt=Selfhtml><br><b>$basename</b><br><br>";
+
+                //style="text-align: center; text-decoration: underline;"
+
+                $data_string .= "<img style=\"max-width:550px;\"  src='" . $path . "' height='300' width='700' alt=Selfhtml><br><b>$basename</b><br><br>";
             }
         }
     }
+
+    $data_string .= "</div>";
 
     return $data_string;
 }
