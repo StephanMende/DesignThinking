@@ -1,3 +1,6 @@
 name = Archiv
 description = Archiv-Funktion, die dem Dozenten erlaubt, auf vergangene Projekte erneut zuzugreifen.
 core = 7.x
+
+dependencies[] = method_overview
+dependencies[] = protocol_overview

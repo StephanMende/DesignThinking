@@ -1,3 +1,5 @@
 name = Methodenübersicht
 description = Zeigt alle durchgeführten Methoden einer Gruppe in einer Übersicht an.
 core = 7.x
+
+dependencies[] = protocol_template

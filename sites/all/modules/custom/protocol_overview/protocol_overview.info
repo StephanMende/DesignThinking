@@ -2,5 +2,3 @@ name = Protokoll Übersicht
 description = Zeigt die erstellten Protokolle der Gruppen an
 core = 7.x
 dependencies[] = protocol_template
-
-configure = admin/config/content/protocol_overview

@@ -2,3 +2,4 @@ name = Task Reminder
 description = Erinnert den Benutzer an anstehende Aufgaben
 core = 7.x
 dependencies[] = protocol_template
+dependencies[] = task_assignment

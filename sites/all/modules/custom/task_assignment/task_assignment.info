@@ -1,3 +1,5 @@
 name = Task Assignment
 description = Ermöglicht das Erstellen von Aufgaben außerhalb von Gruppentreffen
 core = 7.x
+
+dependencies[] = protocol_template
