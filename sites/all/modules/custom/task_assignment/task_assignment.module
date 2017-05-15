@@ -52,7 +52,7 @@ function task_assignment_form()
     //Das Format für die Eingabe eines Fälligkeitsdatums wird definiert
     date_default_timezone_set('Europe/Berlin');
     $dateformat = 'Y-m-d H:i';
-    $label = t('Aktuelles Datum');
+    $label = t('Fälligkeitsdatum der Aufgabe');
     $timestamp = date("Y-m-d H:i");
 
     if (empty($timestamp)) {
@@ -66,7 +66,9 @@ function task_assignment_form()
     $form['new_task'] = array(
         '#title' => "neue Aufgabe erstellen",
         '#type' => 'fieldset',
-        '#description' => "In diesem Formular kann ein neuer Termin angelegt werden."
+        '#description' => "In diesem Formular kann eine neue Aufgabe angelegt werden. Dazu muss eine Aufgabe einem
+        Gruppenmitglied zugeordnet werden, ein Fälligkeitsdatum besitzen und über Kurzbeschreibung als auch ausführliche
+        Beschreibung verfügen."
     );
 
     $form['new_task']['short_description'] = array(

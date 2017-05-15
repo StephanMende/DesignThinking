@@ -30,7 +30,7 @@ function protocol_template_new_task_execution_form($form, &$form_submit)
     //Das Format für die Eingabe eines Fälligkeitsdatums wird definiert
     date_default_timezone_set('Europe/Berlin');
     $dateformat = 'Y-m-d H:i';
-    $label = t('Aktuelles Datum');
+    $label = t('Fälligkeitsdatum der Aufgabe');
     $timestamp = date("Y-m-d H:i");
 
     if (empty($timestamp)) {
@@ -47,7 +47,9 @@ function protocol_template_new_task_execution_form($form, &$form_submit)
     $form['new_task'] = array(
         '#title' => "neue Aufgabe erstellen",
         '#type' => 'fieldset',
-        '#description' => "Mit Hilfe dieses Formulares kann eine neue Aufgabe erstellt werden."
+        '#description' => "In diesem Formular kann eine neue Aufgabe angelegt werden. Dazu muss eine Aufgabe einem
+        Gruppenmitglied zugeordnet werden, ein Fälligkeitsdatum besitzen und über Kurzbeschreibung als auch ausführliche
+        Beschreibung verfügen."
     );
 
     $form['new_task']['short_description'] = array(
