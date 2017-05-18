@@ -207,7 +207,7 @@ function protocol_overview_get_images_for_pdf($id)
 
                 //style="text-align: center; text-decoration: underline;"
 
-                $data_string .= "<img style=\"max-width:550px;\"  src='" . $path . "' height='300' width='700' alt=Selfhtml><br><b>$basename</b><br><br>";
+                $data_string .= "<img style=\"max-width:550px;\"  src='" . $path . "' height='300' width='700' alt=Kein_Bild_vorhanden><br><b>$basename</b><br><br>";
             }
         }
     }

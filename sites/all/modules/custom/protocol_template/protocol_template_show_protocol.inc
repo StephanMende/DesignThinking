@@ -578,7 +578,7 @@ function protocol_template_get_data_for_protocol_display($id)
             global $base_url;
             $path = $base_url . "/sites/default/files/" . $data->path;
 
-            $data_string .= "<img style=\"max-width:550px;\" src='" . $path . "'alt=Selfhtml><br><b>$basename</b><br><br>";
+            $data_string .= "<img style=\"max-width:550px;\" src='" . $path . "'alt=Kein_Bild_vorhanden><br><b>$basename</b><br><br>";
         }
     }
 

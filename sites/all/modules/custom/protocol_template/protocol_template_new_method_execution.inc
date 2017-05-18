@@ -1436,7 +1436,7 @@ function protocol_template_get_images_from_method($method_id, $delete_check)
             if (in_array($ext, $allowed)) {
                 $path = $base_url . "/sites/default/files/" . $method_data->path;
 
-                $method_data_string .= "<li><img style=\"max-width:540px;\" src='" . $path . "'alt=Selfhtml><br><b>$basename</b><a href='" . $base_url . "/delete_file/$method_id/$basename/zqjvEz44Qxyy'\">&nbsp;&nbsp;Löschen</a></li><br><br>";
+                $method_data_string .= "<li><img style=\"max-width:540px;\" src='" . $path . "'alt=Kein_Bild_vorhanden><br><b>$basename</b><a href='" . $base_url . "/delete_file/$method_id/$basename/zqjvEz44Qxyy'\">&nbsp;&nbsp;Löschen</a></li><br><br>";
             } else {
                 $method_data_string .= '<li><a href="' . $base_url . '/sites/default/files/' . $method_data->path . '" target="_blank">' . $basename . '</a><a href="' . $base_url . '/delete_file/' . $method_id . '/' . $basename . '/zqjvEz44Qxyy">&nbsp;&nbsp;Löschen</a></li><br><br>';
             }
@@ -1446,7 +1446,7 @@ function protocol_template_get_images_from_method($method_id, $delete_check)
             if (in_array($ext, $allowed)) {
                 $path = $base_url . "/sites/default/files/" . $method_data->path;
 
-                $method_data_string .= "<li><img style=\"max-width:540px;\" src='" . $path . "'alt=Selfhtml></li><br><b>$basename</b><br><br>";
+                $method_data_string .= "<li><img style=\"max-width:540px;\" src='" . $path . "'alt=Kein_Bild_vorhanden></li><br><b>$basename</b><br><br>";
             } else {
                 $method_data_string .= '<li><a href="' . $base_url . '/sites/default/files/' . $method_data->path . '" target="_blank">' . $basename . '</a></li><br><br>';
             }

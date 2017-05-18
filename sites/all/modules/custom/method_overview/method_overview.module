@@ -299,7 +299,7 @@ function method_overview_get_all_images($id)
         //Sofern die Dateiendung erlaubt ist, kann es angezeigt werden
         if (in_array($ext, $allowed)) {
             $path = "/$base_url/sites/default/files/" . $data->path;
-            $data_string .= "<img style=\"max-width:540px;\" src='" . $path . "'alt=Selfhtml><br><b>$basename</b><a href='/$base_url/delete_file/$id/$basename/zqjvEz44Qx'\">&nbsp;&nbsp;Löschen</a><br><br>";
+            $data_string .= "<img style=\"max-width:540px;\" src='" . $path . "'alt=Kein_Bild_vorhanden><br><b>$basename</b><a href='/$base_url/delete_file/$id/$basename/zqjvEz44Qx'\">&nbsp;&nbsp;Löschen</a><br><br>";
         } else {
             $data_string .= '<a href="/' . $base_url . '/sites/default/files/' . $data->path . '" target="_blank">' . $basename . '</a><a href="/delete_file/' . $id . '/' . $basename . '/zqjvEz44Qx">&nbsp;&nbsp;Löschen</a><br><br>';
         }

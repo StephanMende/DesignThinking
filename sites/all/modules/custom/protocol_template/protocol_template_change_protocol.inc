@@ -566,7 +566,7 @@ function protocol_template_get_all_images($id)
         if (in_array($ext, $allowed)) {
             $path = "/" . $base_url . "/sites/default/files/" . $method->path;
 
-            $data_string .= "<img style=\"max-width:540px;\" src='" . $path . "'alt=Selfhtml><br><b>$basename</b><a href=/" . $base_url . "/delete_file/$id/$basename/pXs8hYVUqe>&nbsp;&nbsp;Löschen</a><br><br>";
+            $data_string .= "<img style=\"max-width:540px;\" src='" . $path . "'alt=Kein_Bild_vorhanden><br><b>$basename</b><a href=/" . $base_url . "/delete_file/$id/$basename/pXs8hYVUqe>&nbsp;&nbsp;Löschen</a><br><br>";
         } else {
             $data_string .= "<a href='/" . $base_url . "/sites/default/files/$method->path' target='blank'>$basename</a><a href='/" . $base_url . "/delete_file/$id/$basename/pXs8hYVUqe'>&nbsp;&nbsp;Löschen</a><br><br>";
         }
