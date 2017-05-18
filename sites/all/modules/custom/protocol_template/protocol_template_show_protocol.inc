@@ -74,9 +74,11 @@ function protocol_template_show_protocol_form($form, &$form_submit)
         $protocol_before_meeting_result = db_query($sql);
 
         //Es wird über alle Protokolle iteriert
-        foreach ($protocol_before_meeting_result as $protocol) {
+        foreach ($protocol_before_meeting_result as $protocol2) {
             array_push($protocol_array, $protocol->protocol_id);
         }
+
+        print_r($protocol);
 
         //Die ID des anzuzeigenden Protokolls wird aus der Datenbank geladen
         $protocol_id = arg(1);
