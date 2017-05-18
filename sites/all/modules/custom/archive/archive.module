@@ -136,15 +136,15 @@ function archive_protocol_overview()
     if (archive_get_height($protocol_list, 40) > 820) {
         if (archive_get_height($protocol_list, 38) > 820) {
             if (archive_get_height($protocol_list, 36) > 820) {
-                $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 34);
+                $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 34, true);
             } else {
-                $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 36);
+                $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 36, true);
             }
         } else {
-            $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 38);
+            $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 38, true);
         }
     } else {
-        $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 40);
+        $dynamic_graphic = archive_protocol_overview_get_dynamic_graphic($protocol_list, 40, true);
     }
 
 
@@ -220,7 +220,7 @@ function archive_method_overview()
     $methods = archive_get_relevant_methods($role_id);
 
     //Die DT-Grafik mit den dynamischen Punkten wird erzeugt
-    $method_overview_string = archive_protocol_overview_get_dynamic_graphic($methods, 40);
+    $method_overview_string = archive_protocol_overview_get_dynamic_graphic($methods, 40, false);
 
     //Die Überschriften der Tabelle werden gebaut
     $method_overview_string .= "<table><th>Nr.</th><th>Datum</th><th>Methodenname</th><th> Bewertung</th><th> Bewertung</th><th> Aktionen</th></th>";
@@ -312,7 +312,7 @@ function archive_get_relevant_methods($role_id)
  * entsprechenden Feldes repräsentiert wird. die Result-Variable enthält alle Protokoll-Elemente, die Value-Variable
  * beinhaltet den vertikalen Abstand der Punkte zueinander.
  */
-function archive_protocol_overview_get_dynamic_graphic($result, $value)
+function archive_protocol_overview_get_dynamic_graphic($result, $value, $is_protocol_overview)
 {
     //Vertikaler Abstand der Punkte. Sollten mehr Punkte vorhanden sein als die Graphik lang ist, wird dieser
     //Abstand verkleinert.
@@ -321,8 +321,21 @@ function archive_protocol_overview_get_dynamic_graphic($result, $value)
     //Die Protokoll-Elemente werden ausgelesen und soweit formatiert, dass sie weiterverwendet werden können
     $protocol_room_phase = array();
     $protocols = $result;
-    foreach ($protocols as $protocol) {
-        array_push($protocol_room_phase, $protocol->raum_end . " " . $protocol->phase_end);
+
+    if ($is_protocol_overview) {
+        foreach ($protocols as $protocol) {
+            drupal_set_message($protocol->raum);
+            array_push($protocol_room_phase, $protocol->raum_end . " " . $protocol->phase_end);
+        }
+    } else {
+
+        foreach ($protocols as $method) {
+            $validation["name"] = $method->raum_end . " " . $method->phase_end;
+            if (!strcmp($method->room, "Vorbereitung") || !strcmp($method->room, "Projektmanagement")) {
+            } else {
+                array_push($protocol_room_phase, $validation["name"]);
+            }
+        }
     }
 
     //In diesem Array werden die einzelnen Punkte (nodes) und deren Verbindungen untereinander (links) gespeichert.
@@ -345,10 +358,12 @@ function archive_protocol_overview_get_dynamic_graphic($result, $value)
     //Es wird über alle Protokolle iteriert
     for ($i = 0; $i < sizeof($protocol_room_phase); $i++) {
 
+
         //Je nachdem, welcher Raum und welche Phase dem Protokoll zugeordnet wurde, wird der Punkt gesetzt.
         //Wird im Prozess voran geschritten, wird der Punkt mit dem gleichen vertikalen Wert versehen, sollten
         //Rückschritte gemacht worden sein, wird der vertikale Wert erhöht.
         $name_of_room_and_phase = $protocol_room_phase[$i];
+
         switch ($name_of_room_and_phase) {
 
             case 'Problemraum divergent':

@@ -2,170 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f9db5615-d57a-45d2-a6cc-fc6669fdf8b9" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mail_function/mail_function_cron.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_content_overview.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_dynamic_graphic.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_front_page.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_general_information.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_group_overview.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_methods.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_new_tasks.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_reflections.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/helperfunctions.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template.info" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template.module" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_change_protocol.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_delete_task.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_descriptions.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_dynamic_graphic.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_general_information.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_method_overview.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_new_task_execution.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_new_tasks.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_open_tasks.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_preparation.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_show_protocol.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/statistiken/statistiken_diagram.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/task_assignment/task_assignment_appointment.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/task_reminder/task_reminder_diagram.inc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/task_reminder/task_reminder_show_appointments.inc" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/basics/basics.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/basics/basics.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/graphic_points/graphic_points.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/graphic_points/graphic_points.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/group_documents/group_documents.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/group_documents/group_documents.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/meetup_email_sending.zip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/meetup_email_sending/meetup_email_sending.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/meetup_email_sending/meetup_email_sending.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/mymodule/mymodule.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/mymodule/mymodule.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project_management/project_management.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project_management/project_management.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/test.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/test2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/test3.pdf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/statistics/generiere_bild.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/statistics/statistics.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/statistics/statistics.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/task_reminder/task_reminder_show_tasks.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/Methodengrafik.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/helperfunctions.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module.info" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module.module" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_change_protocol.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_create_protocol.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_delete_task.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_descriptions.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_general_information.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_method_overview.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_new_task_execution.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_new_tasks.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_open_tasks.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_preparation.inc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test_module/test_module_show_protocol.inc" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/.gitignore" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/.gitignore" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/LISEZMOI.md" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/LISEZMOI.md" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/README.md" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/README.md" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_LGPL.txt" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_LGPL.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_changelog.txt" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_changelog.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_class/exception.class.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_class/exception.class.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_class/locale.class.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_class/locale.class.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_class/myPdf.class.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_class/myPdf.class.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_class/parsingCss.class.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_class/parsingCss.class.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_class/parsingHtml.class.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_class/parsingHtml.class.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/_class/tcpdfConfig.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/_class/tcpdfConfig.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/composer.json" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/composer.json" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/about.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/about.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/bookmark.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/bookmark.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple00.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple00.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple01.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple01.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple02.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple02.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple03.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple03.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple04.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple04.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple05.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple05.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple06.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple06.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple07.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple07.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple08.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple08.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple09.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple09.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple10.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple10.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple11.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple11.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple12.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple12.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/exemple13.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/exemple13.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/forms.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/forms.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/groups.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/groups.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/js1.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/js1.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/js2.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/js2.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/js3.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/js3.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/qrcode.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/qrcode.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/radius.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/radius.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/regle.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/regle.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/about.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/about.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/bas_page.png" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/bas_page.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple00.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple00.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple01.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple01.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple02.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple02.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple03.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple03.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple04.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple04.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple05.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple05.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple06.css" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple06.css" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple06.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple06.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple07a.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple07a.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple07b.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple07b.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple08.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple08.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple09.png.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple09.png.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple10.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple10.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple10a.gif" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple10a.gif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple10b.jpg" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple10b.jpg" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple10c.gif" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple10c.gif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple11.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple11.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple12.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple12.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/exemple13.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/exemple13.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/forms.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/forms.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/logo.gif" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/logo.gif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/logo.png" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/logo.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/off.png" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/off.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/puce.gif" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/puce.gif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/puce2.gif" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/puce2.gif" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/regle.png" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/regle.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/svg.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/svg.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/res/tcpdf_logo.jpg" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/res/tcpdf_logo.jpg" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/svg.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/svg.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/svg_tiger.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/svg_tiger.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/svg_tree.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/svg_tree.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/ticket.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/ticket.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/examples/utf8.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/examples/utf8.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/html2pdf.class.php" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/html2pdf.class.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/ca.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/ca.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/cs.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/cs.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/da.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/da.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/de.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/de.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/en.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/en.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/es.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/es.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/fr.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/fr.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/it.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/it.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/nl.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/nl.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/pt.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/pt.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/locale/tr.csv" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/locale/tr.csv" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/html2pdf-4.5.1/test/generate.sh" afterPath="$PROJECT_DIR$/protocol_template/html2pdf-4.5.1/test/generate.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/test_module/test_module_new_method_execution.inc" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_new_method_execution.inc" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG1376459060f7754cdd5.61647116_1.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG2740659060f770ab690.93172462_1.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG3963759060f778f3686.55847296_0.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG4027459060f778f3b86.24211447_1.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG4467559060f7754c824.51347172_0.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG5924659060f76ebb354.99726360_0.svg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG6169959060f770ab1c2.93722509_0.svg" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/archive/archive.info" afterPath="$PROJECT_DIR$/archive/archive.info" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/archive/archive.module" afterPath="$PROJECT_DIR$/archive/archive.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mail_function/mail_function.info" afterPath="$PROJECT_DIR$/mail_function/mail_function.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mail_function/mail_function.module" afterPath="$PROJECT_DIR$/mail_function/mail_function.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/method_overview/method_overview.info" afterPath="$PROJECT_DIR$/method_overview/method_overview.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/method_overview/method_overview.module" afterPath="$PROJECT_DIR$/method_overview/method_overview.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/protocol_overview/protocol_overview.info" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/protocol_overview/protocol_overview.module" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/protocol_overview/protocol_overview_create_pdf.inc" afterPath="$PROJECT_DIR$/protocol_overview/protocol_overview_create_pdf.inc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/reflection/group_reflection.inc" afterPath="$PROJECT_DIR$/reflection/group_reflection.inc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/reflection/reflection.module" afterPath="$PROJECT_DIR$/reflection/reflection.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/statistiken/statistiken.module" afterPath="$PROJECT_DIR$/statistiken/statistiken.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/task_assignment/task_assignment.module" afterPath="$PROJECT_DIR$/task_assignment/task_assignment.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/task_reminder/task_reminder.info" afterPath="$PROJECT_DIR$/task_reminder/task_reminder.info" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/task_reminder/task_reminder.module" afterPath="$PROJECT_DIR$/task_reminder/task_reminder.module" />
     </list>
     <ignored path="custom.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -187,170 +32,105 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="task_reminder.module" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder.module">
+      <file leaf-file-name="protocol_overview.module" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-213.91304">
-              <caret line="333" column="0" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
+            <state vertical-scroll-proportion="-19.391304">
+              <caret line="593" column="69" selection-start-line="593" selection-start-column="9" selection-end-line="593" selection-end-column="69" />
               <folding>
-                <marker date="1493910006000" expanded="true" signature="2933:3020" placeholder="SELECT * FRO... " />
-                <marker date="1493910006000" expanded="true" signature="4539:4626" placeholder="SELECT * FRO... " />
-                <marker date="1493910006000" expanded="true" signature="7001:7069" placeholder="SELECT * FRO... " />
-                <marker date="1493910006000" expanded="true" signature="7920:7984" placeholder="SELECT * FRO... " />
-                <marker date="1493910006000" expanded="true" signature="8753:8825" placeholder="SELECT * FRO... " />
-                <marker date="1493910006000" expanded="true" signature="11209:11390" placeholder="SELECT ur.ri... " />
+                <marker date="1494836704000" expanded="true" signature="1508:1585" placeholder="SELECT * FRO... " />
+                <marker date="1494836704000" expanded="true" signature="3151:3343" placeholder="..." />
+                <marker date="1494836704000" expanded="true" signature="3429:3479" placeholder="SELECT * FRO... " />
+                <marker date="1494836704000" expanded="true" signature="4977:5119" placeholder="..." />
+                <marker date="1494836704000" expanded="true" signature="6987:7040" placeholder="SELECT * FRO... " />
+                <marker date="1494836704000" expanded="true" signature="25055:25236" placeholder="SELECT ur.ri... " />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="task_reminder_diagram.inc" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder_diagram.inc">
+      <file leaf-file-name="archive.module" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/archive/archive.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="-7.38">
+              <caret line="338" column="5" selection-start-line="324" selection-start-column="4" selection-end-line="338" selection-end-column="5" />
               <folding>
-                <marker date="1493656250000" expanded="true" signature="441:1557" placeholder="..." />
-                <marker date="1493656250000" expanded="true" signature="457:574" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="594:716" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="736:774" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="792:898" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="920:979" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="998:1484" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="1499:1545" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="1604:8833" placeholder="..." />
-                <marker date="1493656250000" expanded="true" signature="2262:2300" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="3071:8492" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="3531:3890" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="3772:3863" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="3963:4249" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="4322:4395" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="4727:5078" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="5901:5980" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="6020:6112" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="6240:6781" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="6477:6758" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="6841:7224" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="7062:7205" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="7269:7331" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="7367:7442" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="7836:8408" placeholder="{...}" />
-                <marker date="1493656250000" expanded="true" signature="8073:8385" placeholder="{...}" />
+                <marker date="1495032329000" expanded="true" signature="1230:1250" placeholder="SELECT * FRO... " />
+                <marker date="1495032329000" expanded="true" signature="3109:3153" placeholder="SELECT * FRO... " />
+                <marker date="1495032329000" expanded="true" signature="3458:3533" placeholder="SELECT * FRO... " />
+                <marker date="1495032329000" expanded="true" signature="4968:5160" placeholder="..." />
+                <marker date="1495032329000" expanded="true" signature="9766:9806" placeholder="SELECT * FRO... " />
+                <marker date="1495032329000" expanded="true" signature="10155:10247" placeholder="SELECT * FRO... " />
+                <marker date="1495032329000" expanded="true" signature="29877:29930" placeholder="SELECT * FRO... " />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="statistiken.module" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistiken/statistiken.module">
+      <file leaf-file-name="method_overview.module" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/method_overview/method_overview.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-210.0">
-              <caret line="322" column="1" selection-start-line="322" selection-start-column="1" selection-end-line="322" selection-end-column="1" />
+            <state vertical-scroll-proportion="-30.173914">
+              <caret line="496" column="5" selection-start-line="486" selection-start-column="4" selection-end-line="496" selection-end-column="5" />
               <folding>
-                <element signature="e#6#88#0#PHP" expanded="true" />
-                <marker date="1493909907000" expanded="true" signature="1726:1792" placeholder="SELECT * FRO... " />
-                <marker date="1493909907000" expanded="true" signature="3253:3356" placeholder="SELECT * FRO... " />
-                <marker date="1493909907000" expanded="true" signature="4814:4883" placeholder="SELECT * FRO... " />
-                <marker date="1493909907000" expanded="true" signature="7971:8003" placeholder="SELECT * FRO... " />
-                <marker date="1493909907000" expanded="true" signature="10915:11096" placeholder="SELECT ur.ri... " />
+                <marker date="1493909354000" expanded="true" signature="5740:5801" placeholder="SELECT * FRO... " />
+                <marker date="1493909354000" expanded="true" signature="6468:6767" placeholder="..." />
+                <marker date="1493909354000" expanded="true" signature="8961:9027" placeholder="SELECT * FRO... " />
+                <marker date="1493909354000" expanded="true" signature="10693:10785" placeholder="SELECT * FRO... " />
+                <marker date="1493909354000" expanded="true" signature="11020:11087" placeholder="SELECT title... " />
+                <marker date="1493909354000" expanded="true" signature="11539:11720" placeholder="SELECT ur.ri... " />
+                <marker date="1493909354000" expanded="true" signature="12402:12461" placeholder="DELETE FROM " />
+                <marker date="1493909354000" expanded="true" signature="12591:12655" placeholder="DELETE FROM " />
+                <marker date="1493909354000" expanded="true" signature="15220:15311" placeholder="INSERT INTO " />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="statistiken_diagram.inc" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistiken/statistiken_diagram.inc">
+      <file leaf-file-name="protocol_overview_pdf_dynamic_graphic.inc" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_dynamic_graphic.inc">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-22.826086">
-              <caret line="40" column="27" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
+            <state vertical-scroll-proportion="0.31380752">
+              <caret line="118" column="33" selection-start-line="118" selection-start-column="15" selection-end-line="118" selection-end-column="33" />
               <folding>
-                <marker date="1493909923000" expanded="true" signature="653:1765" placeholder="..." />
-                <marker date="1493909923000" expanded="true" signature="667:784" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="804:926" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="946:984" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="1002:1108" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="1129:1187" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="1206:1692" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="1707:1753" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="1798:8422" placeholder="..." />
-                <marker date="1493909923000" expanded="true" signature="2382:2412" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="3115:8120" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="3539:3850" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="3760:3835" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="3915:4181" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="4246:4311" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="4611:4938" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="5697:5768" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="5804:5888" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="6004:6501" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="6225:6486" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="6557:6940" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="6778:6921" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="6985:7047" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="7083:7158" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="7520:8052" placeholder="{...}" />
-                <marker date="1493909923000" expanded="true" signature="7741:8033" placeholder="{...}" />
+                <marker date="1494174588000" expanded="true" signature="425:488" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="442:475" placeholder="{...}" />
+                <marker date="1494174588000" expanded="true" signature="530:4911" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="543:758" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="607:629" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="771:989" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="836:861" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="1002:1221" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="1068:1093" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="1234:1462" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="1300:1325" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="1475:1705" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="1542:1567" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="1718:2061" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="1788:1813" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="2074:2413" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="2142:2167" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="2426:2768" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="2496:2521" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="2781:3126" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="2849:2874" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="3139:3475" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="3205:3230" placeholder="..." />
+                <marker date="1494174588000" expanded="true" signature="3488:3711" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="3554:3576" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="3777:3802" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="3877:3902" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="3977:4002" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4077:4102" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4177:4202" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4277:4302" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4370:4394" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4462:4486" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4555:4579" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4647:4670" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4739:4762" placeholder="..." />
+                <marker date="1494174588000" expanded="false" signature="4830:4853" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_assignment.info" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment.info">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_assignment.module" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment.module">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-266.73914">
-              <caret line="414" column="0" selection-start-line="414" selection-start-column="0" selection-end-line="414" selection-end-column="0" />
-              <folding>
-                <marker date="1493909961000" expanded="true" signature="4828:4898" placeholder="SELECT * FRO... " />
-                <marker date="1493909961000" expanded="true" signature="6697:6737" placeholder="SELECT * FRO... " />
-                <marker date="1493909961000" expanded="true" signature="6970:7010" placeholder="SELECT * FRO... " />
-                <marker date="1493909961000" expanded="true" signature="8823:9001" placeholder="INSERT INTO " />
-                <marker date="1493909961000" expanded="true" signature="9110:9166" placeholder="SELECT task_... " />
-                <marker date="1493909961000" expanded="true" signature="13843:14024" placeholder="SELECT ur.ri... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_assignment_appointment.inc" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment_appointment.inc">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <marker date="1493640256000" expanded="true" signature="2502:2633" placeholder="INSERT INTO " />
-                <marker date="1493640256000" expanded="true" signature="2738:2815" placeholder="SELECT appoi... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="task_reminder.info" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder.info">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="statistiken.info" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/statistiken/statistiken.info">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -370,21 +150,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/meetup_email_sending/meetup_email_sending.module" />
-        <option value="$PROJECT_DIR$/statistics/statistics.module" />
-        <option value="$PROJECT_DIR$/designthinking_refactored/designthinking_refactored.module" />
-        <option value="$PROJECT_DIR$/chartstest/chartstest.module" />
-        <option value="$PROJECT_DIR$/Statistiken/statistiken.info" />
-        <option value="$PROJECT_DIR$/method_collection/method_collection.module" />
-        <option value="$PROJECT_DIR$/url_parameter/url_parameter.module" />
-        <option value="$PROJECT_DIR$/test_module/test_module.info" />
-        <option value="$PROJECT_DIR$/project_management/project_management.module" />
-        <option value="$PROJECT_DIR$/gantt_chart/gantt_chart.info" />
-        <option value="$PROJECT_DIR$/gantt_chart/gantt_chart.module.inc" />
-        <option value="$PROJECT_DIR$/gantt_chart/example.css" />
-        <option value="$PROJECT_DIR$/gantt_chart/example.js" />
-        <option value="$PROJECT_DIR$/gantt_chart/gantt_chart.module" />
-        <option value="$PROJECT_DIR$/test_module/test_module_create_pdf.inc" />
         <option value="$PROJECT_DIR$/mail_function/mail_function.php" />
         <option value="$PROJECT_DIR$/test_module/test_module_preparation.inc" />
         <option value="$PROJECT_DIR$/test_module/test_module_descriptions.inc" />
@@ -402,25 +167,40 @@
         <option value="$PROJECT_DIR$/test_module/test_module_show_protocol.inc" />
         <option value="$PROJECT_DIR$/test_module/test_module_change_protocol.inc" />
         <option value="$PROJECT_DIR$/test_module/test_module_delete_task.inc" />
-        <option value="$PROJECT_DIR$/archive/archive.module" />
-        <option value="$PROJECT_DIR$/archive/archive.info" />
         <option value="$PROJECT_DIR$/mail_function/mail_function.info" />
-        <option value="$PROJECT_DIR$/mail_function/mail_function.module" />
-        <option value="$PROJECT_DIR$/method_overview/method_overview.info" />
         <option value="$PROJECT_DIR$/method_overview/method_overview.module" />
-        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview.info" />
-        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview.module" />
-        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview_create_pdf.inc" />
         <option value="$PROJECT_DIR$/reflection/group_reflection.inc" />
         <option value="$PROJECT_DIR$/reflection/reflection.info" />
         <option value="$PROJECT_DIR$/reflection/reflection.module" />
         <option value="$PROJECT_DIR$/statistiken/statistiken.info" />
         <option value="$PROJECT_DIR$/statistiken/statistiken.module" />
         <option value="$PROJECT_DIR$/statistiken/statistiken_diagram.inc" />
+        <option value="$PROJECT_DIR$/protocol_template/helperfunctions.php" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_new_tasks.inc" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template.module" />
+        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_dynamic_graphic.inc" />
+        <option value="$PROJECT_DIR$/task_assignment/task_assignment.install" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template.install" />
+        <option value="$PROJECT_DIR$/reflection/reflection.install" />
+        <option value="$PROJECT_DIR$/method_overview/method_overview.info" />
+        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview.info" />
         <option value="$PROJECT_DIR$/task_assignment/task_assignment.info" />
-        <option value="$PROJECT_DIR$/task_assignment/task_assignment.module" />
         <option value="$PROJECT_DIR$/task_reminder/task_reminder.info" />
+        <option value="$PROJECT_DIR$/archive/archive.info" />
+        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview.module" />
+        <option value="$PROJECT_DIR$/mail_function/mail_function.module" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_show_protocol.inc" />
+        <option value="$PROJECT_DIR$/task_assignment/task_assignment.module" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_new_task_execution.inc" />
+        <option value="$PROJECT_DIR$/task_assignment/task_assignment_appointment.inc" />
         <option value="$PROJECT_DIR$/task_reminder/task_reminder.module" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_change_protocol.inc" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_general_information.inc" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_descriptions.inc" />
+        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_methods.inc" />
+        <option value="$PROJECT_DIR$/protocol_overview/protocol_overview_create_pdf.inc" />
+        <option value="$PROJECT_DIR$/archive/archive.module" />
       </list>
     </option>
   </component>
@@ -465,17 +245,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -532,21 +301,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="statistiken" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="custom" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="custom" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="reflection" />
+              <option name="myItemId" value="protocol_template" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -564,8 +319,61 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="custom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="custom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="method_overview" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="custom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="custom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mail_function" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="custom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="custom" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="archive" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -637,9 +445,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1828125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.365625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -653,7 +461,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286991" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -676,106 +484,143 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/method_collection/method_collection.module">
+    <entry file="file://$PROJECT_DIR$/reflection/group_reflection.inc">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-88.04348">
-          <caret line="140" column="25" selection-start-line="140" selection-start-column="24" selection-end-line="140" selection-end-column="25" />
+        <state vertical-scroll-proportion="-40.260868">
+          <caret line="123" column="1" selection-start-line="123" selection-start-column="1" selection-end-line="123" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gantt_chart/example.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-46.304348">
-          <caret line="71" column="1" selection-start-line="71" selection-start-column="1" selection-end-line="71" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gantt_chart/gantt_chart.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5025773">
-          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gantt_chart/gantt_chart.info">
+    <entry file="file://$PROJECT_DIR$/reflection/reflection.info">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="18" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gantt_chart/example.js">
+    <entry file="file://$PROJECT_DIR$/reflection/reflection.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.8210263">
-          <caret line="97" column="2" selection-start-line="97" selection-start-column="2" selection-end-line="97" selection-end-column="2" />
+        <state vertical-scroll-proportion="-40.260868">
+          <caret line="120" column="1" selection-start-line="120" selection-start-column="1" selection-end-line="120" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/designthinking_refactored/designthinking_refactored.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-116.26087">
-          <caret line="201" column="1" selection-start-line="186" selection-start-column="0" selection-end-line="201" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/designthinking_refactored/designthinking.js">
+    <entry file="file://$PROJECT_DIR$/statistiken/statistiken.info">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/d3_gantt/graph.json">
+    <entry file="file://$PROJECT_DIR$/statistiken/statistiken.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="-210.0">
+          <caret line="322" column="1" selection-start-line="322" selection-start-column="1" selection-end-line="322" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/statistiken/statistiken_diagram.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-22.826086">
+          <caret line="40" column="27" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/d3_gantt/d3_gantt.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="-37.826088">
           <caret line="63" column="31" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/archive/archive.module">
+    <entry file="file://$PROJECT_DIR$/access_control/access_control.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-40.260868">
-          <caret line="736" column="1" selection-start-line="736" selection-start-column="1" selection-end-line="736" selection-end-column="1" />
-          <folding>
-            <marker date="1493909164000" expanded="true" signature="1230:1250" placeholder="SELECT * FRO... " />
-            <marker date="1493909164000" expanded="true" signature="3109:3153" placeholder="SELECT * FRO... " />
-            <marker date="1493909164000" expanded="true" signature="3458:3533" placeholder="SELECT * FRO... " />
-            <marker date="1493909164000" expanded="true" signature="4944:5136" placeholder="..." />
-            <marker date="1493909164000" expanded="true" signature="9735:9775" placeholder="SELECT * FRO... " />
-            <marker date="1493909164000" expanded="true" signature="10124:10216" placeholder="SELECT * FRO... " />
-            <marker date="1493909164000" expanded="true" signature="29363:29416" placeholder="SELECT * FRO... " />
-          </folding>
+        <state vertical-scroll-proportion="-13.695652">
+          <caret line="26" column="3" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/method_collection/method_collection.info">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reflection/reflection.install">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="43" column="10" selection-start-line="43" selection-start-column="10" selection-end-line="43" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template.install">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="340" column="31" selection-start-line="340" selection-start-column="31" selection-end-line="340" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template.info">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="25" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/method_overview/method_overview.info">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment.info">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder.info">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="31" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/archive/archive.info">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mail_function/mail_function.info">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview.info">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mail_function/mail_function.module">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_new_tasks.inc">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-40.260868">
-          <caret line="161" column="1" selection-start-line="161" selection-start-column="1" selection-end-line="161" selection-end-column="1" />
-          <folding />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_reflections.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_dynamic_graphic.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="287.78262">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -783,93 +628,152 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1493878560000" expanded="true" signature="2682:2717" placeholder="SELECT * FRO... " />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/method_overview/method_overview.info">
+    <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment.install">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-          <folding />
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/method_overview/method_overview.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-554.34784">
-          <caret line="850" column="1" selection-start-line="850" selection-start-column="1" selection-end-line="850" selection-end-column="1" />
-          <folding>
-            <element signature="e#6#91#0#PHP" expanded="true" />
-            <marker date="1493909354000" expanded="true" signature="5740:5801" placeholder="SELECT * FRO... " />
-            <marker date="1493909354000" expanded="true" signature="6468:6767" placeholder="..." />
-            <marker date="1493909354000" expanded="true" signature="8961:9027" placeholder="SELECT * FRO... " />
-            <marker date="1493909354000" expanded="true" signature="10693:10785" placeholder="SELECT * FRO... " />
-            <marker date="1493909354000" expanded="true" signature="11020:11087" placeholder="SELECT title... " />
-            <marker date="1493909354000" expanded="true" signature="11539:11720" placeholder="SELECT ur.ri... " />
-            <marker date="1493909354000" expanded="true" signature="12402:12461" placeholder="DELETE FROM " />
-            <marker date="1493909354000" expanded="true" signature="12591:12655" placeholder="DELETE FROM " />
-            <marker date="1493909354000" expanded="true" signature="15220:15311" placeholder="INSERT INTO " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview.info">
+    <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder_diagram.inc">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="50" selection-start-line="5" selection-start-column="50" selection-end-line="5" selection-end-column="50" />
-          <folding />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview.module">
+    <entry file="file://$PROJECT_DIR$/mail_function/mail_function.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-40.260868">
-          <caret line="621" column="0" selection-start-line="621" selection-start-column="0" selection-end-line="621" selection-end-column="0" />
-          <folding>
-            <marker date="1493909402000" expanded="true" signature="1508:1585" placeholder="SELECT * FRO... " />
-            <marker date="1493909402000" expanded="true" signature="3151:3343" placeholder="..." />
-            <marker date="1493909402000" expanded="true" signature="3429:3479" placeholder="SELECT * FRO... " />
-            <marker date="1493909402000" expanded="true" signature="4977:5119" placeholder="..." />
-            <marker date="1493909402000" expanded="true" signature="6987:7040" placeholder="SELECT * FRO... " />
-            <marker date="1493909402000" expanded="true" signature="25055:25236" placeholder="SELECT ur.ri... " />
-          </folding>
+        <state vertical-scroll-proportion="-11.565217">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_create_pdf.inc">
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-40.260868">
-          <caret line="532" column="1" selection-start-line="532" selection-start-column="1" selection-end-line="532" selection-end-column="1" />
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="80" column="85" selection-start-line="80" selection-start-column="84" selection-end-line="80" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_delete_task.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="90" column="174" selection-start-line="90" selection-start-column="169" selection-end-line="90" selection-end-column="174" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_method_overview.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="56" column="17" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_new_method_execution.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="1126" column="119" selection-start-line="1126" selection-start-column="114" selection-end-line="1126" selection-end-column="119" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_new_tasks.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="57" column="21" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_open_tasks.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="68" column="21" selection-start-line="68" selection-start-column="16" selection-end-line="68" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_preparation.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="60" column="21" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_new_task_execution.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.8">
+          <caret line="32" column="44" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment_appointment.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.913044">
+          <caret line="34" column="44" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="66" column="36" selection-start-line="66" selection-start-column="34" selection-end-line="66" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder_show_appointments.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="115" column="104" selection-start-line="115" selection-start-column="104" selection-end-line="115" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_change_protocol.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.18">
+          <caret line="48" column="27" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-31.304348">
+          <caret line="63" column="44" selection-start-line="61" selection-start-column="12" selection-end-line="63" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_general_information.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.8">
+          <caret line="58" column="44" selection-start-line="58" selection-start-column="44" selection-end-line="58" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_descriptions.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="155" column="22" selection-start-line="155" selection-start-column="8" selection-end-line="155" selection-end-column="22" />
           <folding>
-            <element signature="e#6#91#0#PHP" expanded="true" />
-            <marker date="1493909419000" expanded="true" signature="1724:1769" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="1938:1988" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="3911:3978" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="5513:5530" placeholder="..." />
-            <marker date="1493909419000" expanded="true" signature="6693:6710" placeholder="..." />
-            <marker date="1493909419000" expanded="true" signature="7501:7567" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="10169:10242" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="10658:10732" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="13183:13216" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="13436:13476" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="14715:14755" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="15630:15707" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="16683:16723" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="17108:17169" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="17816:17866" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="18117:18166" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="19231:19327" placeholder="SELECT * FRO... " />
-            <marker date="1493909419000" expanded="true" signature="19598:19651" placeholder="SELECT * FRO... " />
+            <marker date="1494846499000" expanded="true" signature="4116:4195" placeholder="SELECT * FRO... " />
+            <marker date="1494846499000" expanded="true" signature="5377:5492" placeholder="SELECT * FRO... " />
+            <marker date="1494846499000" expanded="true" signature="6131:6259" placeholder="SELECT * FRO... " />
+            <marker date="1494846499000" expanded="true" signature="7350:7428" placeholder="SELECT * FRO... " />
+            <marker date="1494846499000" expanded="true" signature="8255:8350" placeholder="SELECT * FRO... " />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_content_overview.inc">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-28.695652">
+        <state vertical-scroll-proportion="0.0">
           <caret line="49" column="55" selection-start-line="49" selection-start-column="55" selection-end-line="49" selection-end-column="55" />
           <folding>
             <marker date="1493657356000" expanded="true" signature="767:1864" placeholder="..." />
@@ -884,245 +788,269 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_dynamic_graphic.inc">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_front_page.inc">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1493884901000" expanded="true" signature="425:488" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="442:475" placeholder="{...}" />
-            <marker date="1493884901000" expanded="true" signature="530:4911" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="543:758" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="607:629" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="771:989" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="836:861" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="1002:1221" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="1068:1093" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="1234:1462" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="1300:1325" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="1475:1705" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="1542:1567" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="1718:2061" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="1788:1813" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="2074:2413" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="2142:2167" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="2426:2768" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="2496:2521" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="2781:3126" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="2849:2874" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="3139:3475" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="3205:3230" placeholder="..." />
-            <marker date="1493884901000" expanded="true" signature="3488:3711" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="3554:3576" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="3777:3802" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="3877:3902" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="3977:4002" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4077:4102" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4177:4202" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4277:4302" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4370:4394" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4462:4486" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4555:4579" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4647:4670" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4739:4762" placeholder="..." />
-            <marker date="1493884901000" expanded="false" signature="4830:4853" placeholder="..." />
+            <marker date="1493883472000" expanded="true" signature="310:730" placeholder="..." />
+            <marker date="1493883472000" expanded="true" signature="333:472" placeholder="{...}" />
+            <marker date="1493883472000" expanded="true" signature="493:543" placeholder="{...}" />
+            <marker date="1493883472000" expanded="true" signature="567:629" placeholder="{...}" />
+            <marker date="1493883472000" expanded="true" signature="657:713" placeholder="{...}" />
+            <marker date="1493883472000" expanded="true" signature="796:1648" placeholder="..." />
+            <marker date="1493883472000" expanded="false" signature="875:900" placeholder="..." />
+            <marker date="1493883472000" expanded="false" signature="1607:1632" placeholder="..." />
+            <marker date="1493883472000" expanded="false" signature="1696:1711" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/reflection/group_reflection.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-40.260868">
-          <caret line="123" column="1" selection-start-line="123" selection-start-column="1" selection-end-line="123" selection-end-column="1" />
-          <folding>
-            <marker date="1493909537000" expanded="true" signature="617:667" placeholder="SELECT * FRO... " />
-            <marker date="1493909537000" expanded="true" signature="2094:2144" placeholder="SELECT * FRO... " />
-            <marker date="1493909537000" expanded="true" signature="2722:2820" placeholder="INSERT INTO " />
-            <marker date="1493909537000" expanded="true" signature="3175:3224" placeholder="SELECT * FRO... " />
-            <marker date="1493909537000" expanded="true" signature="3663:3712" placeholder="SELECT * FRO... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/reflection/reflection.info">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_methods.inc">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-          <folding />
+          <caret line="104" column="31" selection-start-line="104" selection-start-column="31" selection-end-line="104" selection-end-column="31" />
+          <folding>
+            <marker date="1494846652000" expanded="true" signature="481:498" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="748:890" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="765:873" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="1771:3046" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="1788:1942" placeholder="..." />
+            <marker date="1494846652000" expanded="false" signature="1880:1897" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="1959:2081" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2098:2212" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2229:2345" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2362:2476" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2493:2620" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2637:2807" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2712:2789" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2824:2949" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="2966:3046" placeholder="..." />
+            <marker date="1494846652000" expanded="true" signature="3036:3046" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/reflection/reflection.module">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_general_information.inc">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-40.260868">
-          <caret line="120" column="1" selection-start-line="120" selection-start-column="1" selection-end-line="120" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
           <folding>
-            <element signature="e#6#91#0#PHP" expanded="true" />
-            <marker date="1493909557000" expanded="true" signature="2577:2666" placeholder="INSERT INTO " />
-            <marker date="1493909557000" expanded="true" signature="3034:3078" placeholder="SELECT * FRO... " />
-            <marker date="1493909557000" expanded="true" signature="3509:3553" placeholder="SELECT * FRO... " />
+            <marker date="1493883505000" expanded="true" signature="431:609" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="451:509" placeholder="{...}" />
+            <marker date="1493883505000" expanded="true" signature="537:593" placeholder="{...}" />
+            <marker date="1493883505000" expanded="true" signature="631:648" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="731:1938" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="775:1923" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="796:998" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1019:1146" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1167:1334" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1355:1464" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1485:1593" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1614:1740" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1761:1902" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/protocol_template/helperfunctions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-19.565218">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="49" column="1" selection-start-line="28" selection-start-column="0" selection-end-line="49" selection-end-column="1" />
           <folding>
-            <marker date="1493885289000" expanded="true" signature="336:517" placeholder="SELECT ur.ri... " />
-            <marker date="1493885289000" expanded="true" signature="978:1057" placeholder="SELECT * FRO... " />
-            <marker date="1493885289000" expanded="true" signature="1594:1676" placeholder="SELECT * FRO... " />
+            <marker date="1493912741000" expanded="true" signature="336:517" placeholder="SELECT ur.ri... " />
+            <marker date="1493912741000" expanded="true" signature="1063:1244" placeholder="SELECT ur.ri... " />
+            <marker date="1493912741000" expanded="true" signature="1705:1784" placeholder="SELECT * FRO... " />
+            <marker date="1493912741000" expanded="true" signature="2321:2403" placeholder="SELECT * FRO... " />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistiken/statistiken.info">
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_show_protocol.inc">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/statistiken/statistiken.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-210.0">
-          <caret line="322" column="1" selection-start-line="322" selection-start-column="1" selection-end-line="322" selection-end-column="1" />
+          <caret line="697" column="1" selection-start-line="681" selection-start-column="0" selection-end-line="697" selection-end-column="1" />
           <folding>
-            <element signature="e#6#88#0#PHP" expanded="true" />
-            <marker date="1493909907000" expanded="true" signature="1726:1792" placeholder="SELECT * FRO... " />
-            <marker date="1493909907000" expanded="true" signature="3253:3356" placeholder="SELECT * FRO... " />
-            <marker date="1493909907000" expanded="true" signature="4814:4883" placeholder="SELECT * FRO... " />
-            <marker date="1493909907000" expanded="true" signature="7971:8003" placeholder="SELECT * FRO... " />
-            <marker date="1493909907000" expanded="true" signature="10915:11096" placeholder="SELECT ur.ri... " />
+            <marker date="1494837048000" expanded="true" signature="909:954" placeholder="SELECT * FRO... " />
+            <marker date="1494837048000" expanded="true" signature="2663:2730" placeholder="SELECT * FRO... " />
+            <marker date="1494837048000" expanded="true" signature="5288:5387" placeholder="SELECT * FRO... " />
+            <marker date="1494837048000" expanded="true" signature="5866:5966" placeholder="SELECT * FRO... " />
+            <marker date="1494837048000" expanded="false" signature="6547:6564" placeholder="..." />
+            <marker date="1494837048000" expanded="false" signature="6945:6962" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="8061:8078" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="9931:10317" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="9951:10157" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="9975:10041" placeholder="{...}" />
+            <marker date="1494837048000" expanded="true" signature="10073:10137" placeholder="{...}" />
+            <marker date="1494837048000" expanded="true" signature="10176:10317" placeholder="..." />
+            <marker date="1494837048000" expanded="false" signature="10218:10235" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="10752:11909" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="10796:11894" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="10817:10921" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="10942:11069" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="11090:11264" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="11285:11394" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="11415:11523" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="11544:11698" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="11719:11873" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="12437:12755" placeholder="..." />
+            <marker date="1494837048000" expanded="false" signature="12471:12488" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="12547:12755" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="12564:12755" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="12931:13035" placeholder="..." />
+            <marker date="1494837048000" expanded="false" signature="12968:12985" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="13427:13774" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14228:15112" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14268:15101" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14285:14377" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14394:14519" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14536:14663" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14680:14804" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14821:14944" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="14961:15084" placeholder="..." />
+            <marker date="1494837048000" expanded="false" signature="15701:15718" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="16656:17935" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="16673:16786" placeholder="..." />
+            <marker date="1494837048000" expanded="false" signature="16714:16731" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="16803:16935" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="16952:17076" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="17093:17219" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="17236:17360" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="17377:17514" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="17531:17687" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="17704:17839" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="17856:17935" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="17926:17935" placeholder="..." />
+            <marker date="1494837048000" expanded="true" signature="19129:19172" placeholder="DELETE FROM " />
+            <marker date="1494837048000" expanded="true" signature="19306:19357" placeholder="DELETE FROM " />
+            <marker date="1494837048000" expanded="true" signature="19717:19783" placeholder="SELECT * FRO... " />
+            <marker date="1494837048000" expanded="true" signature="23188:23241" placeholder="SELECT * FRO... " />
+            <marker date="1494837048000" expanded="true" signature="23669:23768" placeholder="SELECT * FRO... " />
+            <marker date="1494837048000" expanded="true" signature="24032:24077" placeholder="SELECT * FRO... " />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/statistiken/statistiken_diagram.inc">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_create_pdf.inc">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-22.826086">
-          <caret line="40" column="27" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
+        <state vertical-scroll-proportion="-38.52174">
+          <caret line="564" column="61" selection-start-line="564" selection-start-column="61" selection-end-line="564" selection-end-column="61" />
           <folding>
-            <marker date="1493909923000" expanded="true" signature="653:1765" placeholder="..." />
-            <marker date="1493909923000" expanded="true" signature="667:784" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="804:926" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="946:984" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="1002:1108" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="1129:1187" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="1206:1692" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="1707:1753" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="1798:8422" placeholder="..." />
-            <marker date="1493909923000" expanded="true" signature="2382:2412" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="3115:8120" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="3539:3850" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="3760:3835" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="3915:4181" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="4246:4311" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="4611:4938" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="5697:5768" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="5804:5888" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="6004:6501" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="6225:6486" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="6557:6940" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="6778:6921" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="6985:7047" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="7083:7158" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="7520:8052" placeholder="{...}" />
-            <marker date="1493909923000" expanded="true" signature="7741:8033" placeholder="{...}" />
+            <marker date="1494848327000" expanded="true" signature="1724:1769" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="1938:1988" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="4007:4074" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="5609:5626" placeholder="..." />
+            <marker date="1494848327000" expanded="true" signature="6789:6806" placeholder="..." />
+            <marker date="1494848327000" expanded="true" signature="7597:7663" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="10378:10451" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="10867:10941" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="13392:13425" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="13645:13685" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="14924:14964" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="15839:15916" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="16892:16932" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="17317:17378" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="18025:18075" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="18326:18375" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="19440:19536" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="19807:19860" placeholder="SELECT * FRO... " />
+            <marker date="1494848327000" expanded="true" signature="21620:21801" placeholder="SELECT ur.ri... " />
+            <marker date="1494848327000" expanded="true" signature="22188:22233" placeholder="SELECT * FRO... " />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment.module">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-266.73914">
-          <caret line="414" column="0" selection-start-line="414" selection-start-column="0" selection-end-line="414" selection-end-column="0" />
+        <state vertical-scroll-proportion="-19.391304">
+          <caret line="593" column="69" selection-start-line="593" selection-start-column="9" selection-end-line="593" selection-end-column="69" />
           <folding>
-            <marker date="1493909961000" expanded="true" signature="4828:4898" placeholder="SELECT * FRO... " />
-            <marker date="1493909961000" expanded="true" signature="6697:6737" placeholder="SELECT * FRO... " />
-            <marker date="1493909961000" expanded="true" signature="6970:7010" placeholder="SELECT * FRO... " />
-            <marker date="1493909961000" expanded="true" signature="8823:9001" placeholder="INSERT INTO " />
-            <marker date="1493909961000" expanded="true" signature="9110:9166" placeholder="SELECT task_... " />
-            <marker date="1493909961000" expanded="true" signature="13843:14024" placeholder="SELECT ur.ri... " />
+            <marker date="1494836704000" expanded="true" signature="1508:1585" placeholder="SELECT * FRO... " />
+            <marker date="1494836704000" expanded="true" signature="3151:3343" placeholder="..." />
+            <marker date="1494836704000" expanded="true" signature="3429:3479" placeholder="SELECT * FRO... " />
+            <marker date="1494836704000" expanded="true" signature="4977:5119" placeholder="..." />
+            <marker date="1494836704000" expanded="true" signature="6987:7040" placeholder="SELECT * FRO... " />
+            <marker date="1494836704000" expanded="true" signature="25055:25236" placeholder="SELECT ur.ri... " />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment_appointment.inc">
+    <entry file="file://$PROJECT_DIR$/method_overview/method_overview.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="-30.173914">
+          <caret line="496" column="5" selection-start-line="486" selection-start-column="4" selection-end-line="496" selection-end-column="5" />
           <folding>
-            <marker date="1493640256000" expanded="true" signature="2502:2633" placeholder="INSERT INTO " />
-            <marker date="1493640256000" expanded="true" signature="2738:2815" placeholder="SELECT appoi... " />
+            <marker date="1493909354000" expanded="true" signature="5740:5801" placeholder="SELECT * FRO... " />
+            <marker date="1493909354000" expanded="true" signature="6468:6767" placeholder="..." />
+            <marker date="1493909354000" expanded="true" signature="8961:9027" placeholder="SELECT * FRO... " />
+            <marker date="1493909354000" expanded="true" signature="10693:10785" placeholder="SELECT * FRO... " />
+            <marker date="1493909354000" expanded="true" signature="11020:11087" placeholder="SELECT title... " />
+            <marker date="1493909354000" expanded="true" signature="11539:11720" placeholder="SELECT ur.ri... " />
+            <marker date="1493909354000" expanded="true" signature="12402:12461" placeholder="DELETE FROM " />
+            <marker date="1493909354000" expanded="true" signature="12591:12655" placeholder="DELETE FROM " />
+            <marker date="1493909354000" expanded="true" signature="15220:15311" placeholder="INSERT INTO " />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/task_assignment/task_assignment.info">
+    <entry file="file://$PROJECT_DIR$/archive/archive.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder.info">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-213.91304">
-          <caret line="333" column="0" selection-start-line="333" selection-start-column="0" selection-end-line="333" selection-end-column="0" />
+        <state vertical-scroll-proportion="-7.38">
+          <caret line="338" column="5" selection-start-line="324" selection-start-column="4" selection-end-line="338" selection-end-column="5" />
           <folding>
-            <marker date="1493910006000" expanded="true" signature="2933:3020" placeholder="SELECT * FRO... " />
-            <marker date="1493910006000" expanded="true" signature="4539:4626" placeholder="SELECT * FRO... " />
-            <marker date="1493910006000" expanded="true" signature="7001:7069" placeholder="SELECT * FRO... " />
-            <marker date="1493910006000" expanded="true" signature="7920:7984" placeholder="SELECT * FRO... " />
-            <marker date="1493910006000" expanded="true" signature="8753:8825" placeholder="SELECT * FRO... " />
-            <marker date="1493910006000" expanded="true" signature="11209:11390" placeholder="SELECT ur.ri... " />
+            <marker date="1495032329000" expanded="true" signature="1230:1250" placeholder="SELECT * FRO... " />
+            <marker date="1495032329000" expanded="true" signature="3109:3153" placeholder="SELECT * FRO... " />
+            <marker date="1495032329000" expanded="true" signature="3458:3533" placeholder="SELECT * FRO... " />
+            <marker date="1495032329000" expanded="true" signature="4968:5160" placeholder="..." />
+            <marker date="1495032329000" expanded="true" signature="9766:9806" placeholder="SELECT * FRO... " />
+            <marker date="1495032329000" expanded="true" signature="10155:10247" placeholder="SELECT * FRO... " />
+            <marker date="1495032329000" expanded="true" signature="29877:29930" placeholder="SELECT * FRO... " />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/task_reminder/task_reminder_diagram.inc">
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_dynamic_graphic.inc">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.31380752">
+          <caret line="118" column="33" selection-start-line="118" selection-start-column="15" selection-end-line="118" selection-end-column="33" />
           <folding>
-            <marker date="1493656250000" expanded="true" signature="441:1557" placeholder="..." />
-            <marker date="1493656250000" expanded="true" signature="457:574" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="594:716" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="736:774" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="792:898" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="920:979" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="998:1484" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="1499:1545" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="1604:8833" placeholder="..." />
-            <marker date="1493656250000" expanded="true" signature="2262:2300" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="3071:8492" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="3531:3890" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="3772:3863" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="3963:4249" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="4322:4395" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="4727:5078" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="5901:5980" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="6020:6112" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="6240:6781" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="6477:6758" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="6841:7224" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="7062:7205" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="7269:7331" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="7367:7442" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="7836:8408" placeholder="{...}" />
-            <marker date="1493656250000" expanded="true" signature="8073:8385" placeholder="{...}" />
+            <marker date="1494174588000" expanded="true" signature="425:488" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="442:475" placeholder="{...}" />
+            <marker date="1494174588000" expanded="true" signature="530:4911" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="543:758" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="607:629" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="771:989" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="836:861" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="1002:1221" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="1068:1093" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="1234:1462" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="1300:1325" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="1475:1705" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="1542:1567" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="1718:2061" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="1788:1813" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="2074:2413" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="2142:2167" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="2426:2768" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="2496:2521" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="2781:3126" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="2849:2874" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="3139:3475" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="3205:3230" placeholder="..." />
+            <marker date="1494174588000" expanded="true" signature="3488:3711" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="3554:3576" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="3777:3802" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="3877:3902" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="3977:4002" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4077:4102" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4177:4202" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4277:4302" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4370:4394" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4462:4486" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4555:4579" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4647:4670" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4739:4762" placeholder="..." />
+            <marker date="1494174588000" expanded="false" signature="4830:4853" placeholder="..." />
           </folding>
         </state>
       </provider>
