@@ -664,9 +664,14 @@ function save_data($form, &$form_state)
 
     drupal_set_message("Dokumentation zur Methode wurde angelegt");
 
+    $protocol_id = arg(1);
+
+    $participants = protocol_template_get_participants_from_logged_in_user_group();
+    $current_open_id = protocol_template_get_current_open_group_protocol($participants);
+
     //Sollte die ID des aktuell offenen Protokolls vorliegen, wird dessen Raum und Phase nach Beendigung des Protokolls
     //aktualisiert
-    if ($protocol_id != 0) {
+    if ($protocol_id != $current_open_id) {
         $sql = "UPDATE {protocol} SET raum_end = '" . $end_room . "', phase_end = '" . $end_phase . "' WHERE protocol_id = " . $protocol_id;
         db_query($sql);
         drupal_goto('/protokollanzeige/' . $protocol_id);
@@ -674,7 +679,6 @@ function save_data($form, &$form_state)
     } else {
         drupal_goto('/protokoll_methoden_uebersicht');
     }
-
 }
 
 /*

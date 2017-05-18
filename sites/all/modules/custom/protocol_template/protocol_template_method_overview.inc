@@ -151,7 +151,9 @@ function protocol_template_methods_back_to_open_tasks()
  */
 function protocol_template_methods_new_method_execution()
 {
-    drupal_goto('/protokoll_neue_Methodendurchführung/0');
+    $participants = protocol_template_get_participants_from_logged_in_user_group();
+    $protocol_id = protocol_template_get_current_open_group_protocol($participants);
+    drupal_goto('/protokoll_neue_Methodendurchführung/'.$protocol_id);
 }
 
 /*
