@@ -515,8 +515,16 @@ function protocol_overview_generate_graphic($methods)
 
     //Der Raum und die Phase nach der Methodendurchführung wird aus dem Methoden-Element ausgelesen
     foreach ($methods as $method) {
-        array_push($method_room_phase, $method->raum_end . " " . $method->phase_end);
+
+    $validation = $method->raum_end . " " . $method->phase_end;
+
+    if (!strcmp($method->room, "Vorbereitung") || !strcmp($method->room, "Projektmanagement")) {
+
+    } else {
+        array_push($method_room_phase, $validation);
     }
+
+}
 
     //Die Daten für die Grafik werden ermittelt
     $graphic_data = protocol_overview_get_data_for_dynamic_graphic($method_room_phase);
