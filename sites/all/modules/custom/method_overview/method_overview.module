@@ -193,10 +193,10 @@ function method_overview_show_methods()
     global $base_url;
 
     //Alle relevanten methoden werden geladen
-    $methods = method_overview_get_relevant_methods_for_overview();
+    $methods = method_overview_get_relevant_methods_for_overview(true);
 
     //dynamische Grafik wird erstellt
-    $method_string = method_overview_build_dynamic_graphic(method_overview_get_relevant_methods_for_overview(), 40);
+    $method_string = method_overview_build_dynamic_graphic(method_overview_get_relevant_methods_for_overview(false), 40);
 
     //Kopf der Tabelle wird erstellt
     $method_string .= "
@@ -313,16 +313,26 @@ function method_overview_get_all_images($id)
 /*
 * Diese Methode ermittelt alle Methoden, die von der Gruppe durchgeführt wurden.
  */
-function method_overview_get_relevant_methods_for_overview()
+function method_overview_get_relevant_methods_for_overview($allMethods)
 {
+
+    $methods_from_finished_protocols = array();
+
     //Teilnehmer der Gruppe werden ermittelt
     $participants = method_overview_get_participants_for_methods();
 
-    //Methoden der Teilnehmer werden ausgelesen
-    $sql = "SELECT * FROM {method_execution} WHERE uid in (" . $participants . ") ORDER BY creation_date";
+    $sql = "SELECT * FROM {method_execution} WHERE uid in (" . $participants . ") AND room != 'Vorbereitung' ORDER BY creation_date";
     $result = db_query($sql);
 
-    return $result;
+    foreach ($result as $item) {
+        $protocol = method_overview_get_protocol_element_by_id($item->protocol_id);
+
+        if ($protocol->finished) {
+            array_push($methods_from_finished_protocols, $item);
+        }
+    }
+
+    return $methods_from_finished_protocols;
 }
 
 
@@ -848,4 +858,23 @@ function method_overview_build_dynamic_graphic($method_elements, $y_wert)
     $d3_chart = d3_draw($chart);
 
     return $d3_chart;
+}
+
+/*
+ * Diese Funktion lädt ein Protokoll-Element anhand der Protokoll-ID aus der Datenbank. Die ID wird der Funktion
+ * als Parameter übergeben
+ */
+function method_overview_get_protocol_element_by_id($protocol_id)
+{
+    //In diese Variable wird das Protokoll-Element gespeichert
+    $protocol_string = "";
+
+    //Das betreffende Protokoll-Element wird aus der Datenbank geladen
+    $sql = "SELECT * FROM {protocol} WHERE protocol_id = " . $protocol_id;
+    $protocol_result = db_query($sql);
+
+    foreach ($protocol_result as $protocol) {
+        $protocol_string = $protocol;
+    }
+    return $protocol_string;
 }
