@@ -53,9 +53,6 @@ function protocol_template_create_new_protocol_form($form, &$form_submit)
             $date_value = $d->format($dateformat);
         }
 
-        print_r($user_name_array);
-
-
         $form['new_protocol'] = array(
             '#title' => "allgemeine Informationen",
             '#type' => 'fieldset',
