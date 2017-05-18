@@ -172,7 +172,7 @@ function protocol_template_save_changed_general_protocol($form, &$form_state)
         //... wird das Protokoll aktualisiert
         $sql = "UPDATE {protocol} SET end_date = '" . $end . "', start_date = '" . $start . "', participants = '$users', place = '$place', type = '$type' WHERE protocol_id = " . $protocol_id;
         db_query($sql);
-        drupal_goto('/show_protocol/' . $protocol_id);
+        drupal_goto('/protokollanzeige/' . $protocol_id);
 
         //Sollten Eingaben fehlen, wird eine entsprechende Fehlermeldung ausgegeben
     } else {
@@ -273,7 +273,7 @@ function protocol_template_save_changed_content_protocol($form, &$form_state)
     //Das Protokoll wird aktualisiert
     $sql = "UPDATE {protocol} SET preparation = '$preparation', problems = '$problems', conclusion = '$conclusion' WHERE protocol_id = " . $protocol_id;
     db_query($sql);
-    drupal_goto('/show_protocol/' . $protocol_id);
+    drupal_goto('/protokollanzeige/' . $protocol_id);
 }
 
 /*
@@ -583,5 +583,5 @@ function protocol_template_change_protocol_back_to_protocol_overview()
 {
 
     $protocol_id = arg(1);
-    drupal_goto('/show_protocol/' . $protocol_id);
+    drupal_goto('/protokollanzeige/' . $protocol_id);
 }
