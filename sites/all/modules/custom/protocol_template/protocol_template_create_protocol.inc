@@ -136,8 +136,6 @@ function protocol_template_create_new_protocol($form, &$form_state)
         }
 
         $users2 = implode(',', $new_array);
-        drupal_set_message($users2);
-
 
         //Die ID des aktuell angemeldeten Nutzers wird ermittelt
         global $user;

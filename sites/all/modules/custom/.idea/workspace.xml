@@ -11,6 +11,7 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/protocol_overview/mpdf60/tmp/_tempSVG6169959060f770ab1c2.93722509_0.svg" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/archive/archive.module" afterPath="$PROJECT_DIR$/archive/archive.module" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc" afterPath="$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc" />
     </list>
     <ignored path="custom.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -87,10 +88,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="protocol_overview_pdf_dynamic_graphic.inc" pinned="false" current-in-tab="true">
+      <file leaf-file-name="protocol_overview_pdf_dynamic_graphic.inc" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_dynamic_graphic.inc">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.31380752">
+            <state vertical-scroll-proportion="-13.043478">
               <caret line="118" column="33" selection-start-line="118" selection-start-column="15" selection-end-line="118" selection-end-column="33" />
               <folding>
                 <marker date="1494174588000" expanded="true" signature="425:488" placeholder="..." />
@@ -130,6 +131,42 @@
                 <marker date="1494174588000" expanded="false" signature="4647:4670" placeholder="..." />
                 <marker date="1494174588000" expanded="false" signature="4739:4762" placeholder="..." />
                 <marker date="1494174588000" expanded="false" signature="4830:4853" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="protocol_overview_pdf_general_information.inc" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_general_information.inc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.5652175">
+              <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+              <folding>
+                <marker date="1493883505000" expanded="true" signature="431:609" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="451:509" placeholder="{...}" />
+                <marker date="1493883505000" expanded="true" signature="537:593" placeholder="{...}" />
+                <marker date="1493883505000" expanded="true" signature="631:648" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="731:1938" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="775:1923" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="796:998" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="1019:1146" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="1167:1334" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="1355:1464" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="1485:1593" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="1614:1740" placeholder="..." />
+                <marker date="1493883505000" expanded="true" signature="1761:1902" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="protocol_template_create_protocol.inc" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.8493003">
+              <caret line="137" column="43" selection-start-line="137" selection-start-column="43" selection-end-line="137" selection-end-column="43" />
+              <folding>
+                <marker date="1495091345000" expanded="true" signature="5012:5228" placeholder="INSERT INTO " />
               </folding>
             </state>
           </provider>
@@ -195,12 +232,12 @@
         <option value="$PROJECT_DIR$/task_assignment/task_assignment_appointment.inc" />
         <option value="$PROJECT_DIR$/task_reminder/task_reminder.module" />
         <option value="$PROJECT_DIR$/protocol_template/protocol_template_change_protocol.inc" />
-        <option value="$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc" />
         <option value="$PROJECT_DIR$/protocol_template/protocol_template_general_information.inc" />
         <option value="$PROJECT_DIR$/protocol_template/protocol_template_descriptions.inc" />
         <option value="$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_methods.inc" />
         <option value="$PROJECT_DIR$/protocol_overview/protocol_overview_create_pdf.inc" />
         <option value="$PROJECT_DIR$/archive/archive.module" />
+        <option value="$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc" />
       </list>
     </option>
   </component>
@@ -743,13 +780,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-31.304348">
-          <caret line="63" column="44" selection-start-line="61" selection-start-column="12" selection-end-line="63" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_general_information.inc">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-10.8">
@@ -827,28 +857,6 @@
             <marker date="1494846652000" expanded="true" signature="2824:2949" placeholder="..." />
             <marker date="1494846652000" expanded="true" signature="2966:3046" placeholder="..." />
             <marker date="1494846652000" expanded="true" signature="3036:3046" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_general_information.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
-          <folding>
-            <marker date="1493883505000" expanded="true" signature="431:609" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="451:509" placeholder="{...}" />
-            <marker date="1493883505000" expanded="true" signature="537:593" placeholder="{...}" />
-            <marker date="1493883505000" expanded="true" signature="631:648" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="731:1938" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="775:1923" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="796:998" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="1019:1146" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="1167:1334" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="1355:1464" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="1485:1593" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="1614:1740" placeholder="..." />
-            <marker date="1493883505000" expanded="true" signature="1761:1902" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1011,7 +1019,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_dynamic_graphic.inc">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31380752">
+        <state vertical-scroll-proportion="-13.043478">
           <caret line="118" column="33" selection-start-line="118" selection-start-column="15" selection-end-line="118" selection-end-column="33" />
           <folding>
             <marker date="1494174588000" expanded="true" signature="425:488" placeholder="..." />
@@ -1051,6 +1059,38 @@
             <marker date="1494174588000" expanded="false" signature="4647:4670" placeholder="..." />
             <marker date="1494174588000" expanded="false" signature="4739:4762" placeholder="..." />
             <marker date="1494174588000" expanded="false" signature="4830:4853" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_overview/protocol_overview_pdf_general_information.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.5652175">
+          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+          <folding>
+            <marker date="1493883505000" expanded="true" signature="431:609" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="451:509" placeholder="{...}" />
+            <marker date="1493883505000" expanded="true" signature="537:593" placeholder="{...}" />
+            <marker date="1493883505000" expanded="true" signature="631:648" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="731:1938" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="775:1923" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="796:998" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1019:1146" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1167:1334" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1355:1464" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1485:1593" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1614:1740" placeholder="..." />
+            <marker date="1493883505000" expanded="true" signature="1761:1902" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protocol_template/protocol_template_create_protocol.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8493003">
+          <caret line="137" column="43" selection-start-line="137" selection-start-column="43" selection-end-line="137" selection-end-column="43" />
+          <folding>
+            <marker date="1495091345000" expanded="true" signature="5012:5228" placeholder="INSERT INTO " />
           </folding>
         </state>
       </provider>
