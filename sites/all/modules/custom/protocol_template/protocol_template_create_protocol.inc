@@ -132,7 +132,7 @@ function protocol_template_create_new_protocol($form, &$form_state)
             }
         }
 
-        $users2 = implode(',', $new_array);
+        $users = implode(',', $new_array);
 
         //Die ID des aktuell angemeldeten Nutzers wird ermittelt
         global $user;
