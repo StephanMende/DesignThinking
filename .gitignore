@@ -1,7 +1,6 @@
-#other sites #
-delphi/*
-kochbuch/*
-newsletter/*
-newsletter2/*
-newsletter3/*
-newsletter_bak/*
+# Ignore configuration files that may contain sensitive information.
+sites/*/settings*.php
+
+# Ignore paths that contain user-generated content.
+sites/*/files
+sites/*/private

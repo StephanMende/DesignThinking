@@ -195,11 +195,6 @@ table tr th a:hover {
 table tbody tr th {
   vertical-align: top;
 }
-
-textarea {
-  resize: none;
-}
-
 tr td,
 tr th {
   padding: 4px 9px;
@@ -301,11 +296,6 @@ ul.tips {
   float: left; /* LTR */
   padding: 15px 15px 15px 10px; /* LTR */
 }
-
-  #logo img {
-    width: 100px;
-  }
-
 #name-and-slogan {
   float: left; /* LTR */
   padding-top: 34px;
@@ -477,8 +467,8 @@ h1#site-name {
 #main-menu-links li {
   float: left; /* LTR */
   list-style: none;
-  padding: 2px 1px 0px 1px;
-  margin: 2px 1px 0px 1px;
+  padding: 0 1px;
+  margin: 0 1px;
 }
 #main-menu-links a {
   color: #333;
@@ -490,8 +480,15 @@ h1#site-name {
   padding: 0 0.8em;
   text-decoration: none;
   text-shadow: 0 1px #eee;
+  -khtml-border-radius-topleft: 8px;
+  -khtml-border-radius-topright: 8px;
+  -moz-border-radius-topleft: 8px;
+  -moz-border-radius-topright: 8px;
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
-
 #main-menu-links a:hover,
 #main-menu-links a:focus {
   background: #f6f6f2;
@@ -1641,21 +1638,4 @@ div.admin-panel .description {
 }
 #footer-wrapper .poll .bar .foreground {
   background-color: #ddd;
-}
-
-#edit-field-dateiupload-und-0-upload-button--3 {
-	*background: transparent;
-	*border: none !important;
-	*font-size: 0;
-	*visibility: hidden;
-	display: none;
-}
-
-#edit-field-dateiupload-und-0-upload-button {
-	*background: transparent;
-	*border: none !important;
-	*font-size: 0;
-	*visibility: hidden;
-	display: none;
-	border: 1px solid red;
 }

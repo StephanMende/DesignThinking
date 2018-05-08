@@ -241,8 +241,6 @@
         <?php print render($page['footer']); ?>
       </div> <!-- /#footer -->
     <?php endif; ?>
-	
-	
 
   </div></div> <!-- /.section, /#footer-wrapper -->
 

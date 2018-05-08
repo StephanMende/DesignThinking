@@ -40,7 +40,9 @@ function drupalchatMain() {
   	jQuery.post(Drupal.settings.drupalchat.sendUrl, {
   	  drupalchat_message_id: drupalchat.send_current_message_id,
      	  drupalchat_uid2: drupalchat.send_current_uid2, 
-     	  drupalchat_message: drupalchat.send_current_message 
+     	  drupalchat_message: drupalchat.send_current_message,
+        form_id: Drupal.settings.drupalchat.formId,
+        form_token: Drupal.settings.drupalchat.formToken
   	});
     };
 

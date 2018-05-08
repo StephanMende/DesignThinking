@@ -12,9 +12,9 @@ files[] = drupalchat.module
 files[] = drupalchat.tpl.php
 configure = admin/config/drupalchat/configuration
 
-; Information added by Drupal.org packaging script on 2016-03-04
-version = "7.x-1.8"
+; Information added by Drupal.org packaging script on 2017-07-12
+version = "7.x-2.8"
 core = "7.x"
 project = "drupalchat"
-datestamp = "1457068742"
+datestamp = "1499892246"
 
