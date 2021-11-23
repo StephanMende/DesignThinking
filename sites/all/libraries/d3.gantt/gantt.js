@@ -164,7 +164,7 @@
             .attr("dy", "0em")
             .attr("x", 250)
             .attr("y", 200)
-            .html("Recherchieren")
+            .html("definieren")
             .attr("font-family", "sans-serif")
             .attr("font-size", "22px")
             .attr("fill", "white");
@@ -173,7 +173,7 @@
             .attr("dy", "1em")
             .attr("x", 65)
             .attr("y", 193)
-            .html("definieren")
+            .html("recherchieren")
             .attr("font-family", "sans-serif")
             .attr("font-size", "22px")
             .attr("fill", "white");

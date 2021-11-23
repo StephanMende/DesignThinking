@@ -67,7 +67,7 @@ function protocol_template_create_new_protocol_form($form, &$form_submit)
             '#required' => TRUE,
             '#title' => t('Teilnehmer des Treffens'),
         );
-	
+	/**
         $form['new_protocol']['start'] = array(
             '#type' => 'date_popup',
             '#date_timezone' => date_default_timezone(),
@@ -77,10 +77,15 @@ function protocol_template_create_new_protocol_form($form, &$form_submit)
             '#required' => TRUE,
             '#default_value' => $date_value,
         );
-	
+	*/
+	$form['new_protocol']['start'] = array(
+	    '#type' => 'date_popup',
+	    '#title' => $label,
+	);
 
         $form['new_protocol']['place'] = array(
             '#type' => 'textfield',
+            '#require' => TRUE,
             '#title' => t('Ort des Treffens'),
             '#required' => TRUE,
 
@@ -143,7 +148,7 @@ function protocol_template_create_new_protocol($form, &$form_state)
         $type = $form_state['values']['plugin_select'];
         $date = date("Y-m-d H:i:s");
         $start = $form_state['values']['start'];
-	//dsm($start);
+
 
 
         //Protokoll wird angelegt

@@ -103,7 +103,8 @@ function protocol_overview_pdf_create_dynamic_graphic($circles, $lines)
             ' . $circles . $lines . '
 
     </svg>';
-
+    dsm($circles);
+    dsm($$lines);
     //Die gebaute HTML-Grafik wird am Ende zurückgegeben
     return $graphic;
 }

@@ -22,7 +22,12 @@
 
 
                 //Get the svg document inside the object tag
-                var svgDoc = a.contentDocument;
+                console.log(a);
+		if(a == null) {
+			return;
+		}
+		var svgDoc = a.contentDocument;
+		
 
 
                 //Get one of the SVG items by ID

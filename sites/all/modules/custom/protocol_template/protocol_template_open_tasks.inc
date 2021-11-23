@@ -146,7 +146,7 @@ function protocol_template_get_table_task_last_protocol()
         if ($last_protocol_task->done) {
             $done = "<font color=\"green\">erledigt</font><td></td>";
         } else {
-            $done = "<font color=\"red\">offen</font></td><td><a href='/" . $base_url . "/delete_task/$task_id/pXs8hYVUqe'/>erledigt</a></td></tr></tr>";
+            $done = "<font color=\"red\">offen</font></td><td><a href='" . $base_url . "/delete_task/$task_id/pXs8hYVUqe'/>erledigt</a></td></tr></tr>";
         }
 
         //Jede Aufgabe wird in eine neue Zeile der Tabelle geschrieben
@@ -214,7 +214,7 @@ function protocol_template_get_table_all_open_tasks()
             if ($open_task->done) {
                 $done = "<font color=\"green\">erledigt</font>";
             } else {
-                $done = "<font color=\"red\">offen</font></td><td><a href='/" . $base_url . "/delete_task/$task_id/pXs8hYVUqe'>erledigt</a></td></tr></tr>";
+                $done = "<font color=\"red\">offen</font></td><td><a href='" . $base_url . "/delete_task/$task_id/pXs8hYVUqe'>erledigt</a></td></tr></tr>";
             }
 
             //Der Aufgabe wird in eine neue Zeile der Tabelle geschrieben

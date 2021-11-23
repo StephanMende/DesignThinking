@@ -504,7 +504,7 @@ function protocol_overview_create_dynamic_graphic($protocol_elements, $y_value)
         }
     }
 
-
+    dsm($dynamic_points);
     $chart = array(
         'id' => 'visualization',
         'type' => 'gantt',
