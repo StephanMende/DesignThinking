@@ -2,7 +2,7 @@
 
 /**
  * @file
- * TBA
+ * Creates a string that hints about available help.
  */
 
 /**
@@ -37,9 +37,19 @@ function advanced_help_hint_docs($project, $doclink = NULL, $repo = FALSE) {
     if (!empty($output)) {
       $output = $output . ' ';
     }
+    if (!$repo) {
+      $output .=
+        t("No additional help available for “!project”.",
+          array(
+            '!project' => $project,
+          )
+        );
+      // Nothing more to do.
+      return $output;
+    }
     if (!isset($topics[$project])) {
       $output .=
-        t("Expected to find some help for project &#8220;!project&#8220; in the project's help-directory, but could not locate any.",
+        t("Expected to find some help for project “!project” in the project's help-directory, but could not locate any.",
           array(
             '!project' => $project,
           )
@@ -52,9 +62,9 @@ function advanced_help_hint_docs($project, $doclink = NULL, $repo = FALSE) {
     $ext = pathinfo($file, PATHINFO_EXTENSION);
     if (empty($ext))  {
       $output .=
-        t("Additional help is available in provided by !help.",
+        t('Additional help is provided by the !help.',
            array(
-            '!help' =>  l('advanced help framework',
+            '!help' => l(t('advanced help framework'),
               '/admin/help/ah/' . $project,
               array('attributes' => array('title' => t('Link to advanced help.')))),
          ));
@@ -77,7 +87,8 @@ function advanced_help_hint_docs($project, $doclink = NULL, $repo = FALSE) {
     $output .=
       t('If you install the !advhelp module, additional help may be available.',
         array(
-          '!advhelp' => l(t('Advanced help'), 'https://www.drupal.org/project/advanced_help', array('attributes' => array('title' => t('Link to project.'))))
+          '!advhelp' => l(t('Advanced help'), 'https://www.drupal.org/project/advanced_help',
+          array('attributes' => array('title' => t('Link to the Advanced Help project.'))))
         )
       );
   }

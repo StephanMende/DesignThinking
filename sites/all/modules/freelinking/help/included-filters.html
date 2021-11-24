@@ -1,7 +1,6 @@
-<p>A number of ready-to-use filters are included in the
-<strong>Freelinking</strong> framework (e.g. Nodetitle. Nid, User,
+<p>A number of ready-to-use filters are included in the <strong>Freelinking</strong> framework (e.g. Nodetitle. Nid, User,
 Google search, Drupal search, Drupal projects, Wikipedia, etc.).
-This help file describes all the included filters.</p>
+This help file describes the purpose of the included filters and how to use them.</p>
 
 <p>The <strong>Freelinking</strong> link format is:</p>
 
@@ -10,22 +9,22 @@ This help file describes all the included filters.</p>
 </pre>
 
 <p>Everything <em>except</em> the target is optional. If you do not
-specity a indicator the default one configured at Freelinking Settings
+specify an indicator the default one configured at Freelinking Settings
 page (<em>Administration » Configuration » Content authoring »
 Freelinking settings</em>) will be used.</p>
 
-<p>The indicator is used to select the what filter to use.</p>
+<p>The indicator is used to select which filter to use.</p>
 
 <p>There are three built-in filters (Nowiki, Showtext, Redact) These
-will not generate links.  In addition to these, the project includes a
-small set of plugin filters.  These are in the
-subdirectory <code>plugins</code> of the project.
+filters will not generate links.  In addition to these, the project includes a
+small set of plugin filters which are placed in the
+<code>plugins</code> subdirectory of the project.
 
-<p>Below is an overview of all the filters that is included in the project:</p>
+<p>Below is an overview of all the filters which are included in the project:</p>
 
 <h4>Nowiki (built-in)</h4>
 
-<p>Will strip the nowiki-indicator and show the rest, including the
+<p>This filter will strip the nowiki-indicator and will preserve the rest of the text, including the
 double brackets, verbatim.</p>
 
 <p>Example:<br/>
@@ -35,7 +34,7 @@ becomes:<br/>
 
 <h4>Showtext (built-in)</h4>
 
-<p>similar to Nowiki, but will also strip double brackets before
+<p>This filter is similar to the Nowiki filter, however, will also strip double brackets before
 showing the text.</p>
 
 <p>Example:<br/>
@@ -45,8 +44,8 @@ becomes:<br/>
 
 <h4>Redact (built-in)</h4>
 
-<p>The Redact filter works like Showtext for logged in users, but will
-redact the content of marked up content before showing it to the
+<p>This filter works like the Showtext filter for logged in users, however, will
+redact/conceal marked up content from the page before showing the text to the
 anonymous user.</p>
 
 <p>Example:<br/>
@@ -63,18 +62,17 @@ for anonymous users.</p>
 <p>Example:<br/>
 <code>[[nodetitle:First page]]</code><br/>
 becomes:<br/>
-<code>&lt;a class="freelink freelink-nodetitle freelink-internal" title="Click to view a local node." href="/node/1">test&lt;/a&gt;</code></p>
+<code>&lt;a class="freelink freelink-nodetitle freelink-internal" title="Click to view a local node." href="/node/1">First page&lt;/a&gt;</code></p>
 
-<p>Note: If you have two nodes with the same title, there is no way to
-control what node is linked to.  If you change the title of the page
-linked to, the freelink will no longer work.</p>
+<p>Note: If you have two nodes with the same title, it will not be possible to know which node the link goes to.
+If you change the title of the page linked to, the freelink will no longer work.</p>
 
 <h4>Node nid (<code>freelinking_nid.inc</code>)</h4>
 
 <p>Example:<br/>
-<code>[[nid:2]]</code><br/>
+<code>[[nid:1]]</code><br/>
 becomes:<br/>
-<code>&lt;a class="freelink freelink-nid freelink-internal" title="Click to view a local node." href="/node/2">First page&lt;/a&gt;</code></p>
+<code>&lt;a class="freelink freelink-nid freelink-internal" title="Click to view a local node." href="/node/1">First page&lt;/a&gt;</code></p>
 
 <h4>User profile - <code>freelinking_user.inc</code></h4>
 
@@ -85,7 +83,7 @@ becomes:<br/>
 
 <p>Example:<br/>
 <code>[[user:admin]]</code><br/>
-becomes:<br/
+becomes:<br/>
 <code>&lt;a class="freelink freelink-user freelink-internal" title="Click to view a user profile." href="/user/1">admin&lt;/a&gt;</code></p>
 
 <h4>Path - <code>freelinking_path.inc</code></h4>
@@ -100,7 +98,7 @@ becomes:<br/>
 <p>Example:<br/>
 <code>[[file:logo.png]]</code><br/>
 becomes:<br/>
-<code>&lt;a class="freelink freelink-file freelink-internal" title="Click to view a local file." href="http://<siteroot>/sites/default/files/logo.png">logo.png&lt;/a&gt;</code></p>
+<code>&lt;a class="freelink freelink-file freelink-internal" title="Click to view a local file." href="public://logo.png">logo.png&lt;/a&gt;</code></p>
 
 <h4>Search - <code>freelinking_search.inc</code></h4>
 
@@ -147,10 +145,8 @@ becomes:<br/>
 
 <h4>Wikipedia, etc. (<code>freelinking_wiki.inc</code>)</h4>
 
-<p>The indicators supported by this plugin
-are: <code>wikibooks</code>, <code>wikipedia</code>,
-<code>wikinews</code>, <code>wikiquote</code>, <code>wikisource</code>
-and <code>wiktionary</code>.</p>
+<p>The indicators supported by this plugin are: wikibooks, wikipedia,
+wikinews, wikiquote, wikisource and wiktionary.</p>
 
 
 <p>Example:<br/>

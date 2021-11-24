@@ -1,55 +1,49 @@
-This is a small API module that may be used by other modules to
+This is a small helper module that may be used by other modules to
 produce a string that may be inserted into a project's `hook_help` to
 hint about the documentation that exists.
 
 It has no administrative UI and will not do anything by itself.
-Install this module only if some other module tells you to.
 
 I created this module because I found that I used the same pattern
 inside `hook_help` on almost *every* Drupal module I maintain.
 Replicated patterns consumes memory, and are harder to maintain.
-Instead, to make use of this pattern, call the API function this
+Instead, to make use of this pattern, call the helper function this
 module provides.
 
 ## Recommended modules
 
-* [Advanced Help][1]:<br>
+* [Advanced Help][1]:  
   When this module is enabled, help files created with its framework
   will become available, or `README.md` or `README.txt` will be
   available in the sites's adminsitrative UI.
-* [Markdown filter][2]:<br>
+* [Markdown][2]:  
   The markdown filter will be used when rendering files named
   README.md.
 
 ## Installation
 
-This is an API for other modules.  It will not do anything by itself.
-Install this module only if some other module tells you to.
-
 1. Install as you would normally install a contributed drupal
    module. See: [Installing modules][3] for further information.
 
 2. Edit your own module's `hook_help` to make use of the result of
-   calling `advanced_help_hint_docs`.  For details, see the API
-   section below.
+   calling `advanced_help_hint_docs`.  For details, see the section
+   headed “Helper function” section below.
 
 ## Configuration
 
 This module has no administrative or other UI.  It will usually only
 be enabled if listed as a dependency by some other module.
 
-## API
+## Helper function
 
 If you want to make use of this module, first make it a dependency in
 your module's `.info`-file.  You do that with the following line:
 
     dependencies[] = advanced_help_hint
 
-The module provides this API function:
+The module provides this helper function:
 
 - advanced_help_hint_docs
-
-### advanced_help_hint_docs
 
 The function `advanced_help_hint_docs` generates a hint string that
 may point to online documentation, the project's `README.md` or
@@ -72,7 +66,7 @@ The major features of this function are:
 The hint generated is suitable for use in the project's `hook_help`.
 
 
-#### Parameters
+### Parameters
 
 **$project**: String.  The short name of your module or theme.
 
@@ -81,13 +75,13 @@ community documentation about your project on Drupal.org.
 
 **$repo**: Boolean. Set this TRUE if your project makes use of the
 [**Advanced help**][1] framework to have have online help, or includes
-a `README.md` or `README.txt` help file.
+a `README.md` or `README.txt` help file in the repo.
 
-#### Return value
+### Return value
 
 A string with the generated hint text.
 
-#### Example
+### Example
 
 Provided your module is named “mymodule”, assuming that online
 documentation exists on the following URL

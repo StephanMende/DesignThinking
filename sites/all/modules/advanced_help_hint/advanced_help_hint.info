@@ -1,10 +1,9 @@
-name = Advanced help hint
-description = API module to create a string that hints about available help.
+name = Advanced Help Hint
+description = Helper module to provide a function to create a string that hints about available help.
 core = 7.x
 
-; Information added by Drupal.org packaging script on 2015-05-25
-version = "7.x-1.2"
+; Information added by Drupal.org packaging script on 2019-07-24
+version = "7.x-1.3"
 core = "7.x"
 project = "advanced_help_hint"
-datestamp = "1432557422"
-
+datestamp = "1563976690"

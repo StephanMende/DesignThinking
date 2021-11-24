@@ -123,40 +123,22 @@ function _freelinking_nodetitle_prepare_link($target, $tip) {
     $output = array();
 
     // First time accessing this node. Process it.
-    $params['title'] = $target['dest'];
-    $linktypes = variable_get('freelinking_nodetitle_linkcontenttype', array());
+    // $contenttypes are allowed destination contenttypes.
+    $contenttypes = variable_get('freelinking_nodetitle_linkcontenttype', array());
 
-    // EntityFieldQuery does not support OR. We solve this by looping
-    // through linktypes, halting when we've found a usable node.
-    $all = $none = TRUE;
-    foreach ($linktypes as $linktype => $value) {
-      if ($value) {
-        $none = FALSE;
-      }
-      else {
-        $all = FALSE;
-      }
-    }
-
+    // We only link to nodes that are published.
+    $result = db_query("SELECT n.nid FROM {node} n WHERE n.title = :title AND n.status = 1", array(":title"=> $target['dest']));  
+    $all = $result->fetchAll();
     $found = FALSE;
-    if (!$none) {
-      $query = new EntityFieldQuery();
-      $query->entityCondition('entity_type', 'node')
-        ->propertyCondition('title', $target['dest'])
-        ->propertyCondition('status', 1); // published nodes
-      $result = $query->execute();
-      if (isset($result['node'])) {
-        foreach ($result['node'] as $item => $value) {
-          if (!empty($linktypes[$value->type])) {
-            $nodex = node_load($item);
-            if (node_access('view', $nodex)) {
-              $found = TRUE;
-              break;
-	    }
-	  }
-        }
-      }
+    foreach ($all as $item) {
+       $nodex = node_load($item->nid);
+       // Node must be allowed type and user must have view access.
+       if ($contenttypes[$nodex->type] && (node_access('view', $nodex))) {
+	 $found = TRUE;
+	 break;
+       }
     }
+
     if ($found && isset($nodex)) {
       $tooltip = $target['tooltip'] ? $target['tooltip'] : $tip;
       $output = array(

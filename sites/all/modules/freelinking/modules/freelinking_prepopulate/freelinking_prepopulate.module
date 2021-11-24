@@ -15,9 +15,13 @@ require DRUPAL_ROOT . '/' . drupal_get_path('module', 'freelinking_prepopulate')
 * Implements hook_help().
 */
 function freelinking_prepopulate_help($path, $arg) {
+  if (!function_exists('advanced_help_hint_docs')){
+    drupal_set_message(t('To use <strong>Freelinking prepopulate</strong>, you must install and enable the module <strong>!url</strong>.', array('!url' => l('Advanced help hint', 'https://www.drupal.org/project/advanced_help_hint'))), 'error', FALSE); // l('Advanced help hint', 'https://www.drupal.org/project/advanced_help_hint')
+    return;
+  }
   if ($path == 'admin/help#freelinking_prepopulate') {
     return '<p>' . t('This module provides plugins for Freelinking to prepopulate node create.') . '</p>' .
-      '<p>' . advanced_help_hint_docs('freelinking_prepopulate', NULL, TRUE) . '</p>';
+      '<p>' . advanced_help_hint_docs('freelinking_prepopulate', 'https://www.drupal.org/node/2468155', TRUE) . '</p>';
   }
 }
 

@@ -11,14 +11,16 @@ require DRUPAL_ROOT . '/' . (drupal_get_path('module', 'freelinking') . '/freeli
 * Implements hook_help().
 */
 function freelinking_help($path, $arg) {
-  if (!function_exists('advanced_help_hint_docs')){
-    function advanced_help_hint_docs($ahhd_var_1, $ahhd_var_2, $ahhd_var_3) {
-      return 'WARNING: Install and enable Advanced Help Hint';
-    }
-  }
   if ($path == 'admin/help#freelinking') {
-    return '<p>' . t('This module is a filter to turn wiki-style links into HTML links.') . '</p>' .
-      '<p>' . advanced_help_hint_docs('freelinking', 'https://www.drupal.org/node/2463045', TRUE) . '</p>';
+    $output = '<p>' . t('This module is a filter to turn wiki-style links into HTML links.') . '</p>';
+    if (function_exists('advanced_help_hint_docs')) {
+      $output .= '<p>' . advanced_help_hint_docs('freelinking', 'https://www.drupal.org/docs/7/modules/freelinking', TRUE) . '</p>';
+    }
+    else {
+      $output .= t('If you install and enable the module <strong>!url</strong>, you will get more help for <strong>Freelinking</strong>.',
+        array('!url' => l('Advanced help hint', 'https://www.drupal.org/project/advanced_help_hint')));
+    }
+    return $output;
   }
 }
 
