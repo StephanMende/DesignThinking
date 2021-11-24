@@ -52,3 +52,9 @@ th {
   color: #777;
   text-decoration: none;
  }
+
+/* Fix line breaks */
+.field-type-text-long .field-item {
+  white-space: break-spaces;
+}
+
