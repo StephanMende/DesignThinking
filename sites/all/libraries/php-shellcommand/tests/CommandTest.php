@@ -1,14 +1,8 @@
 <?php
 use mikehaertl\shellcommand\Command;
 
-class CommandTest extends \PHPUnit\Framework\TestCase
+class CommandTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        // Default in some installations
-        setlocale(LC_CTYPE, 'C');
-    }
-
     // Create command from command string
     public function testCanPassCommandStringToConstructor()
     {
@@ -69,20 +63,16 @@ class CommandTest extends \PHPUnit\Framework\TestCase
     // Arguments
     public function testCanAddArguments()
     {
-        $command = new Command(array(
-            'locale' => 'en_US.UTF-8',
-        ));
-        $command->setCommand('test');
+        $command = new Command();
         $command->setArgs('--arg1=x');
         $command->addArg('--a');
-        $command->addArg('--a', '中文字äüp');
+        $command->addArg('--a', 'v');
         $command->addArg('--a', array("v'1",'v2','v3'));
         $command->addArg('-b=','v', false);
         $command->addArg('-b=', array('v4','v5','v6'));
         $command->addArg('-c', '');
         $command->addArg('some name', null, true);
-        $this->assertEquals("--arg1=x --a --a '中文字äüp' --a 'v'\''1' 'v2' 'v3' -b=v -b='v4' 'v5' 'v6' -c '' 'some name'", $command->getArgs());
-        $this->assertEquals("test --arg1=x --a --a '中文字äüp' --a 'v'\''1' 'v2' 'v3' -b=v -b='v4' 'v5' 'v6' -c '' 'some name'", $command->getExecCommand());
+        $this->assertEquals("--arg1=x --a --a 'v' --a 'v'\''1' 'v2' 'v3' -b=v -b='v4' 'v5' 'v6' -c '' 'some name'", $command->getArgs());
     }
     public function testCanResetArguments()
     {
@@ -119,22 +109,20 @@ class CommandTest extends \PHPUnit\Framework\TestCase
     public function testCanRunValidCommand()
     {
         $dir = __DIR__;
-        $command = new Command("/bin/ls $dir/Command*");
+        $command = new Command("/bin/ls $dir");
 
         $this->assertFalse($command->getExecuted());
         $this->assertTrue($command->execute());
         $this->assertTrue($command->getExecuted());
-        $this->assertEquals("$dir/CommandTest.php", $command->getOutput());
-        $this->assertEquals("$dir/CommandTest.php\n", $command->getOutput(false));
+        $this->assertEquals("CommandTest.php\n", $command->getOutput());
         $this->assertEmpty($command->getError());
         $this->assertEmpty($command->getStdErr());
         $this->assertEquals(0, $command->getExitCode());
     }
     public function testCanNotRunEmptyCommand()
     {
-        $command = new Command('');
+        $command = new Command('/does/not/exist');
         $this->assertFalse($command->execute());
-        $this->assertEquals('Could not locate any executable command', $command->getError());
     }
     public function testCanNotRunNotExistantCommand()
     {
@@ -166,53 +154,13 @@ class CommandTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("ls -l -n", (string)$command);
     }
 
-    // Exec
-    public function testCanRunValidCommandWithExec()
-    {
-        $dir = __DIR__;
-        $command = new Command("/bin/ls $dir/Command*");
-        $command->useExec = true;
-
-        $this->assertFalse($command->getExecuted());
-        $this->assertTrue($command->execute());
-        $this->assertTrue($command->getExecuted());
-        $this->assertEquals("$dir/CommandTest.php", $command->getOutput());
-        $this->assertEmpty($command->getError());
-        $this->assertEmpty($command->getStdErr());
-        $this->assertEquals(0, $command->getExitCode());
-    }
-    public function testCanNotRunNotExistantCommandWithExec()
-    {
-        $command = new Command('/does/not/exist');
-        $command->useExec = true;
-        $this->assertFalse($command->getExecuted());
-        $this->assertFalse($command->execute());
-        $this->assertFalse($command->getExecuted());
-        $this->assertNotEmpty($command->getError());
-        $this->assertNotEmpty($command->getStdErr());
-        $this->assertNotEmpty($command->getOutput());
-        $this->assertEquals(127, $command->getExitCode());
-    }
-    public function testCanNotRunInvalidCommandWithExec()
-    {
-        $command = new Command('ls --this-does-not-exist');
-        $command->useExec = true;
-        $this->assertFalse($command->getExecuted());
-        $this->assertFalse($command->execute());
-        $this->assertFalse($command->getExecuted());
-        $this->assertNotEmpty($command->getError());
-        $this->assertNotEmpty($command->getStdErr());
-        $this->assertNotEmpty($command->getOutput());
-        $this->assertEquals(2, $command->getExitCode());
-    }
-
     // Proc
     public function testCanProvideProcEnvVars()
     {
         $command = new Command('echo $TESTVAR');
         $command->procEnv = array('TESTVAR' => 'testvalue');
         $this->assertTrue($command->execute());
-        $this->assertEquals("testvalue", $command->getOutput());
+        $this->assertEquals("testvalue\n", $command->getOutput());
     }
     public function testCanProvideProcDir()
     {
@@ -222,29 +170,6 @@ class CommandTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($command->getExecuted());
         $this->assertTrue($command->execute());
         $this->assertTrue($command->getExecuted());
-        $this->assertEquals($tmpDir, $command->getOutput());
+        $this->assertEquals($tmpDir."\n", $command->getOutput());
     }
-    public function testCanRunCommandWithStandardInput()
-    {
-        $command = new Command('/bin/cat');
-        $command->addArg('-T');
-        $command->setStdIn("\t");
-        $this->assertTrue($command->execute());
-        $this->assertTrue($command->getExecuted());
-        $this->assertEquals("^I", $command->getOutput());
-    }
-    public function testCanRunCommandWithStandardInputStream()
-    {
-        $tmpfile = tmpfile();
-        fwrite($tmpfile, "\t");
-        fseek($tmpfile, 0);
-        $command = new Command('/bin/cat');
-        $command->addArg('-T');
-        $command->setStdIn($tmpfile);
-        $this->assertTrue($command->execute());
-        $this->assertTrue($command->getExecuted());
-        $this->assertEquals("^I", $command->getOutput());
-        fclose($tmpfile);
-    }
-
 }

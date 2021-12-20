@@ -222,8 +222,8 @@ $databases = array (
     'default' => 
     array (
       'database' => 'designthinking_tool',
-      'username' => 'root',
-      'password' => '',
+      'username' => 'drupal',
+      'password' => 'drupal',
       'host' => 'localhost',
       'port' => '',
       'driver' => 'mysql',

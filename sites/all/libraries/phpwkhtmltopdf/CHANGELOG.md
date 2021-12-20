@@ -1,43 +1,12 @@
 # CHANGELOG
 
-## 2.2.1
-
- * Issue #219: Make `header-html` and `footer-html` also work for Toc and cover page
-
-## 2.2.0
-
- * Add a `$type` parameter to `addPage()` and `addToc()` (#169)
-
-## 2.1.1
-
- * Add `-a` to default `xvfb-run` options
-
-## 2.1.0
-
- * We now follow [semver](http://semver.org/)!
- * Issue #112: Add toString() to get raw PDF content as string
-
-## 2.0.4
-
- * Issue #100: Fix issue with header-/footer-html
-
-## 2.0.3
-
- * Make dependencies in `composer.json` less restrictive
- * Remove `composer.lock` to allow for independent updates of dependencies
-
-## 2.0.2
-
- * Issue #56: Fix issue with `proc_open()` on windows
- * Add detection for XML strings
-
 ## 2.0.1
 
  * Issue #61: Fix ignored `tmpDir`
 
 ## 2.0.0
 
-In this major release we have added a wrapper for wkhtmltoimage and cleaned
+In this major release we have added a wrapper for wkhtmltopdf and cleaned
 up the code and interface. We also introduced namespaces and Travis testing.
 Please have a look at the README.md for the new API.
 

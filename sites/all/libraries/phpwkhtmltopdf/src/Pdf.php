@@ -9,30 +9,20 @@ use mikehaertl\tmp\File;
  * This class is a slim wrapper around wkhtmltopdf.
  *
  * @author Michael Härtl <haertl.mike@gmail.com>
+ * @version 2.0.1
  * @license http://www.opensource.org/licenses/MIT
  */
 class Pdf
 {
-    // Type hints for `addPage()` and `addCover()`
-    const TYPE_HTML = 'html';
-    const TYPE_XML = 'xml';
-
     // Regular expression to detect HTML strings
-    const REGEX_HTML = '/<(?:!doctype )?html/i';
-
-    // Regular expression to detect XML strings
-    const REGEX_XML = '/<\??xml/i';
-
-    // Regular expression to detect options that expect an URL or a file name,
-    // so we need to create a tmp file for the content.
-    const REGEX_OPTS_TMPFILE = '/^((header|footer)-html|(xsl|user)-style-sheet)$/i';
+    const REGEX_HTML = '/<html/i';
 
     // prefix for tmp files
     const TMP_PREFIX = 'tmp_wkhtmlto_pdf_';
 
     /**
-     * @var string the name of the `wkhtmltopdf` binary. Default is
-     * `wkhtmltopdf`. You can also configure a full path here.
+     * @var string the name of the `wkhtmltopdf` binary. Default is `wkhtmltopdf`. You can also
+     * configure a full path here.
      */
     public $binary = 'wkhtmltopdf';
 
@@ -42,20 +32,17 @@ class Pdf
     public $commandOptions = array();
 
     /**
-     * @var string|null the directory to use for temporary files. If null
-     * (default) the dir is autodetected.
+     * @var string|null the directory to use for temporary files. If null (default) the dir is autodetected.
      */
     public $tmpDir;
 
     /**
-     * @var bool whether to ignore any errors if some PDF file was still
-     * created. Default is false.
+     * @var bool whether to ignore any errors if some PDF file was still created. Default is false.
      */
     public $ignoreWarnings = false;
 
     /**
-     * @var bool whether the old version 9 of wkhtmltopdf is used (slightly
-     * different syntax). Default is false.
+     * @var bool whether the old version 9 of wkhtmltopdf is used (slightly different syntax). Default is false.
      */
     public $version9 = false;
 
@@ -65,8 +52,7 @@ class Pdf
     protected $_isCreated = false;
 
     /**
-     * @var array global options for `wkhtmltopdf` as `['--opt1', '--opt2' =>
-     * 'val', ...]`
+     * @var array global options for wkhtmltopdf as array('--opt1', '--opt2'=>'val', ...)
      */
     protected $_options = array();
 
@@ -76,14 +62,13 @@ class Pdf
     protected $_objects = array();
 
     /**
-     * @var \mikehaertl\tmp\File the temporary PDF file
+     * @var mikehaertl\tmp\File the temporary PDF file
      */
     protected $_tmpPdfFile;
 
     /**
-     * @var \mikehaertl\tmp\File[] list of tmp file objects. This is here to
-     * keep a reference to `File` and thus avoid too early call of
-     * [[File::__destruct]] if the file is not referenced anymore.
+     * @var array list of tmp file objects. This is here to keep a reference to File and thus avoid
+     * too early call of File::__destruct() if the file is not referenced anymore.
      */
     protected $_tmpFiles = array();
 
@@ -98,10 +83,9 @@ class Pdf
     protected $_error = '';
 
     /**
-     * @param array|string $options global options for wkhtmltopdf, a page URL,
-     * a HTML string or a filename
+     * @param array|string $options global options for wkhtmltopdf or page URL, HTML or PDF/HTML filename
      */
-    public function __construct($options = null)
+    public function __construct($options=null)
     {
         if (is_array($options)) {
             $this->setOptions($options);
@@ -113,35 +97,30 @@ class Pdf
     /**
      * Add a page object to the output
      *
-     * @param string $input either a URL, a HTML string or a filename
+     * @param string $input either a URL, a HTML string or a PDF/HTML filename
      * @param array $options optional options for this page
-     * @param string|null $type a type hint if the input is a string of known
-     * type. This can either be `TYPE_HTML` or `TYPE_XML`. If `null` (default)
-     * the type is auto detected from the string content.
-     * @return static the Pdf instance for method chaining
+     * @return Pdf the Pdf instance for method chaining
      */
-    public function addPage($input, $options = array(), $type = null)
+    public function addPage($input,$options=array())
     {
-        $options['inputArg'] = $this->processInput($input, $type);
-        $this->_objects[] = $this->processOptions($options);
+        $options = $this->processOptions($options);
+        $options['inputArg'] = $this->processInput($input);
+        $this->_objects[] = $options;
         return $this;
     }
 
     /**
      * Add a cover page object to the output
      *
-     * @param string $input either a URL, a HTML string or a filename
+     * @param string $input either a URL, a HTML string or a PDF/HTML filename
      * @param array $options optional options for the cover page
-     * @param string|null $type a type hint if the input is a string of known
-     * type. This can either be `TYPE_HTML` or `TYPE_XML`. If `null` (default)
-     * the type is auto detected from the string content.
-     * @return static the Pdf instance for method chaining
+     * @return Pdf the Pdf instance for method chaining
      */
-    public function addCover($input, $options = array(), $type = null)
+    public function addCover($input,$options=array())
     {
         $options['input'] = ($this->version9 ? '--' : '').'cover';
-        $options['inputArg'] = $this->processInput($input, $type);
-        $this->_objects[] = $this->processOptions($options);
+        $options['inputArg'] = $this->processInput($input);
+        $this->_objects[] = $options;
         return $this;
     }
 
@@ -149,12 +128,12 @@ class Pdf
      * Add a TOC object to the output
      *
      * @param array $options optional options for the table of contents
-     * @return static the Pdf instance for method chaining
+     * @return Pdf the Pdf instance for method chaining
      */
-    public function addToc($options = array())
+    public function addToc($options=array())
     {
         $options['input'] = ($this->version9 ? '--' : '')."toc";
-        $this->_objects[] = $this->processOptions($options);
+        $this->_objects[] = $options;
         return $this;
     }
 
@@ -179,13 +158,11 @@ class Pdf
     /**
      * Send PDF to client, either inline or as download (triggers PDF creation)
      *
-     * @param string|null $filename the filename to send. If empty, the PDF is
-     * streamed inline.
-     * @param bool $inline whether to force inline display of the PDF, even if
-     * filename is present.
+     * @param string|null $filename the filename to send. If empty, the PDF is streamed inline.
+     * @param bool $inline whether to force inline display of the PDF, even if filename is present.
      * @return bool whether PDF was created successfully
      */
-    public function send($filename = null,$inline = false)
+    public function send($filename=null,$inline=false)
     {
         if (!$this->_isCreated && !$this->createPdf()) {
             return false;
@@ -195,33 +172,15 @@ class Pdf
     }
 
     /**
-     * Get the raw PDF contents (triggers PDF creation).
-     * @return string|bool The PDF content as a string or `false` if the PDF
-     * wasn't created successfully.
-     */
-    public function toString()
-    {
-        if (!$this->_isCreated && !$this->createPdf()) {
-            return false;
-        }
-        return file_get_contents($this->_tmpPdfFile->getFileName());
-    }
-
-    /**
      * Set global option(s)
      *
      * @param array $options list of global PDF options to set as name/value pairs
-     * @return static the Pdf instance for method chaining
+     * @return Pdf the Pdf instance for method chaining
      */
-    public function setOptions($options = array())
+    public function setOptions($options=array())
     {
-        // #264 tmpDir must be set before calling processOptions
-        if (isset($options['tmpDir'])) {
-            $this->tmpDir = $options['tmpDir'];
-            unset($options['tmpDir']);
-        }
         $options = $this->processOptions($options);
-        foreach ($options as $key => $val) {
+        foreach ($options as $key=>$val) {
             if (is_int($key)) {
                 $this->_options[] = $val;
             } elseif ($key[0]!=='_' && property_exists($this, $key)) {
@@ -238,7 +197,7 @@ class Pdf
      */
     public function getCommand()
     {
-        if ($this->_command === null) {
+        if ($this->_command===null) {
             $options = $this->commandOptions;
             if (!isset($options['command'])) {
                 $options['command'] = $this->binary;
@@ -261,7 +220,7 @@ class Pdf
      */
     public function getPdfFilename()
     {
-        if ($this->_tmpPdfFile === null) {
+        if ($this->_tmpPdfFile===null) {
             $this->_tmpPdfFile = new File('', '.pdf', self::TMP_PREFIX, $this->tmpDir);
         }
         return $this->_tmpPdfFile->getFileName();
@@ -297,16 +256,12 @@ class Pdf
 
     /**
      * @param string $input
-     * @param string|null $type a type hint if the input is a string of known type. This can either be
-     * `TYPE_HTML` or `TYPE_XML`. If `null` (default) the type is auto detected from the string content.
-     * @return \mikehaertl\tmp\File|string a File object if the input is a HTML or XML string. The unchanged input otherwhise.
+     * @return mikehaertl\tmp\File|string a File object if the input is a html string. The unchanged input otherwhise.
      */
-    protected function processInput($input, $type = null)
+    protected function processInput($input)
     {
-        if ($type === self::TYPE_HTML || $type === null && preg_match(self::REGEX_HTML, $input)) {
+        if (preg_match(self::REGEX_HTML, $input)) {
             return $this->_tmpFiles[] = new File($input, '.html', self::TMP_PREFIX, $this->tmpDir);
-        } elseif ($type === self::TYPE_XML || preg_match(self::REGEX_XML, $input)) {
-            return $this->_tmpFiles[] = new File($input, '.xml', self::TMP_PREFIX, $this->tmpDir);
         } else {
             return $input;
         }
@@ -316,16 +271,12 @@ class Pdf
      * @param array $options list of options as name/value pairs
      * @return array options with raw content converted to tmp files where neccessary
      */
-    protected function processOptions($options = array())
+    protected function processOptions($options=array())
     {
-        foreach ($options as $key => $val) {
-            // Some options expect a URL or a file name, so check if we need a temp file
-            if (is_string($val) && preg_match(self::REGEX_OPTS_TMPFILE, $key) ) {
-                defined('PHP_MAXPATHLEN') || define('PHP_MAXPATHLEN', 255);
-                $isFile = (strlen($val) <= PHP_MAXPATHLEN) ? is_file($val) : false;
-                if (!($isFile || preg_match('/^(https?:)?\/\//i',$val) || $val === strip_tags($val))) {
-                    $options[$key] = new File($val, '.html', self::TMP_PREFIX, $this->tmpDir);
-                }
+        foreach ($options as $key=>$val) {
+            $urlRequired = preg_match('/^(header|footer)-html$/', $key);
+            if ($urlRequired && !(is_file($val) || preg_match('/^(https?:)?\/\//i',$val) || $val===strip_tags($val))) {
+                $options[$key] = new File($val, '.html', self::TMP_PREFIX, $this->tmpDir);
             }
         }
         return $options;
